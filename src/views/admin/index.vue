@@ -1,12 +1,38 @@
 <template>
-  <div class="">index</div>
+  <div class="indexContainer">
+    <el-container>
+      <el-header>
+        <div class="header_container">
+          <div class="logo">
+            <logo></logo>
+          </div>
+          <div class="userInfo">
+            <user-info></user-info>
+          </div>
+        </div>
+      </el-header>
+      <el-container>
+        <el-aside width="200px" height="100%">
+          <menu-list></menu-list>
+        </el-aside>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
+  </div>
 </template>
 
 <script>
+import logo from '@/components/header/logo.vue'
+import userInfo from '@/components/header/userInfo.vue'
+import menuList from '@/components/aside/menu.vue'
 export default {
-  components: {},
+  components: {
+    logo,
+    userInfo,
+    menuList,
+  },
   data() {
-    return {};
+    return {}
   },
   computed: {},
   watch: {},
@@ -14,6 +40,24 @@ export default {
   created() {},
   mounted() {},
   updated() {},
-};
+}
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.indexContainer {
+  min-width: 100%;
+  min-height: 100%;
+  position: absolute;
+
+  .el-header {
+    background-color: #333333;
+    display: flex;
+    justify-content: center;
+    .header_container {
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+</style>

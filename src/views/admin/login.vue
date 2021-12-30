@@ -32,8 +32,8 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
-        password: '',
+        username: 'admin',
+        password: '123456',
       },
       loginRules: {
         username: [
@@ -65,6 +65,7 @@ export default {
         if (valid) {
           login(this.loginForm).then(({ data }) => {
             sessionStorage.setItem('token', data.token)
+            this.$router.push({ path: '/index' })
           })
         } else {
           this.$message.warning('请按要求输入用户名哥密码')

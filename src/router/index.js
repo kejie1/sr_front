@@ -10,7 +10,7 @@ const routes = [
       import(/* webpackChunkName: "login" */ "../views/admin/login.vue"),
   },
   {
-    path: "/",
+    path: "/index",
     name: "index",
     component: Index,
   },
