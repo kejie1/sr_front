@@ -1,13 +1,13 @@
 <template>
-  <div class>
+  <div>
     <el-menu
       default-active="2"
-      class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
+      class="left-menu"
     >
       <el-menu-item index="2">
         <i class="el-icon-menu"></i>
@@ -72,4 +72,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+.left-menu {
+  height: 90.4vh;
+}
 </style>
