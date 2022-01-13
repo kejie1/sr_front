@@ -12,10 +12,12 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside width="200px" height="100%">
+        <el-aside width="200px">
           <menu-list></menu-list>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <router-view />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -57,6 +59,13 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    .el-aside {
+      height: 100%;
+      display: block;
+      position: relative;
+      overflow-y: scroll;
+      background-color: #324157 !important;
     }
   }
 }

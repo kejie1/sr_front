@@ -7,17 +7,24 @@ export function login(data) {
   });
 }
 
-export function getInfo(token) {
-  return http({
-    url: "/vue-element-admin/user/info",
-    method: "get",
-    params: { token },
-  });
-}
+// export function getInfo(token) {
+//   return http({
+//     url: "/vue-element-admin/user/info",
+//     method: "get",
+//     params: { token },
+//   });
+// }
+
+// export function logout() {
+//   return http({
+//     url: "/vue-element-admin/user/logout",
+//     method: "post",
+//   });
+// }
 
 export function logout() {
   return http({
-    url: "/vue-element-admin/user/logout",
+    url: "users/userList",
     method: "post",
   });
 }

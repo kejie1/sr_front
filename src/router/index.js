@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Index from "../views/admin/index.vue";
+import Admin from "../views/admin/index.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -10,10 +10,18 @@ const routes = [
       import(/* webpackChunkName: "login" */ "../views/admin/login.vue"),
   },
   {
-    path: "/index",
-    name: "index",
-    component: Index,
+    path: "/admin",
+    name: "admin",
+    component: Admin,
+    children:[
+      {
+        path:'users',
+        name:'users',
+        component:()=>import('../views/admin/users/index.vue')
+      }
+    ]
   },
+  
 ];
 
 const router = new VueRouter({
