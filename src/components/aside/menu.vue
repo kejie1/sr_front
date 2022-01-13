@@ -2,35 +2,28 @@
   <div>
     <el-menu
       default-active="2"
-      @open="handleOpen"
-      @close="handleClose"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
       class="left-menu"
+      router
     >
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">{{menuList.admin.title}}</span>
+      <el-menu-item :index="item.url" v-for="item in menuList" :key="item.url">
+        <i :class="item.icon"></i>
+        <span slot="title">{{item.title}}</span>
       </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <i class="el-icon-document"></i>
-        <span slot="title">{{menuList.student.title}}</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-setting"></i>
-        <span slot="title">{{menuList.financial.title}}</span>
-      </el-menu-item>
-      <el-submenu index="1">
-        <template slot="title">
+      <!-- <el-submenu :index="item.key" v-for="item in menuList" :key="item.key">
+        <template slot="title" v-if="item.subMenu">
           <i class="el-icon-location"></i>
-          <span>{{menuList.school.title}}</span>
+          <span>{{item.title}}</span>
+          <el-menu-item
+            v-for="subItem in item.subMenu"
+            :key="subItem.key"
+            :route="{path:subItem.url}"
+            :index="subItem.key"
+          >{{subItem.title}}</el-menu-item>
         </template>
-        <el-menu-item index="1-1">{{menuList.school.college}}</el-menu-item>
-        <el-menu-item index="1-2">{{menuList.school.vocational}}</el-menu-item>
-        <el-menu-item index="1-3">{{menuList.school.class}}</el-menu-item>
-        <el-menu-item index="1-4">{{menuList.school.teacher}}</el-menu-item>
-      </el-submenu>
+      </el-submenu>-->
     </el-menu>
   </div>
 </template>
@@ -40,30 +33,62 @@ export default {
   components: {},
   data() {
     return {
-      menuList: {
-        admin: {
+      menuList: [
+        //admin
+        {
           title: '管理员管理',
+          url: '/admin/users',
+          icon: 'el-icon-user-solid',
+          key: 1,
         },
-        student: {
+        // student
+        {
           title: '学生信息管理',
+          url: '/admin/users',
+          icon: 'el-icon-s-management',
+          key: 2,
         },
-        hostel: {
+        //hostel
+        {
           title: '学生宿舍管理',
+          url: '/admin/users',
+          icon: 'el-icon-s-home',
+          key: 3,
         },
-        financial: {
+        // financial
+        {
           title: '财务管理',
+          url: '/admin/users',
+          icon: 'el-icon-s-finance',
+          key: 4,
         },
-        school: {
+        // school
+        {
           title: '学校配置',
-          college: '学院管理',
-          vocational: '专业管理',
-          class: '班级管理',
-          teacher: '辅导员管理',
+          url: '/admin/users',
+          icon: 'el-icon-s-tools',
+          key: 5,
+          subMenu: [
+            { title: '学院管理', url: '/admin/users', key: 5 - 1 },
+            { title: '专业管理', url: '/admin/users', key: 5 - 2 },
+            { title: '班级管理', url: '/admin/users', key: 5 - 3 },
+            { title: '辅导员管理', url: '/admin/users', key: 5 - 4 },
+          ],
         },
-      },
+      ],
     }
   },
-  computed: {},
+  computed: {
+    activeUsers: function () {
+      let subMenu = []
+      for (let i = 0; i < this.menuList.length; i++) {
+        if (this.menuList[i].subMenu) {
+          subMenu = this.menuList[i].subMenu
+        }
+      }
+      return subMenu
+    },
+  },
   watch: {},
   methods: {},
   created() {},
