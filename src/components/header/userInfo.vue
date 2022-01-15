@@ -14,7 +14,7 @@
 export default {
   components: {},
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
@@ -22,7 +22,6 @@ export default {
   created() {},
   mounted() {},
   updated() {},
-}
+};
 </script>
-<style lang='less' scoped>
-</style>
+<style lang="less" scoped></style>

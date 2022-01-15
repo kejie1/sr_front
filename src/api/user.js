@@ -28,3 +28,11 @@ export function userList() {
     method: "get",
   });
 }
+
+export function searchUser(params) {
+  return http({
+    url: "users/queryByUserName",
+    method: "get",
+    params,
+  });
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="logo_container">
-    <el-image style="height:60px" :src="logoSrc"></el-image>
+    <el-image style="height: 60px" :src="logoSrc"></el-image>
   </div>
 </template>
 
@@ -9,8 +9,8 @@ export default {
   components: {},
   data() {
     return {
-      logoSrc: require('@/assets/images/logo.png'),
-    }
+      logoSrc: require("@/assets/images/logo.png"),
+    };
   },
   computed: {},
   watch: {},
@@ -18,9 +18,9 @@ export default {
   created() {},
   mounted() {},
   updated() {},
-}
+};
 </script>
-<style lang='less' scoped>
+<style lang="less" scoped>
 .el-image {
 }
 </style>

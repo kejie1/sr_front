@@ -9,7 +9,7 @@
       class="loginForm"
     >
       <el-form-item label>
-        <h2 style="color:#ffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+        <h2 style="color: #ffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
       </el-form-item>
 
       <el-form-item label="用户名:" prop="username">
@@ -19,43 +19,45 @@
         <el-input type="password" v-model="loginForm.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleLogin('loginForm')">登录</el-button>
+        <el-button type="primary" @click="handleLogin('loginForm')"
+          >登录</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { login } from '../../api/user'
+import { login } from "../../api/user";
 export default {
   components: {},
   data() {
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456',
+        username: "admin",
+        password: "123456",
       },
       loginRules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: "请输入用户名", trigger: "blur" },
           {
             min: 2,
             max: 16,
-            message: '用户名长度为2~16的字符',
-            trigger: 'blur',
+            message: "用户名长度为2~16的字符",
+            trigger: "blur",
           },
         ],
         password: [
-          { required: true, message: '请输入用密码', trigger: 'blur' },
+          { required: true, message: "请输入用密码", trigger: "blur" },
           {
             min: 6,
             max: 16,
-            message: '密码长度为6~16的字符',
-            trigger: 'blur',
+            message: "密码长度为6~16的字符",
+            trigger: "blur",
           },
         ],
       },
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -64,22 +66,22 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           login(this.loginForm).then(({ data }) => {
-            sessionStorage.setItem('token', data.token)
-            this.$store.commit('setUserInfo', data.data)
-            this.$router.push({ path: '/admin' })
-          })
+            sessionStorage.setItem("token", data.token);
+            this.$store.commit("setUserInfo", data.data);
+            this.$router.push({ path: "/admin" });
+          });
         } else {
-          this.$message.warning('请按要求输入用户名哥密码')
+          this.$message.warning("请按要求输入用户名哥密码");
         }
-      })
+      });
     },
   },
   created() {},
   mounted() {},
   updated() {},
-}
+};
 </script>
-<style lang="less" >
+<style lang="less">
 .login_container {
   background-color: #336699;
   min-width: 100%;

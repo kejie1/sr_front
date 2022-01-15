@@ -37,6 +37,11 @@
     "env": {
       "node": true
     },
+    "rules":{
+      "no-debugger":0,
+      "no-console": "off"
+    },
+    
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended",

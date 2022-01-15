@@ -3,21 +3,21 @@
     <div class="search_btn">
       <div class="search_btn_container">
         <div class="search">
-          <el-input placeholder="请输入用户名" v-model="searchParams">
+          <el-input placeholder="请输入用户名" @input="searchUser" v-model="searchParams">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </div>
         <div class="addBtn">
           <el-button
             type="primary"
-            :disabled="accountType == 1 ? false : true "
+            :disabled="accountType == 1 ? false : true"
             plain
             @click="handleAddEdit"
           >添加用户</el-button>
         </div>
       </div>
     </div>
-    <el-table :data="tableData" stripe style="width: 100%">
+    <el-table :key="Math.random()" :data="tableData" stripe style="width: 100%">
       <el-table-column prop="id" label="ID" width="50"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column :v-if="accountType == 1" prop="password" label="密码"></el-table-column>
@@ -25,7 +25,11 @@
       <el-table-column prop="phone" label="电话"></el-table-column>
       <el-table-column prop="collegeStr" label="所属学院"></el-table-column>
       <el-table-column prop="accountType" label="角色类型">
-        <template slot-scope="scope">{{scope.row.accountType == 1 ? '超级管理员' : '普通用户'}}</template>
+        <template slot-scope="scope">
+          {{
+          scope.row.accountType == 1 ? "超级管理员" : "普通用户"
+          }}
+        </template>
       </el-table-column>
       <el-table-column prop="status" label="状态" width="80px">
         <template slot-scope="scope">
@@ -77,7 +81,7 @@
 </template>
 
 <script>
-import { userList } from '../../../api/user'
+import { userList, searchUser } from '../../../api/user'
 // import { mapState } from 'vuex'
 export default {
   components: {},
@@ -123,9 +127,7 @@ export default {
     }
   },
   computed: {},
-  watch: {
-    tableData() {},
-  },
+  watch: {},
   methods: {
     async getUserList() {
       const { data } = await userList()
@@ -138,6 +140,11 @@ export default {
       // this.accountType = this.$store.state.userInfo.accountType
       // console.log(this.accountType)
       this.$message({ message: data.msg, type: 'success' })
+    },
+    // 防抖
+    async searchUser() {
+      const { data } = searchUser({ username: this.searchParams })
+      this.tableData = data.data
     },
     handleAddEdit(row) {
       if (row.id) {
@@ -157,7 +164,7 @@ export default {
   updated() {},
 }
 </script>
-<style lang='less' scoped>
+<style lang="less" scoped>
 .userContainer {
   .search_btn {
     // width: 98%;

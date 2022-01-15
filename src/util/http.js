@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Message } from 'element-ui'
-import NProgress from 'nprogress';
+import { Message } from "element-ui";
+import NProgress from "nprogress";
 // create an axios instances
 const service = axios.create({
   baseURL: "http://localhost:3000/api", // url = base url + request url
@@ -14,9 +14,9 @@ service.interceptors.request.use(
     // 每次发送请求之前判断vuex中是否存在token
     // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-    const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem("token");
     token && (config.headers.Authorization = token);
-    NProgress.start
+    NProgress.start;
     return config;
   },
   (error) => {
@@ -27,17 +27,17 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   (response) => {
-    NProgress.done()
-    const { data } = response
+    NProgress.done();
+    const { data } = response;
     // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
     // 否则的话抛出错误
     // loadingInstance.close();
     if (data.code !== 200) {
       Message({
-        message: data.msg || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
+        message: data.msg || "Error",
+        type: "error",
+        duration: 5 * 1000,
+      });
     }
     return response;
   },
