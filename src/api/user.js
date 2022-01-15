@@ -22,9 +22,9 @@ export function login(data) {
 //   });
 // }
 
-export function logout() {
+export function userList() {
   return http({
-    url: "users/userList",
-    method: "post",
+    url: "users/queryAll",
+    method: "get",
   });
 }

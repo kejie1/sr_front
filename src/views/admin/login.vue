@@ -65,7 +65,8 @@ export default {
         if (valid) {
           login(this.loginForm).then(({ data }) => {
             sessionStorage.setItem('token', data.token)
-            this.$router.push({ path: '/index' })
+            this.$store.commit('setUserInfo', data.data)
+            this.$router.push({ path: '/admin' })
           })
         } else {
           this.$message.warning('请按要求输入用户名哥密码')

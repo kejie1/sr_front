@@ -44,28 +44,28 @@ export default {
         // student
         {
           title: '学生信息管理',
-          url: '/admin/users',
+          url: '/admin/students',
           icon: 'el-icon-s-management',
           key: 2,
         },
         //hostel
         {
           title: '学生宿舍管理',
-          url: '/admin/users',
+          url: '/admin/hotel',
           icon: 'el-icon-s-home',
           key: 3,
         },
         // financial
         {
           title: '财务管理',
-          url: '/admin/users',
+          url: '/admin/finance',
           icon: 'el-icon-s-finance',
           key: 4,
         },
         // school
         {
           title: '学校配置',
-          url: '/admin/users',
+          url: '/admin/college',
           icon: 'el-icon-s-tools',
           key: 5,
           subMenu: [

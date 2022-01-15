@@ -1,4 +1,3 @@
-import { route } from '../../../studentRegisterSystem/routes'
 import router from '../router/index'
 
 router.beforeEach((to, from, next) => {

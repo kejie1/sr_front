@@ -11,7 +11,7 @@
           </div>
         </div>
       </el-header>
-      <el-container>
+      <el-container class="content">
         <el-aside width="200px">
           <menu-list></menu-list>
         </el-aside>
@@ -66,6 +66,14 @@ export default {
       position: relative;
       overflow-y: scroll;
       background-color: #324157 !important;
+    }
+  }
+  .content {
+    .el-aside {
+      width: 20%;
+    }
+    .el-main {
+      width: 80%;
     }
   }
 }
