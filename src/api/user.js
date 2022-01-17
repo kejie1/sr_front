@@ -6,22 +6,6 @@ export function login(data) {
     data,
   });
 }
-
-// export function getInfo(token) {
-//   return http({
-//     url: "/vue-element-admin/user/info",
-//     method: "get",
-//     params: { token },
-//   });
-// }
-
-// export function logout() {
-//   return http({
-//     url: "/vue-element-admin/user/logout",
-//     method: "post",
-//   });
-// }
-
 export function userList() {
   return http({
     url: "users/queryAll",
@@ -34,5 +18,19 @@ export function searchUser(params) {
     url: "users/queryByUserName",
     method: "get",
     params,
+  });
+}
+export function addUser(data) {
+  return http({
+    url: "users/addUser",
+    method: "post",
+    data,
+  });
+}
+export function updateUser(data) {
+  return http({
+    url: "users/updateUser",
+    method: "post",
+    data,
   });
 }
