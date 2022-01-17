@@ -34,7 +34,7 @@ service.interceptors.response.use(
     // loadingInstance.close();
     if (data.code !== 200) {
       Message({
-        message: data.msg || "Error",
+        message: data.msg || "接口调用失败",
         type: "error",
         duration: 5 * 1000,
       });

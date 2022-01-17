@@ -34,3 +34,10 @@ export function updateUser(data) {
     data,
   });
 }
+export function deleteUser(params) {
+  return http({
+    url: "users/deleteUser",
+    method: "post",
+    params,
+  });
+}

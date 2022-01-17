@@ -107,7 +107,13 @@
 </template>
 
 <script>
-import { userList, searchUser, addUser, updateUser } from '../../../api/user'
+import {
+  userList,
+  searchUser,
+  addUser,
+  updateUser,
+  deleteUser,
+} from '../../../api/user'
 import { collegeList } from '../../../api/college'
 // import { mapState } from 'vuex'
 export default {
@@ -164,7 +170,6 @@ export default {
         status: x.status == 1 ? true : false,
         college: this.collegeList[x.collegeId],
       }))
-      console.log(this.tableData)
       // this.accountType = this.$store.state.userInfo.accountType
     },
     // 获取学院列表
@@ -178,8 +183,12 @@ export default {
 
     // 防抖todo
     async searchUser() {
-      const { data } = await searchUser({ username: this.searchParams })
-      this.tableData = data.data
+      if (this.searchParams == '') {
+        this.getUserList()
+      } else {
+        const { data } = await searchUser({ username: this.searchParams })
+        this.tableData = data.data
+      }
     },
     // 判断添加/修改
     handleAddEdit(row) {
@@ -215,8 +224,10 @@ export default {
         await updateUser(row)
       }
     },
-    handleDelete(id) {
-      console.log(id)
+    async handleDelete(id) {
+      const { data } = await deleteUser({ id })
+      this.$message({ message: data.msg, type: 'success' })
+      this.getUserList()
     },
   },
   async created() {
