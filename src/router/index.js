@@ -25,8 +25,8 @@ const routes = [
       },
       {
         path: "students",
-        name: "users",
-        component: () => import("../views/admin/users/index.vue"),
+        name: "students",
+        component: () => import("../views/admin/student/index.vue"),
       },
       {
         path: "hotel",
