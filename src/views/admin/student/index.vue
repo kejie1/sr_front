@@ -6,94 +6,101 @@
           <el-input placeholder="请输入姓名" @input="searchUser" v-model="searchParams">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <el-select v-model="value" placeholder="请选择学院">
+          <el-select placeholder="请选择学院" v-model="value">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in collegeList"
+              :key="item.id"
+              :label="item.collegeStr"
+              :value="item.id"
             ></el-option>
           </el-select>
-          <el-select v-model="value" placeholder="请选择班级">
+          <el-select placeholder="请选择班级" v-model="value">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in collegeList"
+              :key="item.id"
+              :label="item.collegeStr"
+              :value="item.id"
             ></el-option>
           </el-select>
-          <el-button
-            type="primary"
-            :disabled="accountType == 1 ? false : true"
-            size="mini"
-            @click="handleAddEdit"
-          >搜索</el-button>
+          <el-button type="primary" :disabled="accountType == 1 ? false : true" size="mini">搜索</el-button>
         </div>
         <div class="addBtn">
           <el-button
             type="primary"
             :disabled="accountType == 1 ? false : true"
             size="mini"
-            @click="handleAddEdit"
+            @click="openAddEditDrawer"
           >添加学生信息</el-button>
-          <el-button
-            type="success"
-            :disabled="accountType == 1 ? false : true"
-            size="mini"
-            @click="handleAddEdit"
-          >导出为表格</el-button>
+          <el-button type="success" :disabled="accountType == 1 ? false : true" size="mini">导出为表格</el-button>
         </div>
       </div>
     </div>
-    <el-table
-      @cell-click="handleStatus"
-      :key="Math.random()"
-      :data="tableData"
-      stripe
-      style="width: 100%"
-    >
+    <el-table fit :data="studentsList" stripe style="width: 100%">
       <el-table-column prop="id" label="ID" width="50"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="sex" label="性别"></el-table-column>
       <el-table-column prop="age" label="年龄"></el-table-column>
-      <el-table-column prop="phone" label="电话"></el-table-column>
-      <el-table-column prop="idCard" label="身份证号码"></el-table-column>
-      <el-table-column prop="college" label="学院"></el-table-column>
-      <el-table-column prop="class" label="班级"></el-table-column>
+      <el-table-column prop="phone" label="电话" width="120"></el-table-column>
+      <el-table-column prop="idCard" label="身份证号码" width="180"></el-table-column>
+      <el-table-column prop="collegeId" label="学院"></el-table-column>
+      <el-table-column prop="classId" label="班级"></el-table-column>
       <el-table-column prop="hostelId" label="宿舍"></el-table-column>
       <el-table-column prop="ethnic" label="民族"></el-table-column>
       <el-table-column prop="birthPlace" label="生源地"></el-table-column>
-      <el-table-column prop="address" label="家庭地址"></el-table-column>
+      <el-table-column prop="address" label="家庭地址" width="120"></el-table-column>
       <el-table-column prop="graduate" label="毕业院校"></el-table-column>
-      <el-table-column prop="counselor" label="辅导员姓名"></el-table-column>
-      <el-table-column prop="counselorPhone" label="辅导员电话"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="counselorId" label="辅导员姓名" width="100"></el-table-column>
+      <el-table-column prop="counselorPhone" label="辅导员电话" width="120"></el-table-column>
+      <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button type="warning" size="mini" @click="handleAddEdit(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- 添加修改用户 -->
-    <el-dialog
-      :title="`${userInfo.id ? '编辑' : '添加'}用户`"
-      :visible.sync="userInfoVisible"
-      width="40%"
+    <el-pagination
+      small
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagination.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pagination.pageSize"
+      layout="->,total, sizes, prev, pager,next, jumper"
+      :total="pagination.total || 0"
+    ></el-pagination>
+    <el-drawer
+      title="添加学生信息"
+      :visible.sync="addEditVisible"
+      :direction="direction"
+      :before-close="handleClose"
+      size="40%"
     >
-      <el-form :model="userInfo" :rules="userInfoRules" ref="userInfo" label-width="100px">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="userInfo.username"></el-input>
+      <el-form :model="studentInfo" :rules="studentInfoRules" ref="studentInfo" label-width="100px">
+        <el-form-item label="用户名" prop="name">
+          <el-input v-model="studentInfo.name"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="userInfo.password" type="password"></el-input>
+        <el-form-item label="密码" prop="sex">
+          <el-input v-model="studentInfo.sex"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="userInfo.email" type="email"></el-input>
+        <el-form-item label="邮箱" prop="age">
+          <el-input v-model="studentInfo.age"></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
-          <el-input v-model="userInfo.phone"></el-input>
+          <el-input v-model="studentInfo.phone"></el-input>
         </el-form-item>
-        <el-form-item label="角色类型" prop="accountType" :v-if="accountType == 1">
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="studentInfo.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="studentInfo.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="studentInfo.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="studentInfo.phone"></el-input>
+        </el-form-item>
+        <!-- <el-form-item label="角色类型" prop="accountType" :v-if="accountType == 1">
           <el-select v-model="userInfo.accountType" placeholder="请选择">
             <el-option
               v-for="item in accountTypeEnum"
@@ -112,82 +119,78 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="状态" prop="status" :v-if="accountType == 1">
+        </el-form-item>-->
+        <!-- <el-form-item label="状态" prop="status" :v-if="accountType == 1">
           <el-switch v-model="userInfo.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancel">取 消</el-button>
         <el-button type="primary" @click="submit">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
 <script>
-import { collegeList } from '../../../api/college'
+import { collegeList, studentsList } from '../../../api/students'
 // import { mapState } from 'vuex'
 export default {
   components: {},
   data() {
     return {
-      tableData: [],
-      userInfoVisible: false,
-      accountType: 1,
-      rowData: {},
+      studentsList: [],
       collegeList: [],
-      userInfo: {
-        username: '',
-        password: '',
-        email: '',
-        phone: '',
-        accountType: 1,
-        status: true,
-      },
       searchParams: '',
-      userInfoRules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          {
-            min: 2,
-            max: 16,
-            message: '用户名长度为2~16的字符',
-            trigger: 'blur',
-          },
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          {
-            min: 6,
-            max: 16,
-            message: '用户名长度为6~16的字符',
-            trigger: 'blur',
-          },
-        ],
+      accountType: 1,
+      pagination: {
+        pageSize: 10,
+        currentPage: 1,
       },
-      accountTypeEnum: [
-        { value: 1, label: '超级管理员' },
-        { value: 2, label: '普通用户' },
-      ],
+      value: '',
+      addEditVisible: false,
+      studentInfo: {
+        name: '',
+        sex: '',
+        age: '',
+        phone: '',
+        idCard: '',
+        collegeId: '',
+      },
     }
   },
   computed: {},
   watch: {},
-  async created() {
-    await this.getCollegeList()
-    await this.getUserList()
+  created() {
+    this.getCollegeList()
+    this.getStudentList()
   },
   mounted() {},
   updated() {},
   methods: {
+    searchUser() {},
     // 获取学院列表
     async getCollegeList() {
       const { data } = await collegeList()
-      this.collegeList = data.data.map((x) => ({
-        label: x.collegeStr,
-        value: x.id,
+      this.collegeList = data.data
+    },
+    async getStudentList() {
+      const { data } = await studentsList(this.pagination)
+      console.log(data)
+      this.studentsList = data.data.result.map((x) => ({
+        ...x,
       }))
+      this.pagination = data.data.pagination
+    },
+    openAddEditDrawer() {
+      this.addEditVisible = true
+    },
+    handleAddEdit() {},
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
     },
   },
 }

@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import logo from "@/components/header/logo.vue";
-import userInfo from "@/components/header/userInfo.vue";
-import menuList from "@/components/aside/menu.vue";
+import logo from '@/components/header/logo.vue'
+import userInfo from '@/components/header/userInfo.vue'
+import menuList from '@/components/aside/menu.vue'
 export default {
   components: {
     logo,
@@ -34,7 +34,7 @@ export default {
     menuList,
   },
   data() {
-    return {};
+    return {}
   },
   computed: {},
   watch: {},
@@ -42,14 +42,13 @@ export default {
   created() {},
   mounted() {},
   updated() {},
-};
+}
 </script>
 <style lang="less" scoped>
 .indexContainer {
-  min-width: 100%;
+  width: 100%;
   min-height: 100%;
   position: absolute;
-
   .el-header {
     background-color: #333333;
     display: flex;
@@ -69,11 +68,12 @@ export default {
     }
   }
   .content {
+    width: 100%;
     .el-aside {
       width: 20%;
     }
     .el-main {
-      width: 80%;
+      width: 100%;
     }
   }
 }
