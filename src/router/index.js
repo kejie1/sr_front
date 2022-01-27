@@ -30,17 +30,17 @@ const routes = [
       },
       {
         path: "hotel",
-        name: "users",
-        component: () => import("../views/admin/users/index.vue"),
+        name: "hotel",
+        component: () => import("../views/admin/hostel/list.vue"),
       },
       {
         path: "finance",
-        name: "users",
+        name: "finance",
         component: () => import("../views/admin/users/index.vue"),
       },
       {
         path: "college",
-        name: "users",
+        name: "finance",
         component: () => import("../views/admin/users/index.vue"),
       },
     ],
