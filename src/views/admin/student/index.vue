@@ -167,11 +167,10 @@
 </template>
 
 <script>
-import { studentsList } from '@/api/students'
+import { studentsList, searchStudents } from '@/api/students'
 import { collegeList } from '@/api/college'
 import { vocationalList } from '@/api/vocational'
 import { nationList } from '@/util/Enum'
-// import { mapState } from 'vuex'
 export default {
   components: {},
   data() {
@@ -266,6 +265,7 @@ export default {
         label: x.vocationalStr,
         value: x.id,
       }))
+      console.log(this.vocationalList)
     },
     // 学生信息
     async getStudentList() {
@@ -277,7 +277,15 @@ export default {
       this.pagination = data.data.pagination
     },
     // 处理搜索
-    handleSearch() {},
+    async handleSearch() {
+      const params = {
+        name: this.searchParams,
+        collegeId: this.collegeValue,
+        vocationalId: this.vocationalValue,
+      }
+      const { data } = await searchStudents(params)
+      this.studentsList = data.data
+    },
     openAddEditDrawer() {
       this.addEditVisible = true
     },

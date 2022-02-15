@@ -7,3 +7,10 @@ export function studentsList(params) {
     params
   });
 }
+export function searchStudents(params){
+  return http({
+    url:"students/queryByName",
+    method:"get",
+    params
+  })
+}

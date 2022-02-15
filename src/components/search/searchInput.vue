@@ -1,29 +1,28 @@
 <template>
   <div class>
-    <el-input type="text" :value="inputParams" @click="handler"></el-input>
+    <el-input type="text" v-model="inputParams" @click="handler"></el-input>
   </div>
 </template>
 
 <script>
 export default {
   components: {},
-  data() {
-    return {
-      props: {
-        inputParams: {
-          type: String,
-          default() {
-            return ''
-          },
-        },
-        handleInput: {
-          type: Function,
-          default() {
-            return Function
-          },
-        },
+  props: {
+    inputParams: {
+      type: String,
+      default() {
+        return ''
       },
-    }
+    },
+    handleInput: {
+      type: Function,
+      default() {
+        return Function
+      },
+    },
+  },
+  data() {
+    return {}
   },
   computed: {},
   watch: {},
