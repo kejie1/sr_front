@@ -43,6 +43,7 @@
     <el-table fit :data="studentsList" stripe style="width: 100%">
       <el-table-column prop="id" label="ID" width="50"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
+      <el-table-column prop="studentId" label="学号" width="120"></el-table-column>
       <el-table-column prop="sex" label="性别"></el-table-column>
       <el-table-column prop="age" label="年龄"></el-table-column>
       <el-table-column prop="phone" label="电话" width="120"></el-table-column>
@@ -78,6 +79,9 @@
       <el-form :model="studentInfo" :rules="studentInfoRules" ref="studentInfo" label-width="100px">
         <el-form-item label="姓名：" prop="name">
           <el-input v-model="studentInfo.name"></el-input>
+        </el-form-item>
+        <el-form-item label="学号" prop="studentId">
+          <el-input v-model="studentInfo.studentId"></el-input>
         </el-form-item>
         <el-form-item label="性别：" prop="sex">
           <el-radio v-model="studentInfo.sex" label="1">男</el-radio>
@@ -145,17 +149,21 @@
           <el-input v-model="studentInfo.graduate"></el-input>
         </el-form-item>
         <el-form-item label="辅导员姓名:" prop="counselorId">
-          <el-select v-model="studentInfo.counselorId" placeholder="请选择">
+          <el-select
+            v-model="studentInfo.counselorId"
+            placeholder="请选择"
+            @change="getCounselorPhone"
+          >
             <el-option
-              v-for="item in collegeList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in counselorList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="辅导员电话:" prop="counselorPhone">
-          <el-input v-model="studentInfo.counselorPhone" disabled></el-input>
+          <el-input v-model="phone" disabled></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAddEdit">添加</el-button>
@@ -168,8 +176,10 @@
 
 <script>
 import { studentsList, searchStudents } from '@/api/students'
-import { collegeList } from '@/api/college'
-import { vocationalList } from '@/api/vocational'
+import { collegeList, queryCollegeStrById } from '@/api/college'
+import { vocationalList, queryVocationalStrById } from '@/api/vocational'
+import { counselorList, queryPhoneByName } from '@/api/counselor'
+import { queryClassStrById } from '@/api/class'
 import { nationList } from '@/util/Enum'
 export default {
   components: {},
@@ -178,6 +188,8 @@ export default {
       studentsList: [],
       collegeList: [],
       vocationalList: [],
+      counselorList: [],
+      phone: '',
       searchParams: '',
       accountType: 1,
       pagination: {
@@ -201,6 +213,7 @@ export default {
           { required: true, message: '请输入姓名', trigger: 'blur' },
           { min: 2, max: 8, message: '姓名长度为2~8', trigger: 'blur' },
         ],
+        studentId: [{ required: true, message: '请输入学号', trigger: 'blur' }],
         sex: [{ required: true, message: '请选择性别', trigger: 'change' }],
         age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
         phone: [
@@ -265,17 +278,50 @@ export default {
         label: x.vocationalStr,
         value: x.id,
       }))
-      console.log(this.vocationalList)
+    },
+    // 教师信息
+    async getCounselorList() {
+      const params = {
+        pageSize: 10,
+        currentPage: 1,
+      }
+      const { data } = await counselorList(params)
+      this.counselorList = data.data.result
+    },
+    async getCounselorPhone(val) {
+      const params = { id: val }
+      const { data } = await queryPhoneByName(params)
+      this.phone = data.data[0].phone
     },
     // 学生信息
     async getStudentList() {
       const { data } = await studentsList(this.pagination)
-      console.log(data)
       this.studentsList = data.data.result.map((x) => ({
         ...x,
+        ethnic: nationList[x.ethnic].label,
+        collegeId: this.getCollegeStr(x.collegeId),
+        vocationalId: this.getVocationalStr(x.vocationalId),
+        classId: this.getClassStr(x.classId),
       }))
       this.pagination = data.data.pagination
     },
+    // 学生详细信息
+    async getCollegeStr(param) {
+      const params = { id: param }
+      const { data } = await queryCollegeStrById(params)
+      return data.data[0].collegeStr
+    },
+    async getVocationalStr(param) {
+      const params = { id: param }
+      const { data } = await queryVocationalStrById(params)
+      return data.data[0].vocationalStr
+    },
+    async getClassStr(param) {
+      const params = { id: param }
+      const { data } = await queryClassStrById(params)
+      return data.data[0].classStr
+    },
+
     // 处理搜索
     async handleSearch() {
       const params = {
@@ -288,6 +334,7 @@ export default {
     },
     openAddEditDrawer() {
       this.addEditVisible = true
+      this.getCounselorList()
     },
     handleAddEdit(row) {
       if (row) {

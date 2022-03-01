@@ -1,14 +1,13 @@
 import http from "../util/http";
 export function collegeList() {
   return http({
-    url: "college/collegeList",
+    url: "class/collegeList",
     method: "get",
   });
 }
-
-export function queryCollegeStrById(params) {
+export function queryClassStrById(params) {
   return http({
-    url: "college/queryCollegeStrById",
+    url: "class/queryClassStrById",
     method: "get",
     params,
   });

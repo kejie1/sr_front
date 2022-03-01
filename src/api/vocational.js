@@ -6,3 +6,10 @@ export function vocationalList() {
     method: "get",
   });
 }
+export function queryVocationalStrById(params) {
+  return http({
+    url: "vocational/queryVocationalStrById",
+    method: "get",
+    params,
+  });
+}
