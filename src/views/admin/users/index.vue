@@ -32,7 +32,7 @@
       <el-table-column prop="college" label="所属学院">
         <template slot-scope="scope">
           {{
-          scope.row.college
+          scope.row.college.label
           }}
         </template>
       </el-table-column>
