@@ -1,7 +1,7 @@
 import http from "../util/http";
-export function collegeList() {
+export function classList() {
   return http({
-    url: "class/collegeList",
+    url: "class/classList",
     method: "get",
   });
 }

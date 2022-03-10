@@ -119,7 +119,7 @@
         <el-form-item label="所在班级" prop="classId">
           <el-select v-model="studentInfo.classId" placeholder="请选择">
             <el-option
-              v-for="item in collegeList"
+              v-for="item in classList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -179,7 +179,7 @@ import { studentsList, searchStudents } from '@/api/students'
 import { collegeList, queryCollegeStrById } from '@/api/college'
 import { vocationalList, queryVocationalStrById } from '@/api/vocational'
 import { counselorList, queryPhoneByName } from '@/api/counselor'
-import { queryClassStrById } from '@/api/class'
+import { classList, queryClassStrById } from '@/api/class'
 import { nationList } from '@/util/Enum'
 export default {
   components: {},
@@ -187,6 +187,7 @@ export default {
     return {
       studentsList: [],
       collegeList: [],
+      classList: [],
       vocationalList: [],
       counselorList: [],
       phone: '',
@@ -255,6 +256,7 @@ export default {
   created() {
     this.getCollegeList()
     this.getVocational()
+    this.getClassList()
     this.getStudentList()
   },
   mounted() {},
@@ -263,17 +265,27 @@ export default {
     searchUser() {},
     // 获取学院列表
     async getCollegeList() {
-      const { data } = await collegeList()
-      this.collegeList = data.data.map((x) => ({
+      const { data: res } = await collegeList()
+      this.collegeList = res.data.map((x) => ({
         ...x,
         label: x.collegeStr,
         value: x.id,
       }))
     },
+    // 获取班级列表
+    async getClassList() {
+      const { data: res } = await classList()
+      this.classList = res.data.map((x) => ({
+        ...x,
+        label: x.name,
+        value: x.id,
+      }))
+      debugger
+    },
     // 获取专业列表
     async getVocational() {
-      const { data } = await vocationalList()
-      this.vocationalList = data.data.map((x) => ({
+      const { data: res } = await vocationalList()
+      this.vocationalList = res.data.map((x) => ({
         ...x,
         label: x.vocationalStr,
         value: x.id,
@@ -285,8 +297,8 @@ export default {
         pageSize: 10,
         currentPage: 1,
       }
-      const { data } = await counselorList(params)
-      this.counselorList = data.data.result
+      const { data: res } = await counselorList(params)
+      this.counselorList = res.data.result
     },
     async getCounselorPhone(val) {
       const params = { id: val }
