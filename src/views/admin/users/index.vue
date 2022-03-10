@@ -48,7 +48,7 @@
           <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="warning" plain size="mini" @click="handleAddEdit(scope.row)">编辑</el-button>
           <el-button type="danger" plain size="mini" @click="handleDelete(scope.row.id)">删除</el-button>

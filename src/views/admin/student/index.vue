@@ -60,8 +60,8 @@
       <el-table-column prop="counselorPhone" label="辅导员电话" width="120"></el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" @click="handleAddEdit(scope.row)">编辑</el-button>
-          <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
+          <el-button type="warning" plain size="mini" @click="handleAddEdit(scope.row)">编辑</el-button>
+          <el-button type="danger" plain size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import { studentsList, searchStudents } from '@/api/students'
+import { studentsList, searchStudents, addStudentInfo } from '@/api/students'
 import { collegeList, queryCollegeStrById } from '@/api/college'
 import { vocationalList, queryVocationalStrById } from '@/api/vocational'
 import { counselorList, queryPhoneByName } from '@/api/counselor'
@@ -280,7 +280,6 @@ export default {
         label: x.name,
         value: x.id,
       }))
-      debugger
     },
     // 获取专业列表
     async getVocational() {
@@ -349,11 +348,22 @@ export default {
       this.addEditVisible = true
       this.getCounselorList()
     },
-    handleAddEdit(row) {
-      if (row) {
+    async handleAddEdit(row) {
+      if (row.id) {
         // 编辑
+        console.log(row)
       } else {
-        // 修改
+        // 添加
+        const params = {
+          ...this.studentInfo,
+          sex: parseInt(this.studentInfo.sex),
+          counselorPhone: this.phone,
+        }
+        const { data } = await addStudentInfo(params)
+        if (data.code == 200) {
+          this.$message({ message: data.msg, type: 'success' })
+        }
+        debugger
       }
     },
     handleSizeChange(val) {

@@ -14,3 +14,10 @@ export function searchStudents(params){
     params
   })
 }
+export function addStudentInfo(data){
+  return http({
+    url:"students/addStudent",
+    method:"post",
+    data
+  })
+}
