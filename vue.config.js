@@ -9,7 +9,7 @@ module.exports = {
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
         //  是.env.development 文件的 /dev-api
-        target: " http://localhost:3000",
+        target: "http://localhost:3001",
         chargeOrigin: true, // 开启代理服务器
         pathRewrite: {
           // '^/dev-api': '',
@@ -25,5 +25,9 @@ module.exports = {
    .set('assets', resolve('src/assets'))
    .set('components', resolve('src/components'))
    .set('layout', resolve('src/layout'))
- }
+ },
+ publicPath: "./" ,
+ configureWebpack: {
+  devtool: '#eval-source-map'
+},
 };

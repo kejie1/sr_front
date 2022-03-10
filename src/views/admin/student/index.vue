@@ -234,7 +234,7 @@ export default {
         hostelId: [
           { required: true, message: '请输入宿舍号', trigger: 'blur' },
         ],
-        classId: [{ required: true, message: '请选择民族', trigger: 'change' }],
+        ethnic: [{ required: true, message: '请选择民族', trigger: 'change' }],
         birthPlace: [
           { required: true, message: '请输入生源地', trigger: 'blur' },
         ],
@@ -295,31 +295,32 @@ export default {
     },
     // 学生信息
     async getStudentList() {
-      const { data } = await studentsList(this.pagination)
-      this.studentsList = data.data.result.map((x) => ({
-        ...x,
-        ethnic: nationList[x.ethnic].label,
-        collegeId: this.getCollegeStr(x.collegeId),
-        vocationalId: this.getVocationalStr(x.vocationalId),
-        classId: this.getClassStr(x.classId),
-      }))
-      this.pagination = data.data.pagination
+      const { data: res } = await studentsList(this.pagination)
+      let temp = res.data.result || []
+      for (let i = 0; i < temp.length; i++) {
+        temp[i].ethnic = nationList[temp[i].ethnic].label
+        temp[i].collegeId = await this.getCollegeStr(temp[i].collegeId)
+        temp[i].vocationalId = await this.getVocationalStr(temp[i].vocationalId)
+        temp[i].classId = await this.getClassStr(temp[i].classId)
+      }
+      this.studentsList = temp
+      this.pagination = res.data.pagination
     },
     // 学生详细信息
     async getCollegeStr(param) {
       const params = { id: param }
-      const { data } = await queryCollegeStrById(params)
-      return data.data[0].collegeStr
+      const { data: res } = await queryCollegeStrById(params)
+      return res.data[0].collegeStr
     },
     async getVocationalStr(param) {
       const params = { id: param }
-      const { data } = await queryVocationalStrById(params)
-      return data.data[0].vocationalStr
+      const { data: res } = await queryVocationalStrById(params)
+      return res.data[0].vocationalStr
     },
     async getClassStr(param) {
       const params = { id: param }
-      const { data } = await queryClassStrById(params)
-      return data.data[0].classStr
+      const { data: res } = await queryClassStrById(params)
+      return res.data[0].classStr
     },
 
     // 处理搜索
@@ -350,7 +351,7 @@ export default {
       console.log(`当前页: ${val}`)
     },
     handleCancel() {
-      this.$refs[studentInfo].resetFields()
+      this.$refs['studentInfo'].resetFields()
       this.addEditVisible = false
     },
   },

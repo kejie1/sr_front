@@ -3,7 +3,7 @@ import { Message } from "element-ui";
 import NProgress from "nprogress";
 // create an axios instances
 const service = axios.create({
-  baseURL: "http://localhost:3000/api", // url = base url + request url
+  baseURL: "http://localhost:3001/api", // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000, // request timeout
 });
