@@ -60,7 +60,7 @@
       <el-table-column prop="counselorPhone" label="辅导员电话" width="120"></el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button type="warning" plain size="mini" @click="handleAddEdit(scope.row)">编辑</el-button>
+          <el-button type="warning" plain size="mini" @click="openAddEditDrawer(scope.row)">编辑</el-button>
           <el-button type="danger" plain size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -75,7 +75,12 @@
       layout="->,total, sizes, prev, pager,next, jumper"
       :total="pagination.total || 0"
     ></el-pagination>
-    <el-drawer title="添加学生信息" :visible.sync="addEditVisible" size="40%">
+    <el-drawer
+      :title="`${studentTitle}学生信息`"
+      @close="handleClose"
+      :visible.sync="addEditVisible"
+      size="40%"
+    >
       <el-form :model="studentInfo" :rules="studentInfoRules" ref="studentInfo" label-width="100px">
         <el-form-item label="姓名：" prop="name">
           <el-input v-model="studentInfo.name"></el-input>
@@ -175,7 +180,13 @@
 </template>
 
 <script>
-import { studentsList, searchStudents, addStudentInfo } from '@/api/students'
+import {
+  studentsList,
+  searchStudents,
+  addStudentInfo,
+  queryById,
+  updateStudentInfo,
+} from '@/api/students'
 import { collegeList, queryCollegeStrById } from '@/api/college'
 import { vocationalList, queryVocationalStrById } from '@/api/vocational'
 import { counselorList, queryPhoneByName } from '@/api/counselor'
@@ -249,6 +260,8 @@ export default {
           { required: true, message: '请选择辅导员', trigger: 'change' },
         ],
       },
+      studentTitle: '',
+      rowInfo: null,
     }
   },
   computed: {},
@@ -258,6 +271,7 @@ export default {
     this.getVocational()
     this.getClassList()
     this.getStudentList()
+    this.getCounselorList()
   },
   mounted() {},
   updated() {},
@@ -277,7 +291,7 @@ export default {
       const { data: res } = await classList()
       this.classList = res.data.map((x) => ({
         ...x,
-        label: x.name,
+        label: x.classStr,
         value: x.id,
       }))
     },
@@ -304,6 +318,11 @@ export default {
       const { data } = await queryPhoneByName(params)
       this.phone = data.data[0].phone
     },
+    async getCounselorName(val) {
+      const params = { id: val }
+      const { data: res } = await queryPhoneByName(params)
+      return res.data[0].name
+    },
     // 学生信息
     async getStudentList() {
       const { data: res } = await studentsList(this.pagination)
@@ -313,6 +332,7 @@ export default {
         temp[i].collegeId = await this.getCollegeStr(temp[i].collegeId)
         temp[i].vocationalId = await this.getVocationalStr(temp[i].vocationalId)
         temp[i].classId = await this.getClassStr(temp[i].classId)
+        temp[i].counselorId = await this.getCounselorName(temp[i].counselorId)
       }
       this.studentsList = temp
       this.pagination = res.data.pagination
@@ -344,27 +364,42 @@ export default {
       const { data } = await searchStudents(params)
       this.studentsList = data.data
     },
-    openAddEditDrawer() {
-      this.addEditVisible = true
-      this.getCounselorList()
-    },
-    async handleAddEdit(row) {
+    async openAddEditDrawer(row) {
+      this.studentTitle = '添加'
       if (row.id) {
-        // 编辑
-        console.log(row)
+        this.rowInfo = row
+        this.studentTitle = '编辑'
+      }
+      const { data: res } = await queryById({ id: row.id })
+      console.log(res)
+      if (res.code == 200)
+        this.studentInfo = {
+          ...res.data[0],
+          sex: res.data[0].sex + '',
+          ethnic: nationList[res.data[0].ethnic].label,
+        }
+      this.addEditVisible = true
+    },
+    async handleAddEdit() {
+      const params = {
+        ...this.studentInfo,
+        sex: parseInt(this.studentInfo.sex),
+        counselorPhone: this.phone,
+      }
+      if (this.rowInfo.id) {
+        const { data } = await updateStudentInfo(params)
+        console.log(data)
+        this.rowInfo = null
       } else {
         // 添加
-        const params = {
-          ...this.studentInfo,
-          sex: parseInt(this.studentInfo.sex),
-          counselorPhone: this.phone,
-        }
         const { data } = await addStudentInfo(params)
         if (data.code == 200) {
           this.$message({ message: data.msg, type: 'success' })
         }
-        debugger
       }
+    },
+    handleClose() {
+      this.studentTitle = ''
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)

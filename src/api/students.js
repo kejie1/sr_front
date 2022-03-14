@@ -14,9 +14,23 @@ export function searchStudents(params){
     params
   })
 }
+export function queryById(params){
+  return http({
+    url:"students/queryById",
+    method:"get",
+    params
+  })
+}
 export function addStudentInfo(data){
   return http({
     url:"students/addStudent",
+    method:"post",
+    data
+  })
+}
+export function updateStudentInfo(data){
+  return http({
+    url:"students/updateStudentInfo",
     method:"post",
     data
   })
