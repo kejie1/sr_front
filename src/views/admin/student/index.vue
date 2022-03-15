@@ -61,7 +61,7 @@
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button type="warning" plain size="mini" @click="openAddEditDrawer(scope.row)">编辑</el-button>
-          <el-button type="danger" plain size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
+          <el-button type="danger" plain size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -187,6 +187,7 @@ import {
   addStudentInfo,
   queryById,
   updateStudentInfo,
+  deleteStudent,
 } from '@/api/students'
 import { collegeList, queryCollegeStrById } from '@/api/college'
 import { vocationalList, queryVocationalStrById } from '@/api/vocational'
@@ -409,8 +410,19 @@ export default {
       this.handleCancel()
       this.getStudentList()
     },
+    // 关闭drawer回调
     handleClose() {
       this.rowInfo = null
+    },
+    // 删除
+    async handleDelete(row) {
+      const { data } = await deleteStudent({ id: row.id })
+      if (data.code == 200) {
+        this.$message({
+          type: 'success',
+          message: '删除成功!',
+        })
+      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)

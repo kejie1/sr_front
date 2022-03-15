@@ -35,3 +35,10 @@ export function updateStudentInfo(data){
     data
   })
 }
+export function deleteStudent(params) {
+  return http({
+    url: "students/deleteStudent",
+    method: "get",
+    params
+  });
+}
