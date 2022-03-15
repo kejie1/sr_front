@@ -29,10 +29,10 @@
       <el-table-column :v-if="accountType == 1" prop="password" label="密码"></el-table-column>
       <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="phone" label="电话"></el-table-column>
-      <el-table-column prop="college" label="所属学院">
+      <el-table-column prop="collegeId" label="所属学院">
         <template slot-scope="scope">
           {{
-          scope.row.college.label
+          scope.row.college
           }}
         </template>
       </el-table-column>
@@ -114,7 +114,7 @@ import {
   updateUser,
   deleteUser,
 } from '../../../api/user'
-import { collegeList } from '../../../api/college'
+import { collegeList, queryCollegeStrById } from '../../../api/college'
 // import { mapState } from 'vuex'
 export default {
   components: {},
@@ -165,11 +165,14 @@ export default {
   methods: {
     async getUserList() {
       const { data } = await userList()
-      this.tableData = data.data.map((x) => ({
-        ...x,
-        status: x.status == 1 ? true : false,
-        college: this.collegeList[x.collegeId],
-      }))
+      for (let i = 0; i < data.data.length; i++) {
+        data.data[i].status = data.data[i].status == 1 ? true : false
+        data.data[i].college = await this.getCollegeStrById(
+          data.data[i].collegeId
+        )
+      }
+      this.tableData = data.data
+      console.log(this.tableData)
       // this.accountType = this.$store.state.userInfo.accountType
     },
     // 获取学院列表
@@ -179,6 +182,10 @@ export default {
         label: x.collegeStr,
         value: x.id,
       }))
+    },
+    async getCollegeStrById(id) {
+      const { data } = await queryCollegeStrById({ id })
+      return data.data[0].collegeStr || ''
     },
 
     // 防抖todo

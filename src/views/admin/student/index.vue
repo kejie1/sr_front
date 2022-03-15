@@ -75,9 +75,10 @@
       layout="->,total, sizes, prev, pager,next, jumper"
       :total="pagination.total || 0"
     ></el-pagination>
+    <!-- 编辑 -->
     <el-drawer
       :title="`${studentTitle}学生信息`"
-      @close="handleClose"
+      @closed="handleClose"
       :visible.sync="addEditVisible"
       size="40%"
     >
@@ -171,7 +172,7 @@
           <el-input v-model="phone" disabled></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleAddEdit">添加</el-button>
+          <el-button type="primary" @click="handleAddEdit">保存</el-button>
           <el-button @click="handleCancel">取消</el-button>
         </el-form-item>
       </el-form>
@@ -218,6 +219,7 @@ export default {
         phone: '',
         idCard: '',
         collegeId: '',
+        counselorId: '',
       },
       nationList,
       studentInfoRules: {
@@ -262,6 +264,7 @@ export default {
       },
       studentTitle: '',
       rowInfo: null,
+      ethnicStr: '',
     }
   },
   computed: {},
@@ -333,6 +336,7 @@ export default {
         temp[i].vocationalId = await this.getVocationalStr(temp[i].vocationalId)
         temp[i].classId = await this.getClassStr(temp[i].classId)
         temp[i].counselorId = await this.getCounselorName(temp[i].counselorId)
+        temp[i].sex = temp[i].sex == 1 ? '男' : '女'
       }
       this.studentsList = temp
       this.pagination = res.data.pagination
@@ -364,32 +368,37 @@ export default {
       const { data } = await searchStudents(params)
       this.studentsList = data.data
     },
+    // 打开编辑弹框
     async openAddEditDrawer(row) {
       this.studentTitle = '添加'
       if (row.id) {
         this.rowInfo = row
         this.studentTitle = '编辑'
+        const { data: res } = await queryById({ id: row.id })
+        if (res.code == 200)
+          this.studentInfo = {
+            ...res.data[0],
+            sex: res.data[0].sex + '',
+          }
+        ;(this.ethnicStr = nationList[res.data[0].ethnic].label),
+          await this.getCounselorPhone(res.data[0].counselorId)
       }
-      const { data: res } = await queryById({ id: row.id })
-      console.log(res)
-      if (res.code == 200)
-        this.studentInfo = {
-          ...res.data[0],
-          sex: res.data[0].sex + '',
-          ethnic: nationList[res.data[0].ethnic].label,
-        }
       this.addEditVisible = true
     },
+    // 处理添加修改
     async handleAddEdit() {
       const params = {
         ...this.studentInfo,
         sex: parseInt(this.studentInfo.sex),
+        hostelId: parseInt(this.studentInfo.hostelId),
         counselorPhone: this.phone,
       }
-      if (this.rowInfo.id) {
+      if (this.rowInfo) {
+        // 修改
+        params.id = this.rowInfo.id
         const { data } = await updateStudentInfo(params)
-        console.log(data)
-        this.rowInfo = null
+        if (data.code == 200)
+          this.$message({ type: 'success', message: data.msg })
       } else {
         // 添加
         const { data } = await addStudentInfo(params)
@@ -397,9 +406,11 @@ export default {
           this.$message({ message: data.msg, type: 'success' })
         }
       }
+      this.handleCancel()
+      this.getStudentList()
     },
     handleClose() {
-      this.studentTitle = ''
+      this.rowInfo = null
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
