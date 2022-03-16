@@ -7,31 +7,37 @@ export function studentsList(params) {
     params
   });
 }
-export function searchStudents(params){
+export function queryCount() {
   return http({
-    url:"students/queryByName",
-    method:"get",
+    url: "students/queryCount",
+    method: "get",
+  });
+}
+export function searchStudents(params) {
+  return http({
+    url: "students/queryByName",
+    method: "get",
     params
   })
 }
-export function queryById(params){
+export function queryById(params) {
   return http({
-    url:"students/queryById",
-    method:"get",
+    url: "students/queryById",
+    method: "get",
     params
   })
 }
-export function addStudentInfo(data){
+export function addStudentInfo(data) {
   return http({
-    url:"students/addStudent",
-    method:"post",
+    url: "students/addStudent",
+    method: "post",
     data
   })
 }
-export function updateStudentInfo(data){
+export function updateStudentInfo(data) {
   return http({
-    url:"students/updateStudentInfo",
-    method:"post",
+    url: "students/updateStudentInfo",
+    method: "post",
     data
   })
 }

@@ -36,7 +36,7 @@
             size="mini"
             @click="openAddEditDrawer"
           >添加学生信息</el-button>
-          <el-button type="success" :disabled="accountType == 1 ? false : true" size="mini">导出为表格</el-button>
+          <el-button type="success" @click="exportToExcel" size="mini">导出为表格</el-button>
         </div>
       </div>
     </div>
@@ -188,6 +188,7 @@ import {
   queryById,
   updateStudentInfo,
   deleteStudent,
+  queryCount,
 } from '@/api/students'
 import { collegeList, queryCollegeStrById } from '@/api/college'
 import { vocationalList, queryVocationalStrById } from '@/api/vocational'
@@ -271,6 +272,7 @@ export default {
   computed: {},
   watch: {},
   created() {
+    this.counts()
     this.getCollegeList()
     this.getVocational()
     this.getClassList()
@@ -280,6 +282,9 @@ export default {
   mounted() {},
   updated() {},
   methods: {
+    async counts() {
+      await queryCount()
+    },
     searchUser() {},
     // 获取学院列表
     async getCollegeList() {
@@ -422,17 +427,71 @@ export default {
           type: 'success',
           message: '删除成功!',
         })
+        this.getStudentList()
       }
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.pagination.pageSize = val
+      this.getStudentList()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.pagination.currentPage = val
+      this.getStudentList()
     },
+    // 关闭drawer后清空输入框数据
     handleCancel() {
       this.$refs['studentInfo'].resetFields()
       this.addEditVisible = false
+    },
+    // excel导出功能
+    exportToExcel() {
+      require.ensure([], () => {
+        const { export_json_to_excel } = require('@/excel/Export2Excel')
+        const tHeader = [
+          'id',
+          '姓名',
+          '学号',
+          '性别',
+          '年龄',
+          '联系电话',
+          '身份证',
+          '学院',
+          '专业',
+          '班级',
+          '宿舍',
+          '民族',
+          '生源地',
+          '家庭地址',
+          '毕业院校',
+          '辅导员姓名',
+          '辅导员电话',
+        ]
+        const filterVal = [
+          'id',
+          'name',
+          'studentId',
+          'sex',
+          'age',
+          'phone',
+          'idCard',
+          'collegeId',
+          'vocationalId',
+          'classId',
+          'hostelId',
+          'ethnic',
+          'birthPlace',
+          'address',
+          'graduate',
+          'counselorId',
+          'counselorPhone',
+        ]
+        const list = this.studentsList
+        const data = this.formatJson(filterVal, list)
+        export_json_to_excel(tHeader, data, '学生列表')
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]))
     },
   },
 }

@@ -11,10 +11,12 @@
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
+    "file-saver": "^2.0.5",
     "nprogress": "^0.2.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "xlsx": "^0.18.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -30,13 +32,14 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "prettier": "^2.2.1",
+    "script-loader": "^0.7.2",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,
     "env": {
       "node": true
-    }, 
+    },
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended",
@@ -46,7 +49,7 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "no-debugger":"off",
+      "no-debugger": "off",
       "no-console": "off"
     }
   },
