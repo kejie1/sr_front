@@ -1,19 +1,13 @@
 <template>
-  <div class>
-    <search-input
-      :inputParams="inputParams"
-      :handleInput="handleInput"
-    ></search-input>
-  </div>
+  <div class></div>
 </template>
 
 <script>
-import searchInput from "../../../../components/search/searchInput.vue";
 export default {
-  components: { searchInput },
+  name: "hotel",
   data() {
     return {
-      inputParams: "",
+      inputContent: "aaa",
     };
   },
   computed: {},

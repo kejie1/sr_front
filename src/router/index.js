@@ -31,7 +31,7 @@ const routes = [
       {
         path: "hotel",
         name: "hotel",
-        component: () => import("../views/admin/hostel/list.vue"),
+        component: () => import("../views/admin/hostel/index.vue"),
       },
       {
         path: "finance",

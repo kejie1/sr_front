@@ -4,7 +4,7 @@ export function counselorList(params) {
   return http({
     url: "counselor/counselorList",
     method: "get",
-    params
+    params,
   });
 }
 export function queryPhoneByName(params) {

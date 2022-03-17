@@ -1,6 +1,6 @@
-const path = require('path')
+const path = require("path");
 function resolve(dir) {
- return path.join(__dirname, dir)
+  return path.join(__dirname, dir);
 }
 module.exports = {
   devServer: {
@@ -19,15 +19,15 @@ module.exports = {
     },
   },
   lintOnSave: true,
- chainWebpack: config => {
-  config.resolve.alias
-   .set('@', resolve('src'))
-   .set('assets', resolve('src/assets'))
-   .set('components', resolve('src/components'))
-   .set('layout', resolve('src/layout'))
- },
- publicPath: "./" ,
- configureWebpack: {
-  devtool: '#eval-source-map'
-},
+  chainWebpack: (config) => {
+    config.resolve.alias
+      .set("@", resolve("src"))
+      .set("assets", resolve("src/assets"))
+      .set("components", resolve("src/components"))
+      .set("layout", resolve("src/layout"));
+  },
+  publicPath: "./",
+  configureWebpack: {
+    devtool: "#eval-source-map",
+  },
 };

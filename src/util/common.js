@@ -1,7 +1,7 @@
-export const debounce = (function() {
+export const debounce = (function () {
   var timer = 0;
-  return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
+  return function (callback, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(callback, ms);
   };
 })();

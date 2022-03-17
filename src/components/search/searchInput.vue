@@ -11,30 +11,29 @@ export default {
     inputParams: {
       type: String,
       default() {
-        return ''
+        return "";
       },
     },
     handleInput: {
       type: Function,
       default() {
-        return Function
+        return Function;
       },
     },
   },
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   methods: {
     handler() {
-      this.handleInput()
+      this.handleInput();
     },
   },
   created() {},
   mounted() {},
   updated() {},
-}
+};
 </script>
-<style lang='less' scoped>
-</style>
+<style lang="less" scoped></style>
