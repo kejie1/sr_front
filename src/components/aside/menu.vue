@@ -10,7 +10,7 @@
     >
       <el-menu-item index="/admin/users">管理员管理</el-menu-item>
       <el-menu-item index="/admin/students">学生信息管理</el-menu-item>
-      <el-menu-item index="3">学生宿舍管理</el-menu-item>
+      <el-menu-item index="/admin/hotel">学生宿舍管理</el-menu-item>
       <el-menu-item index="4">财务管理</el-menu-item>
       <el-submenu index="5">
         <template slot="title">教务管理</template>
