@@ -6,7 +6,6 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "eslint --fix --ext .js,.ts,.vue src",
-    "prepare": "husky install",
     "commit": "cz"
   },
   "dependencies": {
