@@ -27,6 +27,13 @@ export function queryById(params) {
     params,
   });
 }
+export function queryByHostel(params) {
+  return http({
+    url: "students/queryByHostel",
+    method: "get",
+    params,
+  });
+}
 export function addStudentInfo(data) {
   return http({
     url: "students/addStudent",

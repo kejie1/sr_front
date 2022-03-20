@@ -14,3 +14,31 @@ export function queryHostelName(params) {
     params,
   });
 }
+export function queryById(params) {
+  return http({
+    url: "hostel/queryById",
+    method: "get",
+    params,
+  });
+}
+export function addHostel(data) {
+  return http({
+    url: "hostel/addHostel",
+    method: "post",
+    data,
+  });
+}
+export function updateHostel(data) {
+  return http({
+    url: "hostel/update",
+    method: "post",
+    data,
+  });
+}
+export function deleteHostel(data) {
+  return http({
+    url: "hostel/delete",
+    method: "post",
+    data,
+  });
+}
