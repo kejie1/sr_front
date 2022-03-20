@@ -18,16 +18,11 @@
         </div>
       </div>
     </div>
-    <el-table
-      :key="Math.random()"
-      :data="tableData"
-      stripe
-      style="width: 100%"
-    >
+    <el-table :key="Math.random()" :data="tableData" stripe style="width: 100%">
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="hostelSex" label="分类">
         <template slot-scope="scope">
-          {{scope.row.hostelSex == 1 ? '男' : '女'}}
+          {{ scope.row.hostelSex == 1 ? "男" : "女" }}
         </template>
       </el-table-column>
       <el-table-column prop="hostelBuild" label="楼栋"></el-table-column>
@@ -90,31 +85,39 @@
     <el-dialog
       title="宿舍详细信息"
       :visible.sync="hostelMoreInfoVisible"
-      width="50%">
-      <el-table
-      :key="Math.random()"
-      :data="moreInfoList"
-      stripe
-      style="width: 100%"
+      width="50%"
     >
-      <el-table-column
-      label="#"
-      type="index">
-    </el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="phone" label="电话"></el-table-column>
-      <el-table-column prop="collegeId" label="学院"></el-table-column>
-      <el-table-column prop="vocationalId" label="专业"></el-table-column>
-      <el-table-column prop="classId" label="班级"></el-table-column>
-      <el-table-column prop="counselorId" label="辅导员"></el-table-column>
-      <el-table-column prop="counselorPhone" label="辅导员电话"></el-table-column>
-    </el-table>
+      <el-table
+        :key="Math.random()"
+        :data="moreInfoList"
+        stripe
+        style="width: 100%"
+      >
+        <el-table-column label="#" type="index"> </el-table-column>
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="phone" label="电话"></el-table-column>
+        <el-table-column prop="collegeId" label="学院"></el-table-column>
+        <el-table-column prop="vocationalId" label="专业"></el-table-column>
+        <el-table-column prop="classId" label="班级"></el-table-column>
+        <el-table-column prop="counselorId" label="辅导员"></el-table-column>
+        <el-table-column
+          prop="counselorPhone"
+          label="辅导员电话"
+        ></el-table-column>
+      </el-table>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { hostelList, queryHostelName,queryById,addHostel,updateHostel,deleteHostel } from "@/api/hostel";
+import {
+  hostelList,
+  queryHostelName,
+  queryById,
+  addHostel,
+  updateHostel,
+  deleteHostel,
+} from "@/api/hostel";
 import { queryByHostel } from "@/api/students";
 import { collegeList, queryCollegeStrById } from "@/api/college";
 import { queryVocationalStrById } from "@/api/vocational";
@@ -127,19 +130,23 @@ export default {
       searchParams: "",
       tableData: "",
       accountType: "",
-      hostelVisible:false,
-      hostelInfo:{},
+      hostelVisible: false,
+      hostelInfo: {},
       paginationParams: {
         pageSize: 10,
         currentPage: 1,
       },
       hostelfoRules: {
         sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-        hostelBuild: [{ required: true, message: "请输入楼栋", trigger: "blur" }],
-        hostelName: [{ required: true, message: "请输入宿舍号", trigger: "blur" }],
+        hostelBuild: [
+          { required: true, message: "请输入楼栋", trigger: "blur" },
+        ],
+        hostelName: [
+          { required: true, message: "请输入宿舍号", trigger: "blur" },
+        ],
       },
-      hostelMoreInfoVisible:false,
-      moreInfoList:[]
+      hostelMoreInfoVisible: false,
+      moreInfoList: [],
     };
   },
   computed: {},
@@ -152,7 +159,7 @@ export default {
   methods: {
     async getHostelList() {
       const { data: res } = await hostelList(this.paginationParams);
-      if(res.code == 200) this.tableData = res.data.result;
+      if (res.code == 200) this.tableData = res.data.result;
     },
 
     // 防抖todo
@@ -171,7 +178,7 @@ export default {
       const { data: res } = await queryHostelName({
         hostelName: this.searchParams,
       });
-      if(res.code == 200)this.tableData = res.data.result
+      if (res.code == 200) this.tableData = res.data.result;
     },
     searchHostel() {
       if (this.searchParams == "") {
@@ -182,64 +189,68 @@ export default {
     },
     // 判断添加/修改
     async handleAddEdit(row) {
-      this.hostelVisible = true
-      if(row.id){
-        const {data:res} = await queryById({id:row.id})
-        if(res.code == 200) this.hostelInfo = res.data[0]
-      } 
+      this.hostelVisible = true;
+      if (row.id) {
+        const { data: res } = await queryById({ id: row.id });
+        if (res.code == 200) this.hostelInfo = res.data[0];
+      }
     },
 
     handleCancel() {
-      this.hostelVisible = false
-      this.$refs['hostelInfo'].resetFields()
+      this.hostelVisible = false;
+      this.$refs["hostelInfo"].resetFields();
     },
     // 添加修改保存
     async submit() {
-      this.hostelInfo.hostelBuild = parseInt(this.hostelInfo.hostelBuild)
+      this.hostelInfo.hostelBuild = parseInt(this.hostelInfo.hostelBuild);
       if (this.hostelInfo.id) {
-        const {data:res} = await updateHostel(this.hostelInfo);
-        if(res.code == 200)
-        this.$message({ message: res.msg, type: "success" });
-        this.hostelInfo = {}
+        const { data: res } = await updateHostel(this.hostelInfo);
+        if (res.code == 200)
+          this.$message({ message: res.msg, type: "success" });
+        this.hostelInfo = {};
       } else {
-        const {data:res} = await addHostel(this.hostelInfo);
-        if(res.code == 200)
-        this.$message({ message: res.msg, type: "success" });
+        const { data: res } = await addHostel(this.hostelInfo);
+        if (res.code == 200)
+          this.$message({ message: res.msg, type: "success" });
       }
-      this.handleCancel()
+      this.handleCancel();
       this.getHostelList(this.paginationParams);
     },
     // 删除
     async handleDelete(id) {
-      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(async() => {
+      this.$confirm("此操作将永久删除该数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
           const { data } = await deleteHostel({ id });
           this.$message({ message: data.msg, type: "success" });
           this.getHostelList(this.paginationParams);
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "info",
+            message: "已取消删除",
+          });
         });
     },
-    async handleMoreInfo(row){
-      this.hostelMoreInfoVisible = true
-      const {data:res} = await queryByHostel({hostelId:row.id})
-      if(res.code == 200){
-        let temp = res.data
+    async handleMoreInfo(row) {
+      this.hostelMoreInfoVisible = true;
+      const { data: res } = await queryByHostel({ hostelId: row.id });
+      if (res.code == 200) {
+        let temp = res.data;
         for (let i = 0; i < temp.length; i++) {
           temp[i].collegeId = await this.getCollegeStr(temp[i].collegeId);
           temp[i].vocationalId = await this.getVocationalStr(
             temp[i].vocationalId
           );
           temp[i].classId = await this.getClassStr(temp[i].classId);
-          temp[i].counselorId = await this.getCounselorName(temp[i].counselorId);
+          temp[i].counselorId = await this.getCounselorName(
+            temp[i].counselorId
+          );
         }
-        this.moreInfoList = temp
+        this.moreInfoList = temp;
       }
     },
     async getCollegeList() {
