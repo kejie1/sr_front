@@ -177,7 +177,7 @@ export default {
       //   row.status ? 1 : 0;
       //   await updateUser(row);
       // }
-      console.log(row,column);
+      console.log(row, column);
     },
     async handleDelete(id) {
       // const { data } = await deleteUser({ id });
