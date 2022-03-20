@@ -63,13 +63,14 @@ export default {
   watch: {},
   methods: {
     handleLogin(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          login(this.loginForm).then(({ data }) => {
-            sessionStorage.setItem("token", data.token);
-            this.$store.commit("setUserInfo", data.data);
+          const {data:res} = await login(this.loginForm)
+          if(res.code == 200){
+            sessionStorage.setItem("token", res.token);
+            this.$store.commit("setUserInfo", res.data);
             this.$router.push({ path: "/admin" });
-          });
+          }
         } else {
           this.$message.warning("请按要求输入用户名哥密码");
         }
