@@ -65,8 +65,8 @@ export default {
     handleLogin(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const {data:res} = await login(this.loginForm)
-          if(res.code == 200){
+          const { data: res } = await login(this.loginForm);
+          if (res.code == 200) {
             sessionStorage.setItem("token", res.token);
             this.$store.commit("setUserInfo", res.data);
             this.$router.push({ path: "/admin" });
