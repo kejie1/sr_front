@@ -3,7 +3,11 @@
     <div class="search_btn">
       <div class="search_btn_container">
         <div class="search">
-          <el-input placeholder="请输入姓名" @input="searchUser" v-model="searchParams">
+          <el-input
+            placeholder="请输入姓名"
+            @input="searchUser"
+            v-model="searchParams"
+          >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
           <el-select placeholder="请选择学院" v-model="collegeValue">
@@ -27,7 +31,8 @@
             :disabled="accountType == 1 ? false : true"
             size="mini"
             @click="handleSearch"
-          >搜索</el-button>
+            >搜索</el-button
+          >
         </div>
         <div class="addBtn">
           <el-button
@@ -35,33 +40,68 @@
             :disabled="accountType == 1 ? false : true"
             size="mini"
             @click="openAddEditDrawer"
-          >添加学生信息</el-button>
-          <el-button type="success" @click="exportToExcel" size="mini">导出为表格</el-button>
+            >添加学生信息</el-button
+          >
+          <el-button type="success" @click="exportToExcel" size="mini"
+            >导出为表格</el-button
+          >
         </div>
       </div>
     </div>
     <el-table fit :data="studentsList" stripe style="width: 100%">
       <el-table-column prop="id" label="ID" width="50"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="studentId" label="学号" width="120"></el-table-column>
+      <el-table-column
+        prop="studentId"
+        label="学号"
+        width="120"
+      ></el-table-column>
       <el-table-column prop="sex" label="性别"></el-table-column>
       <el-table-column prop="age" label="年龄"></el-table-column>
       <el-table-column prop="phone" label="电话" width="120"></el-table-column>
-      <el-table-column prop="idCard" label="身份证号码" width="180"></el-table-column>
+      <el-table-column
+        prop="idCard"
+        label="身份证号码"
+        width="180"
+      ></el-table-column>
       <el-table-column prop="collegeId" label="学院"></el-table-column>
       <el-table-column prop="vocationalId" label="专业"></el-table-column>
       <el-table-column prop="classId" label="班级"></el-table-column>
       <el-table-column prop="hostelId" label="宿舍"></el-table-column>
       <el-table-column prop="ethnic" label="民族"></el-table-column>
       <el-table-column prop="birthPlace" label="生源地"></el-table-column>
-      <el-table-column prop="address" label="家庭地址" width="120"></el-table-column>
+      <el-table-column
+        prop="address"
+        label="家庭地址"
+        width="120"
+      ></el-table-column>
       <el-table-column prop="graduate" label="毕业院校"></el-table-column>
-      <el-table-column prop="counselorId" label="辅导员姓名" width="100"></el-table-column>
-      <el-table-column prop="counselorPhone" label="辅导员电话" width="120"></el-table-column>
+      <el-table-column
+        prop="counselorId"
+        label="辅导员姓名"
+        width="100"
+      ></el-table-column>
+      <el-table-column
+        prop="counselorPhone"
+        label="辅导员电话"
+        width="120"
+      ></el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button type="warning" plain size="mini" @click="openAddEditDrawer(scope.row)">编辑</el-button>
-          <el-button type="danger" plain size="mini" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button
+            type="warning"
+            plain
+            size="mini"
+            @click="openAddEditDrawer(scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="danger"
+            plain
+            size="mini"
+            @click="handleDelete(scope.row)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -82,7 +122,12 @@
       :visible.sync="addEditVisible"
       size="40%"
     >
-      <el-form :model="studentInfo" :rules="studentInfoRules" ref="studentInfo" label-width="100px">
+      <el-form
+        :model="studentInfo"
+        :rules="studentInfoRules"
+        ref="studentInfo"
+        label-width="100px"
+      >
         <el-form-item label="姓名：" prop="name">
           <el-input v-model="studentInfo.name"></el-input>
         </el-form-item>
@@ -189,12 +234,12 @@ import {
   updateStudentInfo,
   deleteStudent,
   queryCount,
-} from '@/api/students'
-import { collegeList, queryCollegeStrById } from '@/api/college'
-import { vocationalList, queryVocationalStrById } from '@/api/vocational'
-import { counselorList, queryPhoneByName } from '@/api/counselor'
-import { classList, queryClassStrById } from '@/api/class'
-import { nationList } from '@/util/Enum'
+} from "@/api/students";
+import { collegeList, queryCollegeStrById } from "@/api/college";
+import { vocationalList, queryVocationalStrById } from "@/api/vocational";
+import { counselorList, queryPhoneByName } from "@/api/counselor";
+import { classList, queryClassStrById } from "@/api/class";
+import { nationList } from "@/util/Enum";
 export default {
   components: {},
   data() {
@@ -204,164 +249,166 @@ export default {
       classList: [],
       vocationalList: [],
       counselorList: [],
-      phone: '',
-      searchParams: '',
+      phone: "",
+      searchParams: "",
       accountType: 1,
       pagination: {
         pageSize: 10,
         currentPage: 1,
       },
-      collegeValue: '',
-      vocationalValue: '',
+      collegeValue: "",
+      vocationalValue: "",
       addEditVisible: false,
       studentInfo: {
-        name: '',
-        sex: '',
-        age: '',
-        phone: '',
-        idCard: '',
-        collegeId: '',
-        counselorId: '',
+        name: "",
+        sex: "",
+        age: "",
+        phone: "",
+        idCard: "",
+        collegeId: "",
+        counselorId: "",
       },
       nationList,
       studentInfoRules: {
         name: [
-          { required: true, message: '请输入姓名', trigger: 'blur' },
-          { min: 2, max: 8, message: '姓名长度为2~8', trigger: 'blur' },
+          { required: true, message: "请输入姓名", trigger: "blur" },
+          { min: 2, max: 8, message: "姓名长度为2~8", trigger: "blur" },
         ],
-        studentId: [{ required: true, message: '请输入学号', trigger: 'blur' }],
-        sex: [{ required: true, message: '请选择性别', trigger: 'change' }],
-        age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
+        studentId: [{ required: true, message: "请输入学号", trigger: "blur" }],
+        sex: [{ required: true, message: "请选择性别", trigger: "change" }],
+        age: [{ required: true, message: "请输入年龄", trigger: "blur" }],
         phone: [
-          { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { max: 11, message: '请输入长度为11的手机号码', trigger: 'blur' },
+          { required: true, message: "请输入手机号码", trigger: "blur" },
+          { max: 11, message: "请输入长度为11的手机号码", trigger: "blur" },
         ],
         idCard: [
-          { required: true, message: '请输入身份证号码', trigger: 'blur' },
-          { max: 18, message: '请输入长度为18的身份证号码', trigger: 'blur' },
+          { required: true, message: "请输入身份证号码", trigger: "blur" },
+          { max: 18, message: "请输入长度为18的身份证号码", trigger: "blur" },
         ],
         collegeId: [
-          { required: true, message: '请选择学院', trigger: 'change' },
+          { required: true, message: "请选择学院", trigger: "change" },
         ],
         vocationalId: [
-          { required: true, message: '请选择专业', trigger: 'change' },
+          { required: true, message: "请选择专业", trigger: "change" },
         ],
-        classId: [{ required: true, message: '请选择班级', trigger: 'change' }],
+        classId: [{ required: true, message: "请选择班级", trigger: "change" }],
         hostelId: [
-          { required: true, message: '请输入宿舍号', trigger: 'blur' },
+          { required: true, message: "请输入宿舍号", trigger: "blur" },
         ],
-        ethnic: [{ required: true, message: '请选择民族', trigger: 'change' }],
+        ethnic: [{ required: true, message: "请选择民族", trigger: "change" }],
         birthPlace: [
-          { required: true, message: '请输入生源地', trigger: 'blur' },
+          { required: true, message: "请输入生源地", trigger: "blur" },
         ],
         address: [
-          { required: true, message: '请输入家庭住址', trigger: 'blur' },
+          { required: true, message: "请输入家庭住址", trigger: "blur" },
         ],
         graduate: [
-          { required: true, message: '请输入毕业院校', trigger: 'blur' },
+          { required: true, message: "请输入毕业院校", trigger: "blur" },
         ],
         counselorId: [
-          { required: true, message: '请选择辅导员', trigger: 'change' },
+          { required: true, message: "请选择辅导员", trigger: "change" },
         ],
       },
-      studentTitle: '',
+      studentTitle: "",
       rowInfo: null,
-      ethnicStr: '',
-    }
+      ethnicStr: "",
+    };
   },
   computed: {},
   watch: {},
   created() {
-    this.counts()
-    this.getCollegeList()
-    this.getVocational()
-    this.getClassList()
-    this.getStudentList()
-    this.getCounselorList()
+    this.counts();
+    this.getCollegeList();
+    this.getVocational();
+    this.getClassList();
+    this.getStudentList();
+    this.getCounselorList();
   },
   mounted() {},
   updated() {},
   methods: {
     async counts() {
-      await queryCount()
+      await queryCount();
     },
     searchUser() {},
     // 获取学院列表
     async getCollegeList() {
-      const { data: res } = await collegeList()
+      const { data: res } = await collegeList();
       this.collegeList = res.data.map((x) => ({
         ...x,
         label: x.collegeStr,
         value: x.id,
-      }))
+      }));
     },
     // 获取班级列表
     async getClassList() {
-      const { data: res } = await classList()
+      const { data: res } = await classList();
       this.classList = res.data.map((x) => ({
         ...x,
         label: x.classStr,
         value: x.id,
-      }))
+      }));
     },
     // 获取专业列表
     async getVocational() {
-      const { data: res } = await vocationalList()
+      const { data: res } = await vocationalList();
       this.vocationalList = res.data.map((x) => ({
         ...x,
         label: x.vocationalStr,
         value: x.id,
-      }))
+      }));
     },
     // 教师信息
     async getCounselorList() {
       const params = {
         pageSize: 10,
         currentPage: 1,
-      }
-      const { data: res } = await counselorList(params)
-      this.counselorList = res.data.result
+      };
+      const { data: res } = await counselorList(params);
+      this.counselorList = res.data.result;
     },
     async getCounselorPhone(val) {
-      const params = { id: val }
-      const { data } = await queryPhoneByName(params)
-      this.phone = data.data[0].phone
+      const params = { id: val };
+      const { data } = await queryPhoneByName(params);
+      this.phone = data.data[0].phone;
     },
     async getCounselorName(val) {
-      const params = { id: val }
-      const { data: res } = await queryPhoneByName(params)
-      return res.data[0].name
+      const params = { id: val };
+      const { data: res } = await queryPhoneByName(params);
+      return res.data[0].name;
     },
     // 学生信息
     async getStudentList() {
-      const { data: res } = await studentsList(this.pagination)
-      let temp = res.data.result || []
+      const { data: res } = await studentsList(this.pagination);
+      let temp = res.data.result || [];
       for (let i = 0; i < temp.length; i++) {
-        temp[i].ethnic = nationList[temp[i].ethnic].label
-        temp[i].collegeId = await this.getCollegeStr(temp[i].collegeId)
-        temp[i].vocationalId = await this.getVocationalStr(temp[i].vocationalId)
-        temp[i].classId = await this.getClassStr(temp[i].classId)
-        temp[i].counselorId = await this.getCounselorName(temp[i].counselorId)
-        temp[i].sex = temp[i].sex == 1 ? '男' : '女'
+        temp[i].ethnic = nationList[temp[i].ethnic].label;
+        temp[i].collegeId = await this.getCollegeStr(temp[i].collegeId);
+        temp[i].vocationalId = await this.getVocationalStr(
+          temp[i].vocationalId
+        );
+        temp[i].classId = await this.getClassStr(temp[i].classId);
+        temp[i].counselorId = await this.getCounselorName(temp[i].counselorId);
+        temp[i].sex = temp[i].sex == 1 ? "男" : "女";
       }
-      this.studentsList = temp
-      this.pagination = res.data.pagination
+      this.studentsList = temp;
+      this.pagination = res.data.pagination;
     },
     // 学生详细信息
     async getCollegeStr(param) {
-      const params = { id: param }
-      const { data: res } = await queryCollegeStrById(params)
-      return res.data[0].collegeStr
+      const params = { id: param };
+      const { data: res } = await queryCollegeStrById(params);
+      return res.data[0].collegeStr;
     },
     async getVocationalStr(param) {
-      const params = { id: param }
-      const { data: res } = await queryVocationalStrById(params)
-      return res.data[0].vocationalStr
+      const params = { id: param };
+      const { data: res } = await queryVocationalStrById(params);
+      return res.data[0].vocationalStr;
     },
     async getClassStr(param) {
-      const params = { id: param }
-      const { data: res } = await queryClassStrById(params)
-      return res.data[0].classStr
+      const params = { id: param };
+      const { data: res } = await queryClassStrById(params);
+      return res.data[0].classStr;
     },
 
     // 处理搜索
@@ -370,26 +417,26 @@ export default {
         name: this.searchParams,
         collegeId: this.collegeValue,
         vocationalId: this.vocationalValue,
-      }
-      const { data } = await searchStudents(params)
-      this.studentsList = data.data
+      };
+      const { data } = await searchStudents(params);
+      this.studentsList = data.data;
     },
     // 打开编辑弹框
     async openAddEditDrawer(row) {
-      this.studentTitle = '添加'
+      this.studentTitle = "添加";
       if (row.id) {
-        this.rowInfo = row
-        this.studentTitle = '编辑'
-        const { data: res } = await queryById({ id: row.id })
+        this.rowInfo = row;
+        this.studentTitle = "编辑";
+        const { data: res } = await queryById({ id: row.id });
         if (res.code == 200)
           this.studentInfo = {
             ...res.data[0],
-            sex: res.data[0].sex + '',
-          }
-        ;(this.ethnicStr = nationList[res.data[0].ethnic].label),
-          await this.getCounselorPhone(res.data[0].counselorId)
+            sex: res.data[0].sex + "",
+          };
+        (this.ethnicStr = nationList[res.data[0].ethnic].label),
+          await this.getCounselorPhone(res.data[0].counselorId);
       }
-      this.addEditVisible = true
+      this.addEditVisible = true;
     },
     // 处理添加修改
     async handleAddEdit() {
@@ -398,103 +445,103 @@ export default {
         sex: parseInt(this.studentInfo.sex),
         hostelId: parseInt(this.studentInfo.hostelId),
         counselorPhone: this.phone,
-      }
+      };
       if (this.rowInfo) {
         // 修改
-        params.id = this.rowInfo.id
-        const { data } = await updateStudentInfo(params)
+        params.id = this.rowInfo.id;
+        const { data } = await updateStudentInfo(params);
         if (data.code == 200)
-          this.$message({ type: 'success', message: data.msg })
+          this.$message({ type: "success", message: data.msg });
       } else {
         // 添加
-        const { data } = await addStudentInfo(params)
+        const { data } = await addStudentInfo(params);
         if (data.code == 200) {
-          this.$message({ message: data.msg, type: 'success' })
+          this.$message({ message: data.msg, type: "success" });
         }
       }
-      this.handleCancel()
-      this.getStudentList()
+      this.handleCancel();
+      this.getStudentList();
     },
     // 关闭drawer回调
     handleClose() {
-      this.rowInfo = null
+      this.rowInfo = null;
     },
     // 删除
     async handleDelete(row) {
-      const { data } = await deleteStudent({ id: row.id })
+      const { data } = await deleteStudent({ id: row.id });
       if (data.code == 200) {
         this.$message({
-          type: 'success',
-          message: '删除成功!',
-        })
-        this.getStudentList()
+          type: "success",
+          message: "删除成功!",
+        });
+        this.getStudentList();
       }
     },
     handleSizeChange(val) {
-      this.pagination.pageSize = val
-      this.getStudentList()
+      this.pagination.pageSize = val;
+      this.getStudentList();
     },
     handleCurrentChange(val) {
-      this.pagination.currentPage = val
-      this.getStudentList()
+      this.pagination.currentPage = val;
+      this.getStudentList();
     },
     // 关闭drawer后清空输入框数据
     handleCancel() {
-      this.$refs['studentInfo'].resetFields()
-      this.addEditVisible = false
+      this.$refs["studentInfo"].resetFields();
+      this.addEditVisible = false;
     },
     // excel导出功能
     exportToExcel() {
       require.ensure([], () => {
-        const { export_json_to_excel } = require('@/excel/Export2Excel')
+        const { export_json_to_excel } = require("@/excel/Export2Excel");
         const tHeader = [
-          'id',
-          '姓名',
-          '学号',
-          '性别',
-          '年龄',
-          '联系电话',
-          '身份证',
-          '学院',
-          '专业',
-          '班级',
-          '宿舍',
-          '民族',
-          '生源地',
-          '家庭地址',
-          '毕业院校',
-          '辅导员姓名',
-          '辅导员电话',
-        ]
+          "id",
+          "姓名",
+          "学号",
+          "性别",
+          "年龄",
+          "联系电话",
+          "身份证",
+          "学院",
+          "专业",
+          "班级",
+          "宿舍",
+          "民族",
+          "生源地",
+          "家庭地址",
+          "毕业院校",
+          "辅导员姓名",
+          "辅导员电话",
+        ];
         const filterVal = [
-          'id',
-          'name',
-          'studentId',
-          'sex',
-          'age',
-          'phone',
-          'idCard',
-          'collegeId',
-          'vocationalId',
-          'classId',
-          'hostelId',
-          'ethnic',
-          'birthPlace',
-          'address',
-          'graduate',
-          'counselorId',
-          'counselorPhone',
-        ]
-        const list = this.studentsList
-        const data = this.formatJson(filterVal, list)
-        export_json_to_excel(tHeader, data, '学生列表')
-      })
+          "id",
+          "name",
+          "studentId",
+          "sex",
+          "age",
+          "phone",
+          "idCard",
+          "collegeId",
+          "vocationalId",
+          "classId",
+          "hostelId",
+          "ethnic",
+          "birthPlace",
+          "address",
+          "graduate",
+          "counselorId",
+          "counselorPhone",
+        ];
+        const list = this.studentsList;
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, "学生列表");
+      });
     },
     formatJson(filterVal, jsonData) {
-      return jsonData.map((v) => filterVal.map((j) => v[j]))
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
     },
   },
-}
+};
 </script>
 <style lang="less" scoped>
 .userContainer {
