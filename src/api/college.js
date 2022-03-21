@@ -13,3 +13,38 @@ export function queryCollegeStrById(params) {
     params,
   });
 }
+export function queryCollegeName(params) {
+  return http({
+    url: "college/queryCollegeName",
+    method: "get",
+    params,
+  });
+}
+export function queryCollegeById(params) {
+  return http({
+    url: "college/queryCollegeById",
+    method: "get",
+    params,
+  });
+}
+export function addCollege(data) {
+  return http({
+    url: "college/addCollege",
+    method: "post",
+    data,
+  });
+}
+export function deleteCollege(data) {
+  return http({
+    url: "college/deleteCollege",
+    method: "post",
+    data,
+  });
+}
+export function updateCollege(data) {
+  return http({
+    url: "college/updateCollege",
+    method: "post",
+    data,
+  });
+}
