@@ -42,29 +42,36 @@ const routes = [
       {
         path: "EducationalAffairs",
         name: "EducationalAffairs",
-        component: () => import(/* webpackChunkName: "EducationalAffairs" */ "@/views/admin/EducationalAffairs/index.vue"),
+        component: () =>
+          import(
+            /* webpackChunkName: "EducationalAffairs" */ "@/views/admin/EducationalAffairs/index.vue"
+          ),
         children: [
           {
             path: "class",
             name: "class",
-            component: () => import("@/views/admin/EducationalAffairs/class/index.vue"),
+            component: () =>
+              import("@/views/admin/EducationalAffairs/class/index.vue"),
           },
           {
             path: "college",
             name: "college",
-            component: () => import("@/views/admin/EducationalAffairs/college/index.vue"),
+            component: () =>
+              import("@/views/admin/EducationalAffairs/college/index.vue"),
           },
           {
             path: "counselor",
             name: "counselor",
-            component: () => import("@/views/admin/EducationalAffairs/counselor/index.vue"),
+            component: () =>
+              import("@/views/admin/EducationalAffairs/counselor/index.vue"),
           },
           {
             path: "vocational",
             name: "vocational",
-            component: () => import("@/views/admin/EducationalAffairs/vocational/index.vue"),
+            component: () =>
+              import("@/views/admin/EducationalAffairs/vocational/index.vue"),
           },
-        ]
+        ],
       },
     ],
   },
