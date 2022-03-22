@@ -13,3 +13,10 @@ export function queryVocationalStrById(params) {
     params,
   });
 }
+export function queryVocationalById(params) {
+  return http({
+    url: "vocational/queryVocationalById",
+    method: "get",
+    params,
+  });
+}
