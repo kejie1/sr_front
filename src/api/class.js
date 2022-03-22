@@ -12,3 +12,10 @@ export function queryClassStrById(params) {
     params,
   });
 }
+export function queryVocationalById(params) {
+  return http({
+    url: "class/queryVocationalById",
+    method: "get",
+    params,
+  });
+}

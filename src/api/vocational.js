@@ -20,3 +20,24 @@ export function queryVocationalById(params) {
     params,
   });
 }
+export function addVocational(data) {
+  return http({
+    url: "college/add",
+    method: "post",
+    data,
+  });
+}
+export function deleteVocational(data) {
+  return http({
+    url: "college/delete",
+    method: "post",
+    data,
+  });
+}
+export function updateVocational(data) {
+  return http({
+    url: "college/update",
+    method: "post",
+    data,
+  });
+}
