@@ -22,21 +22,21 @@ export function queryVocationalById(params) {
 }
 export function addVocational(data) {
   return http({
-    url: "college/add",
+    url: "vocational/add",
     method: "post",
     data,
   });
 }
 export function deleteVocational(data) {
   return http({
-    url: "college/delete",
+    url: "vocational/delete",
     method: "post",
     data,
   });
 }
 export function updateVocational(data) {
   return http({
-    url: "college/update",
+    url: "vocational/update",
     method: "post",
     data,
   });
