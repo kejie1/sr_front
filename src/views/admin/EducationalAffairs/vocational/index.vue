@@ -8,63 +8,43 @@
             @input="searchVocationalList"
             v-model="searchParams"
           >
-            <i
-              slot="prefix"
-              class="el-input__icon el-icon-search"
-            ></i>
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </div>
         <div class="addBtn">
-          <el-button
-            type="primary"
-            plain
-            @click="handleAddEdit"
-          >添加专业</el-button>
+          <el-button type="primary" plain @click="handleAddEdit"
+            >添加专业</el-button
+          >
         </div>
       </div>
     </div>
-    <el-table
-      :key="Math.random()"
-      :data="tableData"
-      stripe
-      style="width: 100%"
-    >
-      <el-table-column
-        prop="id"
-        label="ID"
-      ></el-table-column>
-      <el-table-column
-        prop="vocationalStr"
-        label="专业名称"
-      ></el-table-column>
-      <el-table-column
-        prop="principal"
-        label="专业负责人"
-      ></el-table-column>
-      <el-table-column
-        label="操作"
-        fixed="right"
-        width="300"
-      >
+    <el-table :key="Math.random()" :data="tableData" stripe style="width: 100%">
+      <el-table-column prop="id" label="ID"></el-table-column>
+      <el-table-column prop="vocationalStr" label="专业名称"></el-table-column>
+      <el-table-column prop="principal" label="专业负责人"></el-table-column>
+      <el-table-column label="操作" fixed="right" width="300">
         <template slot-scope="scope">
           <el-button
             type="primary"
             plain
             size="mini"
             @click="handleMoreInfo(scope.row)"
-          >查看班级列表</el-button>
+            >查看班级列表</el-button
+          >
           <el-button
             type="warning"
             plain
             size="mini"
             @click="handleAddEdit(scope.row)"
-          >编辑</el-button>
+            >编辑</el-button
+          >
           <el-button
             type="danger"
             plain
             size="mini"
             @click="handleDelete(scope.row.id)"
-          >删除</el-button>
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -81,30 +61,16 @@
         ref="vocationalInfo"
         label-width="100px"
       >
-        <el-form-item
-          required
-          label="专业名称"
-          prop="vocationalStr"
-        >
+        <el-form-item required label="专业名称" prop="vocationalStr">
           <el-input v-model="vocationalInfo.vocationalStr"></el-input>
         </el-form-item>
-        <el-form-item
-          required
-          label="专业负责人"
-          prop="principal"
-        >
+        <el-form-item required label="专业负责人" prop="principal">
           <el-input v-model="vocationalInfo.principal"></el-input>
         </el-form-item>
       </el-form>
-      <div
-        slot="footer"
-        class="dialog-footer"
-      >
+      <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancel">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="submit"
-        >保 存</el-button>
+        <el-button type="primary" @click="submit">保 存</el-button>
       </div>
     </el-dialog>
     <!-- 宿舍详细信息 -->
@@ -113,23 +79,10 @@
       :visible.sync="vocationalMoreInfoVisible"
       width="30%"
     >
-      <el-table
-        :key="Math.random()"
-        :data="moreInfoList"
-        stripe
-      >
-        <el-table-column
-          label="#"
-          type="index"
-        ></el-table-column>
-        <el-table-column
-          prop="classStr"
-          label="专业"
-        ></el-table-column>
-        <el-table-column
-          prop="principal"
-          label="负责人"
-        ></el-table-column>
+      <el-table :key="Math.random()" :data="moreInfoList" stripe>
+        <el-table-column label="#" type="index"></el-table-column>
+        <el-table-column prop="classStr" label="专业"></el-table-column>
+        <el-table-column prop="principal" label="负责人"></el-table-column>
       </el-table>
     </el-dialog>
   </div>
@@ -147,7 +100,7 @@ import {
 import { queryVocationalById } from "@/api/class";
 export default {
   components: {},
-  data () {
+  data() {
     return {
       searchParams: "",
       tableData: "",
@@ -172,18 +125,18 @@ export default {
   },
   computed: {},
   watch: {},
-  created () {
+  created() {
     this.getVocational();
   },
-  mounted () { },
-  updated () { },
+  mounted() {},
+  updated() {},
   methods: {
-    async getVocational () {
+    async getVocational() {
       const { data: res } = await vocationalList(this.paginationParams);
       if (res.code == 200) this.tableData = res.data.result;
     },
     // 防抖todo
-    debounce (fn, delay) {
+    debounce(fn, delay) {
       let timer = null; //借助闭包
       return (function () {
         if (timer) {
@@ -194,26 +147,26 @@ export default {
         }
       })();
     },
-    async getVocationalName () {
+    async getVocationalName() {
       const { data: res } = await queryVocationalName({
         vocationalStr: this.searchParams,
       });
       if (res.code == 200) this.tableData = res.data.result;
     },
-    searchVocationalList () {
+    searchVocationalList() {
       if (this.searchParams == "") {
         this.debounce(this.getVocationalList(), 1500);
       } else {
         this.debounce(this.getVocationalName(), 1500);
       }
     },
-    async handleMoreInfo (row) {
+    async handleMoreInfo(row) {
       this.vocationalMoreInfoVisible = true;
       const { data: res } = await queryVocationalById({ vocationalId: row.id });
       if (res.code == 200) this.moreInfoList = res.data;
     },
     // 判断添加/修改
-    async handleAddEdit (row) {
+    async handleAddEdit(row) {
       this.vocationalVisible = true;
       if (row.id) {
         const { data: res } = await queryVocationalStrById({ id: row.id });
@@ -221,13 +174,13 @@ export default {
       }
     },
 
-    handleCancel () {
+    handleCancel() {
       this.vocationalInfo.id = null;
       this.$refs["vocationalInfo"].resetFields();
       this.vocationalVisible = false;
     },
     // 添加修改保存
-    async submit () {
+    async submit() {
       if (this.vocationalInfo.id) {
         console.log("res", this.vocationalInfo);
         const { data: res } = await updateVocational(this.vocationalInfo);
@@ -242,7 +195,7 @@ export default {
       this.getVocationalList();
     },
     // 删除
-    async handleDelete (id) {
+    async handleDelete(id) {
       this.$confirm("此操作将永久删除该数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
