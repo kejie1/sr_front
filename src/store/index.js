@@ -48,37 +48,19 @@ export default new Vuex.Store({
     async getCollegeList(content) {
       await queryCollegeCount();
       const { data: res } = await collegeList(this.state.paginationParams);
-      res.data.result
-        ? res.data.result.map((x) => ({
-            ...x,
-            label: x.collegeStr,
-            value: x.id,
-          }))
-        : [];
+      res.data.result ? res.data.result : [];
       content.commit("setCollegeList", res.data.result);
     },
     async getVocationList(content) {
       await queryVocationalCount();
       const { data: res } = await vocationalList(this.state.paginationParams);
-      res.data.result
-        ? res.data.result.map((x) => ({
-            ...x,
-            label: x.vocationalStr,
-            value: x.id,
-          }))
-        : [];
+      res.data.result ? res.data.result : [];
       content.commit("setVocationList", res.data.result);
     },
     async getClassList(content) {
       await queryClassCount();
       const { data: res } = await classList(this.state.paginationParams);
-      res.data.result
-        ? res.data.result.map((x) => ({
-            ...x,
-            label: x.classStr,
-            value: x.id,
-          }))
-        : [];
+      res.data.result ? res.data.result : [];
       content.commit("setClassList", res.data.result);
     },
   },

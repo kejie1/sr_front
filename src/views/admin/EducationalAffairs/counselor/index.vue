@@ -44,6 +44,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      small
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="paginationParams.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="paginationParams.pageSize"
+      layout="->,total, sizes, prev, pager,next, jumper"
+      :total="paginationParams.total || 0"
+    ></el-pagination>
     <!-- 添加宿舍 -->
     <el-dialog
       :title="`${counselorInfo.id ? '编辑' : '添加'}教师`"
@@ -58,10 +68,10 @@
         label-width="100px"
       >
         <el-form-item required label="姓名" prop="name">
-          <el-input v-model="counselorInfo.counselorStr"></el-input>
+          <el-input v-model="counselorInfo.name"></el-input>
         </el-form-item>
         <el-form-item required label="电话" prop="phone">
-          <el-input v-model="counselorInfo.principal"></el-input>
+          <el-input v-model="counselorInfo.phone"></el-input>
         </el-form-item>
         <el-form-item required label="所属学院" prop="collegeId">
           <el-select
@@ -72,30 +82,30 @@
           >
             <el-option
               v-for="item in collegeList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.collegeStr"
+              :value="item.id"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属专业" prop="counselorId">
+        <el-form-item label="所属专业" prop="vocationalId">
           <el-select
             clearable
             v-model="counselorInfo.vocationalId"
             placeholder="不负责专业则无需选取"
-            @change="getCounselorList"
+            @change="getClassList"
           >
             <el-option
               v-for="item in vocationalList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.vocationalStr"
+              :value="item.id"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属班级" prop="vocationalId">
+        <el-form-item label="所属班级" prop="classId">
           <el-select
             clearable
             v-model="counselorInfo.classId"
@@ -104,9 +114,9 @@
           >
             <el-option
               v-for="item in classList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.classStr"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -121,8 +131,16 @@
 </template>
 
 <script>
-import { counselorList, queryCount, queryPhoneByName } from "@/api/counselor";
+import {
+  counselorList,
+  queryCount,
+  queryPhoneByName,
+  addCounselor,
+  deleteCounselor,
+  updateCounselor,
+} from "@/api/counselor";
 import { queryVocationalById } from "@/api/vocational";
+import { queryClassStrById } from "@/api/class";
 export default {
   components: {},
   data() {
@@ -191,11 +209,12 @@ export default {
               vocationalId: this.vocationalList[x.vocationalId].vocationalStr
                 ? this.vocationalList[x.vocationalId].vocationalStr
                 : "暂无",
-              classId: this.classList[x.classId].classStr
-                ? this.classList[x.classId].classStr
-                : "暂无",
+              classId: !this.classList[x.classId].classStr
+                ? "暂无"
+                : this.classList[x.classId].classStr,
             }))
           : [];
+        this.paginationParams = res.data.pagination;
       }
     },
     // 防抖todo
@@ -241,11 +260,11 @@ export default {
     async submit() {
       if (this.counselorInfo.id) {
         console.log("res", this.counselorInfo);
-        const { data: res } = await updateVocational(this.counselorInfo);
+        const { data: res } = await updateCounselor(this.counselorInfo);
         if (res.code == 200)
           this.$message({ message: res.msg, type: "success" });
       } else {
-        const { data: res } = await addVocational(this.counselorInfo);
+        const { data: res } = await addCounselor(this.counselorInfo);
         if (res.code == 200)
           this.$message({ message: res.msg, type: "success" });
       }
@@ -260,7 +279,7 @@ export default {
         type: "warning",
       })
         .then(async () => {
-          const { data } = await deleteVocational({ id });
+          const { data } = await deleteCounselor({ id });
           this.$message({ message: data.msg, type: "success" });
           this.getCounselorList();
         })
@@ -273,12 +292,20 @@ export default {
     },
     async getVocationalList(row) {
       const { data: res } = await queryVocationalById({ collegeId: row });
-      this.vocationalList = res.data
-        ? res.data.map((x) => ({
-            label: x.vocationalStr,
-            value: x.id,
-          }))
-        : [];
+      this.vocationalList = res.data ? res.data : [];
+    },
+    async getClassList(row) {
+      const { data: res } = await queryClassStrById({ id: row });
+      this.classList = res.data ? res.data : [];
+    },
+    // 分页
+    handleSizeChange(val) {
+      this.paginationParams.pageSize = val;
+      this.getCounselorList();
+    },
+    handleCurrentChange(val) {
+      this.paginationParams.currentPage = val;
+      this.getCounselorList();
     },
   },
 };
