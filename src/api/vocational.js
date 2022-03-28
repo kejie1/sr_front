@@ -1,8 +1,15 @@
 import http from "../util/http";
 
-export function vocationalList() {
+export function vocationalList(params) {
   return http({
     url: "vocational/vocationalList",
+    method: "get",
+    params,
+  });
+}
+export function queryCount() {
+  return http({
+    url: "vocational/queryCount",
     method: "get",
   });
 }

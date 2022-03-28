@@ -7,6 +7,12 @@ export function counselorList(params) {
     params,
   });
 }
+export function queryCount() {
+  return http({
+    url: "counselor/queryCount",
+    method: "get",
+  });
+}
 export function queryPhoneByName(params) {
   return http({
     url: "counselor/queryPhoneByName",
