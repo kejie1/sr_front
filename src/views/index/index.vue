@@ -1,13 +1,13 @@
 <template>
-  <div>
-     <header>
-      <h1>可视化展板-ECharts</h1>
-      <div class="showTime">{{newTime}}</div>
+  <div class="body">
+    <header>
+      <h1>新生报到系统可视化大屏</h1>
+      <div class="showTime">{{ newTime }}</div>
     </header>
     <section class="mainbox">
       <div class="column">
         <div class="panel bar">
-          <h2>
+          <h2 @click="handleChangeBar">
             柱状图-就业行业 <a href="javascript:;">2019</a>
             <a href="javacript:;"> 2020</a>
           </h2>
@@ -66,74 +66,122 @@
       </div>
     </section>
   </div>
-  <!-- <script src="js/flexible.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/echarts.min.js"></script>
-    <script src="js/index.js"></script>
-    <script src="js/china.js"></script>
-    <script src="js/myMap.js"></script> -->
 </template>
 <script>
-// import '@/assets/js/flexible.css'
-// import '@/assets/js/jquery.css'
-// import '@/assets/js/echarts.min.css'
-// import '@/assets/js/index.css'
-// import '@/assets/js/china.css'
-// import '@/assets/js/myMap.css'
+import { option } from "@/util/mapInfo";
+import { barOption, lineOption, pieOption,bar1Option,line1Option,pie1Option } from "@/util/allOption";
 export default {
   data() {
     return {
-        newTime:'当前时间：2022年3月17-0时54分14秒'
+      newTime: "当前时间：2022年3月17-0时54分14秒",
     };
   },
   computed: {},
   watch: {},
   created() {
-    this.getNewTime()
+    this.getNewTime();
   },
-  mounted() {},
+  mounted() {
+    this.myMap();
+    this.getBar();
+    this.getLine()
+    this.getPie()
+    this.getBar1()
+    this.getline1()
+    this.getPie1()
+  },
   methods: {
-      getNewTime(){
-          let t = null;
-        t = setTimeout(time, 1000); //開始运行
-        function time() {
-          clearTimeout(t); //清除定时器
-          const dt = new Date();
-          let y = dt.getFullYear();
-          let mt = dt.getMonth() + 1;
-          let day = dt.getDate();
-          let h = dt.getHours(); //获取时
-          let m = dt.getMinutes(); //获取分
-          let s = dt.getSeconds(); //获取秒
-          this.newTime =
-            "当前时间：" +
-            y +
-            "年" +
-            mt +
-            "月" +
-            day +
-            "-" +
-            h +
-            "时" +
-            m +
-            "分" +
-            s +
-            "秒";
-          t = setTimeout(time, 1000); //设定定时器，循环运行
-        }
-      },
-      myMap(){
-          let myChart = this.$echarts.init(document.querySelector(".map .chart"));
-          myChart.setOption(option);
-            window.addEventListener("resize", function() {
-            myChart.resize();
-  })
+    getNewTime() {
+      let t = null;
+      t = setTimeout(time, 1000); //開始运行
+      function time() {
+        clearTimeout(t); //清除定时器
+        const dt = new Date();
+        let y = dt.getFullYear();
+        let mt = dt.getMonth() + 1;
+        let day = dt.getDate();
+        let h = dt.getHours(); //获取时
+        let m = dt.getMinutes(); //获取分
+        let s = dt.getSeconds(); //获取秒
+        this.newTime =
+          "当前时间：" +
+          y +
+          "年" +
+          mt +
+          "月" +
+          day +
+          "-" +
+          h +
+          "时" +
+          m +
+          "分" +
+          s +
+          "秒";
+        t = setTimeout(time, 1000); //设定定时器，循环运行
       }
+    },
+    myMap() {
+      let myChart = this.$echarts.init(document.querySelector(".map .chart"));
+      myChart.setOption(option);
+      window.addEventListener("resize", function () {
+        myChart.resize();
+      });
+    },
+    getBar(temp) {
+      let myChart = this.$echarts.init(document.querySelector(".bar .chart"));
+      myChart.setOption(temp || barOption);
+      window.addEventListener("resize", function () {
+        myChart.resize();
+      });
+    },
+    handleChangeBar() {
+      const dataAll = [
+        { year: "2019", data: [200, 300, 300, 900, 1500, 1200, 600] },
+        { year: "2020", data: [300, 400, 350, 800, 1800, 1400, 700] },
+      ];
+      barOption.series[0].data = dataAll[1].data;
+      this.getBar();
+    },
+    getLine() {
+      let myChart = this.$echarts.init(document.querySelector(".line .chart"));
+      myChart.setOption(lineOption);
+      window.addEventListener("resize", function () {
+        myChart.resize();
+      });
+    },
+    getPie() {
+      let myChart = this.$echarts.init(document.querySelector(".pie .chart"));
+      myChart.setOption(pieOption);
+      window.addEventListener("resize", function () {
+        myChart.resize();
+      });
+    },
+    getBar1() {
+      let myChart = this.$echarts.init(document.querySelector(".bar1 .chart"));
+      myChart.setOption(bar1Option);
+      window.addEventListener("resize", function () {
+        myChart.resize();
+      });
+    },
+    getline1() {
+      let myChart = this.$echarts.init(document.querySelector(".line1 .chart"));
+      myChart.setOption(line1Option);
+      window.addEventListener("resize", function () {
+        myChart.resize();
+      });
+    },
+    getPie1() {
+      let myChart = this.$echarts.init(document.querySelector(".pie1 .chart"));
+      myChart.setOption(pie1Option);
+      window.addEventListener("resize", function () {
+        myChart.resize();
+      });
+    },
   },
 };
 </script>
 <style lang="less" scoped>
-    * {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -145,7 +193,7 @@ li {
   font-family: electronicFont;
   src: url(../../assets/font/DS-DIGIT.TTF);
 }
-body {
+.body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
@@ -391,5 +439,4 @@ header {
     font-size: 80px !important;
   }
 }
-
 </style>
