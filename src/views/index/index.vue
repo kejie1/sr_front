@@ -1,15 +1,15 @@
 <template>
   <div class="body">
     <header>
-      <h1>新生报到系统可视化大屏</h1>
-      <div class="showTime">{{ newTime }}</div>
+      <!-- <h1>新生报到系统可视化大屏</h1> -->
+      <div class="showTime">当前时间：{{ newTime }}</div>
     </header>
     <section class="mainbox">
       <div class="column">
         <div class="panel bar">
           <h2 @click="handleChangeBar">
-            柱状图-就业行业 <a href="javascript:;">2019</a>
-            <a href="javacript:;"> 2020</a>
+            学院人数 <a href="javascript:;">{{nowYear}}</a>
+            <a href="javacript:;"> {{nowYear -1 }}</a>
           </h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
@@ -40,7 +40,7 @@
             </ul>
           </div>
         </div>
-        <div class="map">
+        <div class="map" style="width:100%;height:400px">
           <div class="chart"></div>
           <div class="map1"></div>
           <div class="map2"></div>
@@ -59,7 +59,7 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel pie1">
-          <h2>饼形图-地区分布</h2>
+          <h2>民族比例</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -70,20 +70,36 @@
 <script>
 import { option } from "@/util/mapInfo";
 import { barOption, lineOption, pieOption,bar1Option,line1Option,pie1Option } from "@/util/allOption";
+import {queryeThnicDesc,queryCollegeCount} from '@/api/students'
+import {nationList} from '@/util/Enum'
 export default {
   data() {
     return {
-      newTime: "当前时间：2022年3月17-0时54分14秒",
+      newTime: "2022年3月17-0时54分14秒",
+      nowYear:2021,
+      collegeList:[],
+      collegeCount:[]
     };
   },
   computed: {},
-  watch: {},
+ watch: {
+    newTime(){
+      setTimeout(() => {
+        this.getNewTime()
+      }, 1000);
+    },
+    async "$store.state.collegeList"() {
+      this.collegeList = this.$store.state.collegeList;
+      // 
+      this.collegeCount = await this.getCollegeCount()
+      this.getBar();
+    },
+  },
   created() {
-    this.getNewTime();
   },
   mounted() {
+    this.getNewTime();
     this.myMap();
-    this.getBar();
     this.getLine()
     this.getPie()
     this.getBar1()
@@ -92,33 +108,27 @@ export default {
   },
   methods: {
     getNewTime() {
-      let t = null;
-      t = setTimeout(time, 1000); //開始运行
-      function time() {
-        clearTimeout(t); //清除定时器
-        const dt = new Date();
-        let y = dt.getFullYear();
-        let mt = dt.getMonth() + 1;
-        let day = dt.getDate();
-        let h = dt.getHours(); //获取时
-        let m = dt.getMinutes(); //获取分
-        let s = dt.getSeconds(); //获取秒
-        this.newTime =
-          "当前时间：" +
-          y +
-          "年" +
-          mt +
-          "月" +
-          day +
-          "-" +
-          h +
-          "时" +
-          m +
-          "分" +
-          s +
-          "秒";
-        t = setTimeout(time, 1000); //设定定时器，循环运行
-      }
+      const dt = new Date();
+      let y = dt.getFullYear();
+      let mt = dt.getMonth() + 1;
+      let day = dt.getDate();
+      let h = dt.getHours(); //获取时
+      let m = dt.getMinutes(); //获取分
+      let s = dt.getSeconds(); //获取秒
+      this.nowYear = y
+      this.newTime =
+        y +
+        "年" +
+        mt +
+        "月" +
+        day +
+        "-" +
+        h +
+        "时" +
+        m +
+        "分" +
+        s +
+        "秒";
     },
     myMap() {
       let myChart = this.$echarts.init(document.querySelector(".map .chart"));
@@ -129,6 +139,9 @@ export default {
     },
     getBar(temp) {
       let myChart = this.$echarts.init(document.querySelector(".bar .chart"));
+      console.log(this.collegeCount);
+      debugger
+      barOption.xAxis[0].data = this.collegeCount.filter(x=>x.name)
       myChart.setOption(temp || barOption);
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -170,13 +183,40 @@ export default {
         myChart.resize();
       });
     },
-    getPie1() {
+    async getPie1() {
       let myChart = this.$echarts.init(document.querySelector(".pie1 .chart"));
+      const temp = await this.getThnicDesc()
+      pie1Option.series[0].data = temp
       myChart.setOption(pie1Option);
       window.addEventListener("resize", function () {
         myChart.resize();
       });
     },
+    // 民族比例
+    async getCollegeCount(){
+      const {data:res} = await queryCollegeCount()
+      let temp
+      if(res.code == 200){
+        setTimeout(() => {
+          temp = res.data.map(x=>({
+          value:x.cntNum,
+          name:this.collegeList[x.collegeId].collegeStr
+        }))
+        }, 0);
+      }
+      return temp
+    },
+    async getThnicDesc(){
+      const {data:res} = await queryeThnicDesc()
+      let temp
+      if(res.code == 200){
+        temp = res.data.map(x=>({
+          value:x.cntNum,
+          name:nationList[x.ethnic].label
+        }))
+      }
+      return temp.slice(0,5)
+    }
   },
 };
 </script>

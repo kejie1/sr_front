@@ -1,4 +1,4 @@
-const lineData = {
+var lineData = {
   year: [
     [24, 40, 101, 134, 90, 230, 210, 230, 120, 230, 210, 120],
     [40, 64, 191, 324, 290, 330, 310, 213, 180, 200, 180, 79]
@@ -6,7 +6,7 @@ const lineData = {
 };
 
 
-const barOption = {
+var barOption = {
   color: ["#2f89cf"],
   tooltip: {
     trigger: "axis",
@@ -25,27 +25,19 @@ const barOption = {
   xAxis: [
     {
       type: "category",
-      data: [
-        "旅游行业",
-        "教育培训",
-        "游戏行业",
-        "医疗行业",
-        "电商行业",
-        "社交行业",
-        "金融行业"
-      ],
+      data: [],
       axisTick: {
         alignWithLabel: true
       },
       axisLabel: {
         textStyle: {
           color: "rgba(255,255,255,.6)",
-          fontSize: "12"
+          fontSize: "8"
         }
       },
       axisLine: {
         show: false
-      }
+      },
     }
   ],
   yAxis: [
@@ -85,7 +77,7 @@ const barOption = {
 };
 
 
-const lineOption = {
+var lineOption = {
   color: ["#00f2f1", "#ed3f35"],
   tooltip: {
     // 通过坐标轴来触发
@@ -177,7 +169,7 @@ const lineOption = {
   ]
 };
 
-const pieOption = {
+var pieOption = {
   tooltip: {
     trigger: "item",
     formatter: "{a} <br/>{b}: {c} ({d}%)",
@@ -230,7 +222,7 @@ var bar1Data = [70, 34, 60, 78, 69];
 var bar1Titlename = ["HTML5", "CSS3", "javascript", "VUE", "NODE"];
 var bar1Valdata = [702, 350, 610, 793, 664];
 var bar1MyColor = ["#1089E7", "#F57474", "#56D0E3", "#F8B448", "#8B78F6"];
-const bar1Option = {
+var bar1Option = {
   //图标位置
   grid: {
     top: "10%",
@@ -325,7 +317,7 @@ const bar1Option = {
     }
   ]
 };
-const line1Option = {
+var line1Option = {
   tooltip: {
     trigger: "axis",
     axisPointer: {
@@ -444,7 +436,20 @@ const line1Option = {
       },
       areaStyle: {
         normal: {
-          // color: this.$echarts.graphic.LinearGradient(
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+                offset: 0, color: "rgba(1, 132, 213, 0.4)" // 0% 处的颜色
+            }, {
+                offset: 1, color: "rgba(1, 132, 213, 0.1)" // 100% 处的颜色
+            }],
+            global: false // 缺省为 false
+          },
+          // color: new echarts.graphic.LinearGradient(
           //   0,
           //   0,
           //   0,
@@ -519,7 +524,20 @@ const line1Option = {
       },
       areaStyle: {
         normal: {
-          // color: this.$echarts.graphic.LinearGradient(
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+                offset: 0, color: "rgba(0, 216, 135, 0.4)" // 0% 处的颜色
+            }, {
+                offset: 1, color: "rgba(0, 216, 135, 0.1)" // 100% 处的颜色
+            }],
+            global: false // 缺省为 false
+          },
+          // color: new echarts.graphic.LinearGradient(
           //   0,
           //   0,
           //   0,
@@ -582,7 +600,7 @@ const line1Option = {
     }
   ]
 };
-const pie1Option = {
+var pie1Option = {
   legend: {
     top: "90%",
     itemWidth: 10,
@@ -615,16 +633,7 @@ const pie1Option = {
       radius: ["10%", "70%"],
       center: ["50%", "42%"],
       roseType: "radius",
-      data: [
-        { value: 20, name: "云南" },
-        { value: 26, name: "北京" },
-        { value: 24, name: "山东" },
-        { value: 25, name: "河北" },
-        { value: 20, name: "江苏" },
-        { value: 25, name: "浙江" },
-        { value: 30, name: "深圳" },
-        { value: 42, name: "广东" }
-      ],
+      data: [],
       // 修饰饼形图文字相关的样式 label对象
       label: {
         fontSize: 10
