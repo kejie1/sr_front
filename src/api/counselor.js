@@ -34,3 +34,24 @@ export function queryByVocationalId(params) {
     params,
   });
 }
+export function addCounselor(data) {
+  return http({
+    url: "counselor/add",
+    method: "post",
+    data,
+  });
+}
+export function deleteCounselor(data) {
+  return http({
+    url: "counselor/delete",
+    method: "post",
+    data,
+  });
+}
+export function updateCounselor(data) {
+  return http({
+    url: "counselor/update",
+    method: "post",
+    data,
+  });
+}

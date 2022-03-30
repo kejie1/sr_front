@@ -7,6 +7,18 @@ export function studentsList(params) {
     params,
   });
 }
+export function queryeThnicDesc() {
+  return http({
+    url: "students/queryeThnicDesc",
+    method: "get",
+  });
+}
+export function queryCollegeCount() {
+  return http({
+    url: "students/queryCollegeCount",
+    method: "get",
+  });
+}
 export function queryCount() {
   return http({
     url: "students/queryCount",
