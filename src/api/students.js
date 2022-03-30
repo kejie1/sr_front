@@ -13,6 +13,12 @@ export function queryeThnicDesc() {
     method: "get",
   });
 }
+export function queryAgeCount() {
+  return http({
+    url: "students/queryAgeCount",
+    method: "get",
+  });
+}
 export function queryCollegeCount() {
   return http({
     url: "students/queryCollegeCount",

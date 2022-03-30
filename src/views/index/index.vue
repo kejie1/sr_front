@@ -7,15 +7,14 @@
     <section class="mainbox">
       <div class="column">
         <div class="panel bar">
-          <h2 @click="handleChangeBar">
-            学院人数 <a href="javascript:;">{{nowYear}}</a>
-            <a href="javacript:;"> {{nowYear -1 }}</a>
+          <h2>
+            各学院报到学院人数
           </h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="panel line">
-          <h2>折线图-人员变化</h2>
+          <h2>折线图-年龄分布</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -29,14 +28,14 @@
         <div class="no">
           <div class="no-hd">
             <ul>
-              <li>125811</li>
-              <li>104563</li>
+              <li>{{registerCount}}</li>
+              <li>{{nowRegisterCount}}</li>
             </ul>
           </div>
           <div class="no-bd">
             <ul>
-              <li>前端需求人数</li>
-              <li>市场供应人数</li>
+              <li>应报道人数</li>
+              <li>实际报道人数</li>
             </ul>
           </div>
         </div>
@@ -49,7 +48,7 @@
       </div>
       <div class="column">
         <div class="panel bar1">
-          <h2>柱状图-技能掌握</h2>
+          <h2>各学院报到比例</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -68,9 +67,11 @@
   </div>
 </template>
 <script>
+
 import { option } from "@/util/mapInfo";
 import { barOption, lineOption, pieOption,bar1Option,line1Option,pie1Option } from "@/util/allOption";
-import {queryeThnicDesc,queryCollegeCount} from '@/api/students'
+import {queryeThnicDesc,queryCollegeCount,studentsList,queryAgeCount} from '@/api/students'
+import {collegeList as allCollegeList} from '@/api/college'
 import {nationList} from '@/util/Enum'
 export default {
   data() {
@@ -78,7 +79,10 @@ export default {
       newTime: "2022年3月17-0时54分14秒",
       nowYear:2021,
       collegeList:[],
-      collegeCount:[]
+      collegeCount:[],
+      registerCount:0, //应注册总人数
+      nowRegisterCount:0, //已注册人数
+      ageCount:[],//年龄数据
     };
   },
   computed: {},
@@ -90,21 +94,25 @@ export default {
     },
     async "$store.state.collegeList"() {
       this.collegeList = this.$store.state.collegeList;
-      // 
       this.collegeCount = await this.getCollegeCount()
       this.getBar();
     },
   },
   created() {
+    this.getRegisterCount()
+    this.getNowRegisterCount()
   },
-  mounted() {
+  async mounted() {
     this.getNewTime();
     this.myMap();
-    this.getLine()
+    await this.getAgeCount()
+    await this.getLine()
     this.getPie()
     this.getBar1()
     this.getline1()
     this.getPie1()
+  },
+  beforeUpdate(){
   },
   methods: {
     getNewTime() {
@@ -137,26 +145,25 @@ export default {
         myChart.resize();
       });
     },
-    getBar(temp) {
+    getBar() {
       let myChart = this.$echarts.init(document.querySelector(".bar .chart"));
-      console.log(this.collegeCount);
-      debugger
-      barOption.xAxis[0].data = this.collegeCount.filter(x=>x.name)
-      myChart.setOption(temp || barOption);
+      const dataName = this.collegeCount?this.collegeCount.map(x=>x.name):[]
+      const dataValue = this.collegeCount?this.collegeCount.map(x=>x.value):[]
+      barOption.xAxis[0].data = dataName
+      barOption.series[0].data = dataValue
+      myChart.setOption(barOption);
       window.addEventListener("resize", function () {
         myChart.resize();
       });
     },
-    handleChangeBar() {
-      const dataAll = [
-        { year: "2019", data: [200, 300, 300, 900, 1500, 1200, 600] },
-        { year: "2020", data: [300, 400, 350, 800, 1800, 1400, 700] },
-      ];
-      barOption.series[0].data = dataAll[1].data;
-      this.getBar();
-    },
     getLine() {
       let myChart = this.$echarts.init(document.querySelector(".line .chart"));
+      const dataName = this.ageCount ? this.ageCount.map(x=>x.age) : []
+      const dataValue = this.ageCount? this.ageCount.map(x=>x.cntNum) : []
+      lineOption.xAxis.data = dataName;
+      lineOption.series[0].data = dataValue;
+      lineOption.series[1].data = dataValue;
+      console.log(lineOption);
       myChart.setOption(lineOption);
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -192,20 +199,19 @@ export default {
         myChart.resize();
       });
     },
-    // 民族比例
+    
     async getCollegeCount(){
       const {data:res} = await queryCollegeCount()
       let temp
       if(res.code == 200){
-        setTimeout(() => {
-          temp = res.data.map(x=>({
-          value:x.cntNum,
-          name:this.collegeList[x.collegeId].collegeStr
-        }))
-        }, 0);
+        temp = res.data.map(x=>({
+        value:x.cntNum,
+        name:this.collegeList[x.collegeId].collegeStr
+      }))
       }
       return temp
     },
+    // 民族比例
     async getThnicDesc(){
       const {data:res} = await queryeThnicDesc()
       let temp
@@ -216,7 +222,25 @@ export default {
         }))
       }
       return temp.slice(0,5)
+    },
+    // 总人数
+    async getRegisterCount(){
+      const {data:res} = await allCollegeList({pageSize: 100000,currentPage: 1,})
+      let temp = res.data.result.map(x=>x.register)
+      this.registerCount = eval(temp.join("+"))
+    },
+    // 
+    async getNowRegisterCount(){
+      const {data:res} = await studentsList({pageSize: 10000,currentPage: 1,})
+      let temp = res.data.pagination.total
+      this.nowRegisterCount = temp
+    },
+    // 年龄数量
+    async getAgeCount(){
+      const {data:res} = await queryAgeCount()
+      if(res.code == 200)this.ageCount = res.data
     }
+    
   },
 };
 </script>

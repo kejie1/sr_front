@@ -106,20 +106,7 @@ var lineOption = {
   xAxis: {
     type: "category",
     boundaryGap: false,
-    data: [
-      "1月",
-      "2月",
-      "3月",
-      "4月",
-      "5月",
-      "6月",
-      "7月",
-      "8月",
-      "9月",
-      "10月",
-      "11月",
-      "12月"
-    ],
+    data: [],
     // 去除刻度
     axisTick: {
       show: false
@@ -152,7 +139,7 @@ var lineOption = {
   },
   series: [
     {
-      name: "新增粉丝",
+      name: "男生",
       type: "line",
       stack: "总量",
       // 是否让线条圆滑显示
@@ -160,7 +147,7 @@ var lineOption = {
       data: lineData.year[0]
     },
     {
-      name: "新增游客",
+      name: "女生",
       type: "line",
       stack: "总量",
       smooth: true,
