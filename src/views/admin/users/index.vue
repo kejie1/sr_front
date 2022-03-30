@@ -213,15 +213,15 @@ export default {
     },
     // 获取学院列表
     async getCollegeList() {
-      const { data } = await collegeList();
-      this.collegeList = data.data.map((x) => ({
+      const { data:res } = await collegeList();
+      this.collegeList = res.data.result.map((x) => ({
         label: x.collegeStr,
         value: x.id,
       }));
     },
     async getCollegeStrById(id) {
-      const { data } = await queryCollegeStrById({ id });
-      return data.data[0].collegeStr || "";
+      const { data:res } = await queryCollegeStrById({ id });
+      return res.data[0].collegeStr || "";
     },
 
     // 防抖todo

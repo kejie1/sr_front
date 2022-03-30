@@ -334,7 +334,7 @@ export default {
     // 获取学院列表
     async getCollegeList() {
       const { data: res } = await collegeList();
-      this.collegeList = res.data.map((x) => ({
+      this.collegeList = res.data.result.map((x) => ({
         ...x,
         label: x.collegeStr,
         value: x.id,
@@ -343,7 +343,7 @@ export default {
     // 获取班级列表
     async getClassList() {
       const { data: res } = await classList();
-      this.classList = res.data.map((x) => ({
+      this.classList = res.data.result.map((x) => ({
         ...x,
         label: x.classStr,
         value: x.id,
@@ -352,7 +352,7 @@ export default {
     // 获取专业列表
     async getVocational() {
       const { data: res } = await vocationalList();
-      this.vocationalList = res.data.map((x) => ({
+      this.vocationalList = res.data.result.map((x) => ({
         ...x,
         label: x.vocationalStr,
         value: x.id,
