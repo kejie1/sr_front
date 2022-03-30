@@ -68,7 +68,7 @@
 </template>
 <script>
 
-import { option } from "@/util/mapInfo";
+import { option,XAData } from "@/util/mapInfo";
 import { barOption, lineOption, pieOption,bar1Option,line1Option,pie1Option } from "@/util/allOption";
 import {queryeThnicDesc,queryCollegeCount,studentsList,queryAgeCount} from '@/api/students'
 import {collegeList as allCollegeList} from '@/api/college'
@@ -83,6 +83,7 @@ export default {
       registerCount:0, //应注册总人数
       nowRegisterCount:0, //已注册人数
       ageCount:[],//年龄数据
+      birthPlaceMap:[]
     };
   },
   computed: {},
@@ -99,20 +100,20 @@ export default {
     },
   },
   created() {
-    this.getRegisterCount()
-    this.getNowRegisterCount()
+    
   },
   async mounted() {
     this.getNewTime();
-    this.myMap();
+    await this.getRegisterCount()
+    await this.getNowRegisterCount()
+    await this.setBirthPlaceMap()
+    await this.myMap();
     await this.getAgeCount()
     await this.getLine()
     this.getPie()
     this.getBar1()
     this.getline1()
     this.getPie1()
-  },
-  beforeUpdate(){
   },
   methods: {
     getNewTime() {
@@ -229,16 +230,25 @@ export default {
       let temp = res.data.result.map(x=>x.register)
       this.registerCount = eval(temp.join("+"))
     },
-    // 
+    // 当前人数
     async getNowRegisterCount(){
       const {data:res} = await studentsList({pageSize: 10000,currentPage: 1,})
-      let temp = res.data.pagination.total
+      const temp = res.data.pagination.total
+      const temp1 = res.data.result.map(x=>x.birthPlace)
       this.nowRegisterCount = temp
+      this.birthPlaceMap = temp1
     },
     // 年龄数量
     async getAgeCount(){
       const {data:res} = await queryAgeCount()
       if(res.code == 200)this.ageCount = res.data
+    },
+    // 生源地
+    async setBirthPlaceMap(){
+      const temp = this.birthPlaceMap.map(x=>x.replace('市',''))
+      for (let i = 0; i < temp.length; i++) {
+        XAData.push([{name:this.birthPlaceMap[i]},{ name: "重庆", value: 100 }])
+      }
     }
     
   },

@@ -116,25 +116,25 @@ const geoCoordMap = {
 };
 
 const XAData = [
-  [{ name: "西安" }, { name: "北京", value: 100 }],
-  [{ name: "西安" }, { name: "上海", value: 100 }],
-  [{ name: "西安" }, { name: "广州", value: 100 }],
-  [{ name: "西安" }, { name: "西宁", value: 100 }],
-  [{ name: "西安" }, { name: "拉萨", value: 100 }]
+  [{ name: "厦门" }, { name: "重庆", value: 100 }],
+  [{ name: "韶关" }, { name: "重庆", value: 100 }],
+  [{ name: "青岛" }, { name: "重庆", value: 100 }],
+  [{ name: "西安" }, { name: "重庆", value: 100 }],
+  [{ name: "长春" }, { name: "重庆", value: 100 }]
 ];
 
 const XNData = [
-  [{ name: "西宁" }, { name: "北京", value: 100 }],
-  [{ name: "西宁" }, { name: "上海", value: 100 }],
-  [{ name: "西宁" }, { name: "广州", value: 100 }],
-  [{ name: "西宁" }, { name: "西安", value: 100 }],
-  [{ name: "西宁" }, { name: "银川", value: 100 }]
+  // [{ name: "银川" }, { name: "重庆", value: 100 }],
+  // [{ name: "西宁" }, { name: "重庆", value: 100 }],
+  // [{ name: "长春" }, { name: "重庆", value: 100 }],
+  // [{ name: "西宁" }, { name: "重庆", value: 100 }],
+  // [{ name: "西宁" }, { name: "重庆", value: 100 }]
 ];
 
 const YCData = [
-  [{ name: "拉萨" }, { name: "北京", value: 100 }],
-  [{ name: "拉萨" }, { name: "潍坊", value: 100 }],
-  [{ name: "拉萨" }, { name: "哈尔滨", value: 100 }]
+  // [{ name: "拉萨" }, { name: "重庆", value: 100 }],
+  // [{ name: "拉萨" }, { name: "重庆", value: 100 }],
+  // [{ name: "拉萨" }, { name: "重庆", value: 100 }]
 ];
 
 const planePath =
