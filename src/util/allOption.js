@@ -165,11 +165,20 @@ var pieOption = {
       return [p[0] + 10, p[1] - 10];
     }
   },
+  // legend: {
+  //   top: "90%",
+  //   itemWidth: 10,
+  //   itemHeight: 10,
+  //   data: ["0岁以下", "20-29岁", "30-39岁", "40-49岁", "50岁以上"],
+  //   textStyle: {
+  //     color: "rgba(255,255,255,.5)",
+  //     fontSize: "12"
+  //   }
+  // },
   legend: {
     top: "90%",
     itemWidth: 10,
     itemHeight: 10,
-    data: ["0岁以下", "20-29岁", "30-39岁", "40-49岁", "50岁以上"],
     textStyle: {
       color: "rgba(255,255,255,.5)",
       fontSize: "12"
@@ -177,7 +186,7 @@ var pieOption = {
   },
   series: [
     {
-      name: "年龄分布",
+      name: "高中同院校比例",
       type: "pie",
       center: ["50%", "42%"],
       radius: ["40%", "60%"],
@@ -193,14 +202,8 @@ var pieOption = {
         "#06f0ab"
       ],
       label: { show: false },
-      labelLine: { show: false },
-      data: [
-        { value: 1, name: "0岁以下" },
-        { value: 4, name: "20-29岁" },
-        { value: 2, name: "30-39岁" },
-        { value: 2, name: "40-49岁" },
-        { value: 1, name: "50岁以上" }
-      ]
+      labelLine: { show: true },
+      data: []
     }
   ]
 };
@@ -614,7 +617,7 @@ var pie1Option = {
   ],
   series: [
     {
-      name: "点位统计",
+      name: "各民族占例",
       type: "pie",
       // 如果radius是百分比则必须加引号
       radius: ["10%", "70%"],

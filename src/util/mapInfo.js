@@ -116,11 +116,11 @@ const geoCoordMap = {
 };
 
 const XAData = [
-  [{ name: "厦门" }, { name: "重庆", value: 100 }],
-  [{ name: "韶关" }, { name: "重庆", value: 100 }],
-  [{ name: "青岛" }, { name: "重庆", value: 100 }],
-  [{ name: "西安" }, { name: "重庆", value: 100 }],
-  [{ name: "长春" }, { name: "重庆", value: 100 }]
+  // [{ name: "厦门" }, { name: "重庆", value: 100 }],
+  // [{ name: "韶关" }, { name: "重庆", value: 100 }],
+  // [{ name: "青岛" }, { name: "重庆", value: 100 }],
+  // [{ name: "西安" }, { name: "重庆", value: 100 }],
+  // [{ name: "长春" }, { name: "重庆", value: 100 }]
 ];
 
 const XNData = [
@@ -128,13 +128,15 @@ const XNData = [
   // [{ name: "西宁" }, { name: "重庆", value: 100 }],
   // [{ name: "长春" }, { name: "重庆", value: 100 }],
   // [{ name: "西宁" }, { name: "重庆", value: 100 }],
-  // [{ name: "西宁" }, { name: "重庆", value: 100 }]
+  // [{ name: "西宁" }, { name: "重庆", value: 100 }],
+  // [{ name: "湛江" }, { name: "重庆", value: 100 }]
 ];
 
 const YCData = [
-  // [{ name: "拉萨" }, { name: "重庆", value: 100 }],
-  // [{ name: "拉萨" }, { name: "重庆", value: 100 }],
-  // [{ name: "拉萨" }, { name: "重庆", value: 100 }]
+  // [{ name: "青岛" }, { name: "重庆", value: 100 }],
+  // [{ name: "石家庄" }, { name: "重庆", value: 100 }],
+  // [{ name: "丽江" }, { name: "重庆", value: 100 }],
+  // [{ name: "湛江" }, { name: "重庆", value: 100 }]
 ];
 
 const planePath =
@@ -244,48 +246,4 @@ var series = [];
     }
   );
 });
-const option = {
-  tooltip: {
-    trigger: "item",
-    formatter: function (params, ticket, callback) {
-      if (params.seriesType == "effectScatter") {
-        return "线路：" + params.data.name + "" + params.data.value[2];
-      } else if (params.seriesType == "lines") {
-        return (
-          params.data.fromName +
-          ">" +
-          params.data.toName +
-          "<br />" +
-          params.data.value
-        );
-      } else {
-        return params.name;
-      }
-    }
-  },
-
-  geo: {
-    map: "china",
-    label: {
-      emphasis: {
-        show: true,
-        color: "#fff"
-      }
-    },
-    roam: false,
-    //   放大我们的地图
-    zoom: 1,
-    itemStyle: {
-      normal: {
-        areaColor: "rgba(43, 196, 243, 0.42)",
-        borderColor: "rgba(43, 196, 243, 1)",
-        borderWidth: 1
-      },
-      emphasis: {
-        areaColor: "#2B91B7"
-      }
-    }
-  },
-  series: series
-};
-module.exports = { planePath, YCData, XNData, XAData, geoCoordMap, option };
+module.exports = { planePath, convertData, XNData, XAData,YCData, geoCoordMap };
