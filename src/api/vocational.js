@@ -20,6 +20,13 @@ export function queryVocationalStrById(params) {
     params,
   });
 }
+export function queryVocationalName(params) {
+  return http({
+    url: "vocational/queryVocationalName",
+    method: "get",
+    params,
+  });
+}
 export function queryVocationalById(params) {
   return http({
     url: "vocational/queryVocationalById",

@@ -12,8 +12,8 @@ const routes = [
   {
     path: "/login",
     component: Login,
-  }
-  ,{
+  },
+  {
     path: "/index",
     component: Index,
   },
@@ -23,6 +23,11 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "admin" */ "@/views/admin/index.vue"),
     children: [
+      {
+        path: "dashboard",
+        name: "dashboard",
+        component: () => import("@/views/admin/dashboard/index.vue"),
+      },
       {
         path: "users",
         name: "users",
@@ -39,9 +44,9 @@ const routes = [
         component: () => import("@/views/admin/hostel/index.vue"),
       },
       {
-        path: "finance",
-        name: "finance",
-        component: () => import("@/views/admin/users/index.vue"),
+        path: "financial",
+        name: "financial",
+        component: () => import("@/views/admin/financial/index.vue"),
       },
       // 教务管理
       {
