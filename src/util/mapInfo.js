@@ -112,29 +112,31 @@ const geoCoordMap = {
   长治: [112.8625, 36.4746],
   阳泉: [113.4778, 38.0951],
   青岛: [120.4651, 36.3373],
-  韶关: [113.7964, 24.7028]
+  韶关: [113.7964, 24.7028],
 };
 
 const XAData = [
-  [{ name: "西安" }, { name: "北京", value: 100 }],
-  [{ name: "西安" }, { name: "上海", value: 100 }],
-  [{ name: "西安" }, { name: "广州", value: 100 }],
-  [{ name: "西安" }, { name: "西宁", value: 100 }],
-  [{ name: "西安" }, { name: "拉萨", value: 100 }]
+  // [{ name: "厦门" }, { name: "重庆", value: 100 }],
+  // [{ name: "韶关" }, { name: "重庆", value: 100 }],
+  // [{ name: "青岛" }, { name: "重庆", value: 100 }],
+  // [{ name: "西安" }, { name: "重庆", value: 100 }],
+  // [{ name: "长春" }, { name: "重庆", value: 100 }]
 ];
 
 const XNData = [
-  [{ name: "西宁" }, { name: "北京", value: 100 }],
-  [{ name: "西宁" }, { name: "上海", value: 100 }],
-  [{ name: "西宁" }, { name: "广州", value: 100 }],
-  [{ name: "西宁" }, { name: "西安", value: 100 }],
-  [{ name: "西宁" }, { name: "银川", value: 100 }]
+  // [{ name: "银川" }, { name: "重庆", value: 100 }],
+  // [{ name: "西宁" }, { name: "重庆", value: 100 }],
+  // [{ name: "长春" }, { name: "重庆", value: 100 }],
+  // [{ name: "西宁" }, { name: "重庆", value: 100 }],
+  // [{ name: "西宁" }, { name: "重庆", value: 100 }],
+  // [{ name: "湛江" }, { name: "重庆", value: 100 }]
 ];
 
 const YCData = [
-  [{ name: "拉萨" }, { name: "北京", value: 100 }],
-  [{ name: "拉萨" }, { name: "潍坊", value: 100 }],
-  [{ name: "拉萨" }, { name: "哈尔滨", value: 100 }]
+  // [{ name: "青岛" }, { name: "重庆", value: 100 }],
+  // [{ name: "石家庄" }, { name: "重庆", value: 100 }],
+  // [{ name: "丽江" }, { name: "重庆", value: 100 }],
+  // [{ name: "湛江" }, { name: "重庆", value: 100 }]
 ];
 
 const planePath =
@@ -151,7 +153,7 @@ var convertData = function (data) {
         fromName: dataItem[0].name,
         toName: dataItem[1].name,
         coords: [fromCoord, toCoord],
-        value: dataItem[1].value
+        value: dataItem[1].value,
       });
     }
   }
@@ -163,7 +165,7 @@ var series = [];
 [
   ["西安", XAData],
   ["西宁", XNData],
-  ["银川", YCData]
+  ["银川", YCData],
 ].forEach(function (item, i) {
   series.push(
     {
@@ -175,16 +177,16 @@ var series = [];
         period: 6,
         trailLength: 0.7,
         color: "red", //arrow箭头的颜色
-        symbolSize: 3
+        symbolSize: 3,
       },
       lineStyle: {
         normal: {
           color: color[i],
           width: 0,
-          curveness: 0.2
-        }
+          curveness: 0.2,
+        },
       },
-      data: convertData(item[1])
+      data: convertData(item[1]),
     },
     {
       name: item[0] + " Top3",
@@ -197,17 +199,17 @@ var series = [];
         period: 6,
         trailLength: 0,
         symbol: planePath,
-        symbolSize: 15
+        symbolSize: 15,
       },
       lineStyle: {
         normal: {
           color: color[i],
           width: 1,
           opacity: 0.6,
-          curveness: 0.2
-        }
+          curveness: 0.2,
+        },
       },
-      data: convertData(item[1])
+      data: convertData(item[1]),
     },
     {
       name: item[0] + " Top3",
@@ -215,77 +217,40 @@ var series = [];
       coordinateSystem: "geo",
       zlevel: 2,
       rippleEffect: {
-        brushType: "stroke"
+        brushType: "stroke",
       },
       label: {
         normal: {
           show: true,
           position: "right",
-          formatter: "{b}"
-        }
+          formatter: "{b}",
+        },
       },
       symbolSize: function (val) {
         return val[2] / 8;
       },
       itemStyle: {
         normal: {
-          color: color[i]
+          color: color[i],
         },
         emphasis: {
-          areaColor: "#2B91B7"
-        }
+          areaColor: "#2B91B7",
+        },
       },
       data: item[1].map(function (dataItem) {
         return {
           name: dataItem[1].name,
-          value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+          value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value]),
         };
-      })
+      }),
     }
   );
 });
-const option = {
-  tooltip: {
-    trigger: "item",
-    formatter: function (params, ticket, callback) {
-      if (params.seriesType == "effectScatter") {
-        return "线路：" + params.data.name + "" + params.data.value[2];
-      } else if (params.seriesType == "lines") {
-        return (
-          params.data.fromName +
-          ">" +
-          params.data.toName +
-          "<br />" +
-          params.data.value
-        );
-      } else {
-        return params.name;
-      }
-    }
-  },
-
-  geo: {
-    map: "china",
-    label: {
-      emphasis: {
-        show: true,
-        color: "#fff"
-      }
-    },
-    roam: false,
-    //   放大我们的地图
-    zoom: 1,
-    itemStyle: {
-      normal: {
-        areaColor: "rgba(43, 196, 243, 0.42)",
-        borderColor: "rgba(43, 196, 243, 1)",
-        borderWidth: 1
-      },
-      emphasis: {
-        areaColor: "#2B91B7"
-      }
-    }
-  },
-  series: series
+module.exports = {
+  planePath,
+  convertData,
+  XNData,
+  XAData,
+  YCData,
+  geoCoordMap,
 };
-module.exports = { planePath, YCData, XNData, XAData, geoCoordMap, option };

@@ -10,10 +10,10 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {
-    this.$store.dispatch("getCollegeList");
-    this.$store.dispatch("getVocationList");
-    this.$store.dispatch("getClassList");
+  async created() {
+    await this.$store.dispatch("getCollegeList");
+    await this.$store.dispatch("getVocationList");
+    await this.$store.dispatch("getClassList");
   },
   mounted() {},
   methods: {},

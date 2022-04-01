@@ -1,26 +1,23 @@
 <template>
   <div class="body">
     <header>
-      <!-- <h1>新生报到系统可视化大屏</h1> -->
+      <h1>新生报到系统可视化大屏</h1>
       <div class="showTime">当前时间：{{ newTime }}</div>
     </header>
     <section class="mainbox">
       <div class="column">
         <div class="panel bar">
-          <h2 @click="handleChangeBar">
-            学院人数 <a href="javascript:;">{{nowYear}}</a>
-            <a href="javacript:;"> {{nowYear -1 }}</a>
-          </h2>
+          <h2>各学院报到学院人数</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="panel line">
-          <h2>折线图-人员变化</h2>
+          <h2>年龄分布</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="panel pie">
-          <h2>饼形图-年龄分布</h2>
+          <h2>高中同院校比例</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -29,18 +26,18 @@
         <div class="no">
           <div class="no-hd">
             <ul>
-              <li>125811</li>
-              <li>104563</li>
+              <li>{{ registerCount }}</li>
+              <li>{{ nowRegisterCount }}</li>
             </ul>
           </div>
           <div class="no-bd">
             <ul>
-              <li>前端需求人数</li>
-              <li>市场供应人数</li>
+              <li>应报道人数</li>
+              <li>实际报道人数</li>
             </ul>
           </div>
         </div>
-        <div class="map" style="width:100%;height:400px">
+        <div class="map">
           <div class="chart"></div>
           <div class="map1"></div>
           <div class="map2"></div>
@@ -49,7 +46,7 @@
       </div>
       <div class="column">
         <div class="panel bar1">
-          <h2>柱状图-技能掌握</h2>
+          <h2>各学院报到比例</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -68,43 +65,63 @@
   </div>
 </template>
 <script>
-import { option } from "@/util/mapInfo";
-import { barOption, lineOption, pieOption,bar1Option,line1Option,pie1Option } from "@/util/allOption";
-import {queryeThnicDesc,queryCollegeCount} from '@/api/students'
-import {nationList} from '@/util/Enum'
+import { XAData, XNData, YCData, planePath, geoCoordMap } from "@/util/mapInfo";
+import {
+  barOption,
+  lineOption,
+  pieOption,
+  bar1Option,
+  line1Option,
+  pie1Option,
+} from "@/util/allOption";
+import {
+  queryeThnicDesc,
+  queryCollegeCount,
+  studentsList,
+  queryAgeCount,
+  queryeGraduateDesc,
+} from "@/api/students";
+import { collegeList as allCollegeList } from "@/api/college";
+import { nationList } from "@/util/Enum";
 export default {
   data() {
     return {
       newTime: "2022年3月17-0时54分14秒",
-      nowYear:2021,
-      collegeList:[],
-      collegeCount:[]
+      nowYear: 2021,
+      collegeList: [],
+      collegeCount: [],
+      registerCount: 0, //应注册总人数
+      nowRegisterCount: 0, //已注册人数
+      ageCount: [], //年龄数据
+      birthPlaceMap: [],
     };
   },
   computed: {},
- watch: {
-    newTime(){
+  watch: {
+    newTime() {
       setTimeout(() => {
-        this.getNewTime()
+        this.getNewTime();
       }, 1000);
     },
     async "$store.state.collegeList"() {
       this.collegeList = this.$store.state.collegeList;
-      // 
-      this.collegeCount = await this.getCollegeCount()
+      this.collegeCount = await this.getCollegeCount();
       this.getBar();
     },
   },
-  created() {
-  },
-  mounted() {
+  created() {},
+  async mounted() {
     this.getNewTime();
-    this.myMap();
-    this.getLine()
-    this.getPie()
-    this.getBar1()
-    this.getline1()
-    this.getPie1()
+    await this.getRegisterCount();
+    await this.getNowRegisterCount();
+    await this.setBirthPlaceMap();
+    await this.myMap();
+    await this.getAgeCount();
+    await this.getLine();
+    this.getPie();
+    this.getBar1();
+    this.getline1();
+    this.getPie1();
   },
   methods: {
     getNewTime() {
@@ -115,55 +132,181 @@ export default {
       let h = dt.getHours(); //获取时
       let m = dt.getMinutes(); //获取分
       let s = dt.getSeconds(); //获取秒
-      this.nowYear = y
+      this.nowYear = y;
       this.newTime =
-        y +
-        "年" +
-        mt +
-        "月" +
-        day +
-        "-" +
-        h +
-        "时" +
-        m +
-        "分" +
-        s +
-        "秒";
+        y + "年" + mt + "月" + day + "-" + h + "时" + m + "分" + s + "秒";
     },
     myMap() {
       let myChart = this.$echarts.init(document.querySelector(".map .chart"));
-      myChart.setOption(option);
+      const color = ["#fff", "#fff", "#fff"]; //航线的颜色
+      let series = [];
+      [
+        ["西安", XAData],
+        ["西宁", XNData],
+        ["银川", YCData],
+      ].forEach((item, i) => {
+        series.push(
+          {
+            name: item[0] + " Top3",
+            type: "lines",
+            zlevel: 1,
+            effect: {
+              show: true,
+              period: 6,
+              trailLength: 0.7,
+              color: "red", //arrow箭头的颜色
+              symbolSize: 3,
+            },
+            lineStyle: {
+              normal: {
+                color: color[i],
+                width: 0,
+                curveness: 0.2,
+              },
+            },
+            data: this.convertData(item[1]),
+          },
+          {
+            name: item[0] + " Top3",
+            type: "lines",
+            zlevel: 2,
+            symbol: ["none", "arrow"],
+            symbolSize: 10,
+            effect: {
+              show: true,
+              period: 6,
+              trailLength: 0,
+              symbol: planePath,
+              symbolSize: 15,
+            },
+            lineStyle: {
+              normal: {
+                color: color[i],
+                width: 1,
+                opacity: 0.6,
+                curveness: 0.2,
+              },
+            },
+            data: this.convertData(item[1]),
+          },
+          {
+            name: item[0] + " Top3",
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            zlevel: 2,
+            rippleEffect: {
+              brushType: "stroke",
+            },
+            label: {
+              normal: {
+                show: true,
+                position: "right",
+                formatter: "{b}",
+              },
+            },
+            symbolSize: function (val) {
+              return val[2] / 8;
+            },
+            itemStyle: {
+              normal: {
+                color: color[i],
+              },
+              emphasis: {
+                areaColor: "#2B91B7",
+              },
+            },
+            data: item[1].map(function (dataItem) {
+              return {
+                name: dataItem[1].name,
+                value: geoCoordMap[dataItem[1].name].concat([
+                  dataItem[1].value,
+                ]),
+              };
+            }),
+          }
+        );
+      });
+      const mapOption = {
+        tooltip: {
+          trigger: "item",
+          formatter: function (params, ticket, callback) {
+            if (params.seriesType == "effectScatter") {
+              return "线路：" + params.data.name + "" + params.data.value[2];
+            } else if (params.seriesType == "lines") {
+              return (
+                params.data.fromName +
+                ">" +
+                params.data.toName +
+                "<br />" +
+                params.data.value
+              );
+            } else {
+              return params.name;
+            }
+          },
+        },
+
+        geo: {
+          map: "china",
+          label: {
+            emphasis: {
+              show: true,
+              color: "#fff",
+            },
+          },
+          roam: false,
+          //   放大我们的地图
+          zoom: 1,
+          itemStyle: {
+            normal: {
+              areaColor: "rgba(43, 196, 243, 0.42)",
+              borderColor: "rgba(43, 196, 243, 1)",
+              borderWidth: 1,
+            },
+            emphasis: {
+              areaColor: "#2B91B7",
+            },
+          },
+        },
+        series: series,
+      };
+
+      myChart.setOption(mapOption);
       window.addEventListener("resize", function () {
         myChart.resize();
       });
     },
-    getBar(temp) {
+    getBar() {
       let myChart = this.$echarts.init(document.querySelector(".bar .chart"));
-      console.log(this.collegeCount);
-      debugger
-      barOption.xAxis[0].data = this.collegeCount.filter(x=>x.name)
-      myChart.setOption(temp || barOption);
+      const dataName = this.collegeCount
+        ? this.collegeCount.map((x) => x.name)
+        : [];
+      const dataValue = this.collegeCount
+        ? this.collegeCount.map((x) => x.value)
+        : [];
+      barOption.xAxis[0].data = dataName;
+      barOption.series[0].data = dataValue;
+      myChart.setOption(barOption);
       window.addEventListener("resize", function () {
         myChart.resize();
       });
-    },
-    handleChangeBar() {
-      const dataAll = [
-        { year: "2019", data: [200, 300, 300, 900, 1500, 1200, 600] },
-        { year: "2020", data: [300, 400, 350, 800, 1800, 1400, 700] },
-      ];
-      barOption.series[0].data = dataAll[1].data;
-      this.getBar();
     },
     getLine() {
       let myChart = this.$echarts.init(document.querySelector(".line .chart"));
+      const dataName = this.ageCount ? this.ageCount.map((x) => x.age) : [];
+      const dataValue = this.ageCount ? this.ageCount.map((x) => x.cntNum) : [];
+      lineOption.xAxis.data = dataName;
+      lineOption.series[0].data = dataValue;
+      lineOption.series[1].data = dataValue;
       myChart.setOption(lineOption);
       window.addEventListener("resize", function () {
         myChart.resize();
       });
     },
-    getPie() {
+    async getPie() {
       let myChart = this.$echarts.init(document.querySelector(".pie .chart"));
+      const temp = await this.getGraduateDesc();
+      pieOption.series[0].data = temp;
       myChart.setOption(pieOption);
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -185,38 +328,104 @@ export default {
     },
     async getPie1() {
       let myChart = this.$echarts.init(document.querySelector(".pie1 .chart"));
-      const temp = await this.getThnicDesc()
-      pie1Option.series[0].data = temp
+      const temp = await this.getThnicDesc();
+      pie1Option.series[0].data = temp;
       myChart.setOption(pie1Option);
       window.addEventListener("resize", function () {
         myChart.resize();
       });
     },
-    // 民族比例
-    async getCollegeCount(){
-      const {data:res} = await queryCollegeCount()
-      let temp
-      if(res.code == 200){
-        setTimeout(() => {
-          temp = res.data.map(x=>({
-          value:x.cntNum,
-          name:this.collegeList[x.collegeId].collegeStr
-        }))
-        }, 0);
+
+    async getCollegeCount() {
+      const { data: res } = await queryCollegeCount();
+      let temp;
+      if (res.code == 200) {
+        temp = res.data.map((x) => ({
+          value: x.cntNum,
+          name: this.collegeList[x.collegeId].collegeStr,
+        }));
       }
-      return temp
+      return temp;
     },
-    async getThnicDesc(){
-      const {data:res} = await queryeThnicDesc()
-      let temp
-      if(res.code == 200){
-        temp = res.data.map(x=>({
-          value:x.cntNum,
-          name:nationList[x.ethnic].label
-        }))
+    // 民族比例
+    async getThnicDesc() {
+      const { data: res } = await queryeThnicDesc();
+      let temp;
+      if (res.code == 200) {
+        temp = res.data.map((x) => ({
+          value: x.cntNum,
+          name: nationList[x.ethnic].label,
+        }));
       }
-      return temp.slice(0,5)
-    }
+      return temp.slice(0, 5);
+    },
+    // 总人数
+    async getRegisterCount() {
+      const { data: res } = await allCollegeList({
+        pageSize: 100000,
+        currentPage: 1,
+      });
+      let temp = res.data.result.map((x) => x.register);
+      this.registerCount = eval(temp.join("+"));
+    },
+    // 当前人数
+    async getNowRegisterCount() {
+      const { data: res } = await studentsList({
+        pageSize: 10000,
+        currentPage: 1,
+      });
+      const temp = res.data.pagination.total;
+      const temp1 = res.data.result.map((x) => x.birthPlace.replace("市", ""));
+      this.nowRegisterCount = temp;
+      this.birthPlaceMap = temp1;
+    },
+    // 年龄数量
+    async getAgeCount() {
+      const { data: res } = await queryAgeCount();
+      if (res.code == 200) this.ageCount = res.data;
+    },
+    // 生源地
+    async setBirthPlaceMap() {
+      const temp = this.birthPlaceMap.map((x) => x.replace("市", ""));
+      for (let i = 0; i < temp.length; i++) {
+        XAData.push([
+          { name: this.birthPlaceMap[i] },
+          { name: "重庆", value: 100 },
+        ]);
+      }
+    },
+    //mapUtil
+    convertData(param) {
+      let res = [];
+      for (let i = 0; i < param.length; i++) {
+        let dataItem = param[i];
+        let fromCoord = geoCoordMap[dataItem[0].name];
+        let toCoord = geoCoordMap[dataItem[1].name];
+        if (fromCoord && toCoord) {
+          res.push({
+            fromName: dataItem[0].name,
+            toName: dataItem[1].name,
+            coords: [fromCoord, toCoord],
+            value: dataItem[1].value,
+          });
+        }
+      }
+      return res;
+    },
+    // 毕业学校
+    async getGraduateDesc() {
+      const { data: rs } = await queryeGraduateDesc();
+      const temp1 = rs.data
+        .map((x) => ({
+          value: x.cntNum,
+          name: x.graduate,
+        }))
+        .splice(0, 5);
+      const temp2 = rs.data.splice(5, rs.data.length).map((x) => x.cntNum);
+      const others = eval(temp2.join("+"));
+      temp1.push({ value: others, name: "其它" });
+      return temp1;
+    },
   },
 };
 </script>

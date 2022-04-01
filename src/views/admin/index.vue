@@ -4,7 +4,9 @@
       <el-header>
         <div class="header_container">
           <div class="logo">
-            <logo></logo>
+            <router-link :to="'dashboard'" tag="a">
+              <logo></logo>
+            </router-link>
           </div>
           <div class="userInfo">
             <user-info></user-info>

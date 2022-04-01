@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { login } from "../../api/user";
+import { login } from "@/api/user";
 export default {
   components: {},
   data() {
@@ -69,7 +69,7 @@ export default {
           if (res.code == 200) {
             sessionStorage.setItem("token", res.token);
             this.$store.commit("setUserInfo", res.data);
-            this.$router.push({ path: "/admin" });
+            this.$router.push({ path: "/admin/dashboard" });
           }
         } else {
           this.$message.warning("请按要求输入用户名哥密码");
