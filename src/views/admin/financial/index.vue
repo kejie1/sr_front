@@ -11,6 +11,11 @@
           </el-input>
           <el-button type="primary" @click="getVocationalName">搜索</el-button>
         </div>
+        <div class="addBtn">
+          <el-button type="success" @click="exportToExcel" size="mini"
+            >导出为表格</el-button
+          >
+        </div>
       </div>
     </div>
     <el-table :key="Math.random()" :data="tableData" stripe style="width: 100%">
@@ -39,7 +44,6 @@
       layout="->,total, sizes, prev, pager,next, jumper"
       :total="paginationParams.total || 0"
     ></el-pagination>
-    <!-- 添加宿舍 -->
     <!-- 设置费用 -->
     <el-dialog
       :title="'设置费用'"
@@ -123,12 +127,17 @@ export default {
     },
     async getVocationalName() {
       if(this.searchParams == ''){
-          return this.$message({ message: '请输入专业名称', type: "warning" });
+          this.getVocationalList()
       }
       const { data: res } = await queryVocationalName({
         vocationalStr: this.searchParams,
+        pageSize: 10,
+        currentPage: 1,
       });
-      if (res.code == 200) this.tableData = res.data.result;
+      if (res.code == 200) {
+        this.tableData = res.data.result;
+        this.paginationParams = res.data.pagination;
+      }
     },
     // 判断添加/修改
     async handleAddEdit(row) {
@@ -136,7 +145,7 @@ export default {
         const { data: res } = await queryVocationalStrById({ id: row.id });
         if (res.code == 200){
             this.vocationalInfo = res.data[0];
-            this.paginationParams = res.data.pagination;
+            
         } 
     },
 
@@ -154,6 +163,27 @@ export default {
 
       this.handleCancel();
       this.getVocationalList();
+    },
+    exportToExcel() {
+      require.ensure([], () => {
+        const { export_json_to_excel } = require("@/excel/Export2Excel");
+        const tHeader = [
+          "id",
+          "专业名称",
+          "费用(元)",
+        ];
+        const filterVal = [
+          "id",
+          "vocationalStr",
+          "cost",
+        ];
+        const list = this.tableData;
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, "各专业学费信息表");
+      });
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
     },
   },
 };
