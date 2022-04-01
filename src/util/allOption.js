@@ -207,7 +207,7 @@ var pieOption = {
 };
 
 var bar1Data = [70, 34, 60, 78, 69];
-var bar1Titlename = ["HTML5", "CSS3", "javascript", "VUE", "NODE"];
+var bar1Titlename = ["讯飞学院", "软件学院", "智能制造学院", "大数据学院", "金融学院"];
 var bar1Valdata = [702, 350, 610, 793, 664];
 var bar1MyColor = ["#1089E7", "#F57474", "#56D0E3", "#F8B448", "#8B78F6"];
 var bar1Option = {
