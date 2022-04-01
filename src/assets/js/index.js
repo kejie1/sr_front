@@ -1,5 +1,5 @@
 // 柱状图1模块
-(function() {
+(function () {
   // 实例化对象
   var myChart = echarts.init(document.querySelector(".bar .chart"));
   // 指定配置和数据
@@ -9,15 +9,15 @@
       trigger: "axis",
       axisPointer: {
         // 坐标轴指示器，坐标轴触发有效
-        type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-      }
+        type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+      },
     },
     grid: {
       left: "0%",
       top: "10px",
       right: "0%",
       bottom: "4%",
-      containLabel: true
+      containLabel: true,
     },
     xAxis: [
       {
@@ -29,21 +29,21 @@
           "医疗行业",
           "电商行业",
           "社交行业",
-          "金融行业"
+          "金融行业",
         ],
         axisTick: {
-          alignWithLabel: true
+          alignWithLabel: true,
         },
         axisLabel: {
           textStyle: {
             color: "rgba(255,255,255,.6)",
-            fontSize: "12"
-          }
+            fontSize: "12",
+          },
         },
         axisLine: {
-          show: false
-        }
-      }
+          show: false,
+        },
+      },
     ],
     yAxis: [
       {
@@ -51,22 +51,22 @@
         axisLabel: {
           textStyle: {
             color: "rgba(255,255,255,.6)",
-            fontSize: "12"
-          }
+            fontSize: "12",
+          },
         },
         axisLine: {
           lineStyle: {
-            color: "rgba(255,255,255,.1)"
+            color: "rgba(255,255,255,.1)",
             // width: 1,
             // type: "solid"
-          }
+          },
         },
         splitLine: {
           lineStyle: {
-            color: "rgba(255,255,255,.1)"
-          }
-        }
-      }
+            color: "rgba(255,255,255,.1)",
+          },
+        },
+      },
     ],
     series: [
       {
@@ -75,32 +75,32 @@
         barWidth: "35%",
         data: [200, 300, 300, 900, 1500, 1200, 600],
         itemStyle: {
-          barBorderRadius: 5
-        }
-      }
-    ]
+          barBorderRadius: 5,
+        },
+      },
+    ],
   };
 
   // 把配置给实例对象
   myChart.setOption(option);
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", function () {
     myChart.resize();
   });
 
   // 数据变化
   var dataAll = [
     { year: "2019", data: [200, 300, 300, 900, 1500, 1200, 600] },
-    { year: "2020", data: [300, 400, 350, 800, 1800, 1400, 700] }
+    { year: "2020", data: [300, 400, 350, 800, 1800, 1400, 700] },
   ];
 
-  $(".bar h2 ").on("click", "a", function() {
+  $(".bar h2 ").on("click", "a", function () {
     option.series[0].data = dataAll[$(this).index()].data;
     myChart.setOption(option);
   });
 })();
 
 // 折线图定制
-(function() {
+(function () {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.querySelector(".line .chart"));
 
@@ -108,8 +108,8 @@
   var data = {
     year: [
       [24, 40, 101, 134, 90, 230, 210, 230, 120, 230, 210, 120],
-      [40, 64, 191, 324, 290, 330, 310, 213, 180, 200, 180, 79]
-    ]
+      [40, 64, 191, 324, 290, 330, 310, 213, 180, 200, 180, 79],
+    ],
   };
 
   // 2. 指定配置和数据
@@ -117,15 +117,15 @@
     color: ["#00f2f1", "#ed3f35"],
     tooltip: {
       // 通过坐标轴来触发
-      trigger: "axis"
+      trigger: "axis",
     },
     legend: {
       // 距离容器10%
       right: "10%",
       // 修饰图例文字的颜色
       textStyle: {
-        color: "#4c9bfd"
-      }
+        color: "#4c9bfd",
+      },
       // 如果series 里面设置了name，此时图例组件的data可以省略
       // data: ["邮件营销", "联盟广告"]
     },
@@ -136,7 +136,7 @@
       bottom: "3%",
       show: true,
       borderColor: "#012f4a",
-      containLabel: true
+      containLabel: true,
     },
 
     xAxis: {
@@ -154,37 +154,37 @@
         "9月",
         "10月",
         "11月",
-        "12月"
+        "12月",
       ],
       // 去除刻度
       axisTick: {
-        show: false
+        show: false,
       },
       // 修饰刻度标签的颜色
       axisLabel: {
-        color: "rgba(255,255,255,.7)"
+        color: "rgba(255,255,255,.7)",
       },
       // 去除x坐标轴的颜色
       axisLine: {
-        show: false
-      }
+        show: false,
+      },
     },
     yAxis: {
       type: "value",
       // 去除刻度
       axisTick: {
-        show: false
+        show: false,
       },
       // 修饰刻度标签的颜色
       axisLabel: {
-        color: "rgba(255,255,255,.7)"
+        color: "rgba(255,255,255,.7)",
       },
       // 修改y轴分割线的颜色
       splitLine: {
         lineStyle: {
-          color: "#012f4a"
-        }
-      }
+          color: "#012f4a",
+        },
+      },
     },
     series: [
       {
@@ -193,30 +193,30 @@
         stack: "总量",
         // 是否让线条圆滑显示
         smooth: true,
-        data: data.year[0]
+        data: data.year[0],
       },
       {
         name: "新增游客",
         type: "line",
         stack: "总量",
         smooth: true,
-        data: data.year[1]
-      }
-    ]
+        data: data.year[1],
+      },
+    ],
   };
   // 3. 把配置和数据给实例对象
   myChart.setOption(option);
 
   // 重新把配置好的新数据给实例对象
   myChart.setOption(option);
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", function () {
     myChart.resize();
   });
 })();
 
 // 饼形图定制
 // 折线图定制
-(function() {
+(function () {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.querySelector(".pie .chart"));
 
@@ -224,10 +224,10 @@
     tooltip: {
       trigger: "item",
       formatter: "{a} <br/>{b}: {c} ({d}%)",
-      position: function(p) {
+      position: function (p) {
         //其中p为当前鼠标的位置
         return [p[0] + 10, p[1] - 10];
-      }
+      },
     },
     legend: {
       top: "90%",
@@ -236,8 +236,8 @@
       data: ["0岁以下", "20-29岁", "30-39岁", "40-49岁", "50岁以上"],
       textStyle: {
         color: "rgba(255,255,255,.5)",
-        fontSize: "12"
-      }
+        fontSize: "12",
+      },
     },
     series: [
       {
@@ -254,7 +254,7 @@
           "#06b4ab",
           "#06c8ab",
           "#06dcab",
-          "#06f0ab"
+          "#06f0ab",
         ],
         label: { show: false },
         labelLine: { show: false },
@@ -263,20 +263,20 @@
           { value: 4, name: "20-29岁" },
           { value: 2, name: "30-39岁" },
           { value: 2, name: "40-49岁" },
-          { value: 1, name: "50岁以上" }
-        ]
-      }
-    ]
+          { value: 1, name: "50岁以上" },
+        ],
+      },
+    ],
   };
 
   // 使用刚指定的配置项和数据显示图表。
   myChart.setOption(option);
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", function () {
     myChart.resize();
   });
 })();
 // 学习进度柱状图模块
-(function() {
+(function () {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.querySelector(".bar1 .chart"));
 
@@ -289,10 +289,10 @@
     grid: {
       top: "10%",
       left: "22%",
-      bottom: "10%"
+      bottom: "10%",
     },
     xAxis: {
-      show: false
+      show: false,
     },
     yAxis: [
       {
@@ -300,13 +300,13 @@
         data: titlename,
         inverse: true,
         axisLine: {
-          show: false
+          show: false,
         },
         splitLine: {
-          show: false
+          show: false,
         },
         axisTick: {
-          show: false
+          show: false,
         },
         axisLabel: {
           color: "#fff",
@@ -319,10 +319,10 @@
               // padding: 5,
               align: "center",
               width: 15,
-              height: 15
-            }
-          }
-        }
+              height: 15,
+            },
+          },
+        },
       },
       {
         show: true,
@@ -331,10 +331,10 @@
         axisLabel: {
           textStyle: {
             fontSize: 12,
-            color: "#fff"
-          }
-        }
-      }
+            color: "#fff",
+          },
+        },
+      },
     ],
     series: [
       {
@@ -347,19 +347,19 @@
         itemStyle: {
           normal: {
             barBorderRadius: 20,
-            color: function(params) {
+            color: function (params) {
               var num = myColor.length;
               return myColor[params.dataIndex % num];
-            }
-          }
+            },
+          },
         },
         label: {
           normal: {
             show: true,
             position: "inside",
-            formatter: "{c}%"
-          }
-        }
+            formatter: "{c}%",
+          },
+        },
       },
       {
         name: "框",
@@ -373,21 +373,21 @@
             color: "none",
             borderColor: "#00c1de",
             borderWidth: 3,
-            barBorderRadius: 15
-          }
-        }
-      }
-    ]
+            barBorderRadius: 15,
+          },
+        },
+      },
+    ],
   };
 
   // 使用刚指定的配置项和数据显示图表。
   myChart.setOption(option);
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", function () {
     myChart.resize();
   });
 })();
 // 折线图 优秀作品
-(function() {
+(function () {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.querySelector(".line1 .chart"));
 
@@ -396,23 +396,23 @@
       trigger: "axis",
       axisPointer: {
         lineStyle: {
-          color: "#dddc6b"
-        }
-      }
+          color: "#dddc6b",
+        },
+      },
     },
     legend: {
       top: "0%",
       textStyle: {
         color: "rgba(255,255,255,.5)",
-        fontSize: "12"
-      }
+        fontSize: "12",
+      },
     },
     grid: {
       left: "10",
       top: "30",
       right: "10",
       bottom: "10",
-      containLabel: true
+      containLabel: true,
     },
 
     xAxis: [
@@ -422,13 +422,13 @@
         axisLabel: {
           textStyle: {
             color: "rgba(255,255,255,.6)",
-            fontSize: 12
-          }
+            fontSize: 12,
+          },
         },
         axisLine: {
           lineStyle: {
-            color: "rgba(255,255,255,.2)"
-          }
+            color: "rgba(255,255,255,.2)",
+          },
         },
 
         data: [
@@ -460,15 +460,15 @@
           "27",
           "28",
           "29",
-          "30"
-        ]
+          "30",
+        ],
       },
       {
         axisPointer: { show: false },
         axisLine: { show: false },
         position: "bottom",
-        offset: 20
-      }
+        offset: 20,
+      },
     ],
 
     yAxis: [
@@ -477,22 +477,22 @@
         axisTick: { show: false },
         axisLine: {
           lineStyle: {
-            color: "rgba(255,255,255,.1)"
-          }
+            color: "rgba(255,255,255,.1)",
+          },
         },
         axisLabel: {
           textStyle: {
             color: "rgba(255,255,255,.6)",
-            fontSize: 12
-          }
+            fontSize: 12,
+          },
         },
 
         splitLine: {
           lineStyle: {
-            color: "rgba(255,255,255,.1)"
-          }
-        }
-      }
+            color: "rgba(255,255,255,.1)",
+          },
+        },
+      },
     ],
     series: [
       {
@@ -505,8 +505,8 @@
         lineStyle: {
           normal: {
             color: "#0184d5",
-            width: 2
-          }
+            width: 2,
+          },
         },
         areaStyle: {
           normal: {
@@ -518,57 +518,29 @@
               [
                 {
                   offset: 0,
-                  color: "rgba(1, 132, 213, 0.4)"
+                  color: "rgba(1, 132, 213, 0.4)",
                 },
                 {
                   offset: 0.8,
-                  color: "rgba(1, 132, 213, 0.1)"
-                }
+                  color: "rgba(1, 132, 213, 0.1)",
+                },
               ],
               false
             ),
-            shadowColor: "rgba(0, 0, 0, 0.1)"
-          }
+            shadowColor: "rgba(0, 0, 0, 0.1)",
+          },
         },
         itemStyle: {
           normal: {
             color: "#0184d5",
             borderColor: "rgba(221, 220, 107, .1)",
-            borderWidth: 12
-          }
+            borderWidth: 12,
+          },
         },
         data: [
-          30,
-          40,
-          30,
-          40,
-          30,
-          40,
-          30,
-          60,
-          20,
-          40,
-          20,
-          40,
-          30,
-          40,
-          30,
-          40,
-          30,
-          40,
-          30,
-          60,
-          20,
-          40,
-          20,
-          40,
-          30,
-          60,
-          20,
-          40,
-          20,
-          40
-        ]
+          30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 20, 40, 30, 40, 30, 40, 30,
+          40, 30, 60, 20, 40, 20, 40, 30, 60, 20, 40, 20, 40,
+        ],
       },
       {
         name: "转发量",
@@ -580,8 +552,8 @@
         lineStyle: {
           normal: {
             color: "#00d887",
-            width: 2
-          }
+            width: 2,
+          },
         },
         areaStyle: {
           normal: {
@@ -593,71 +565,42 @@
               [
                 {
                   offset: 0,
-                  color: "rgba(0, 216, 135, 0.4)"
+                  color: "rgba(0, 216, 135, 0.4)",
                 },
                 {
                   offset: 0.8,
-                  color: "rgba(0, 216, 135, 0.1)"
-                }
+                  color: "rgba(0, 216, 135, 0.1)",
+                },
               ],
               false
             ),
-            shadowColor: "rgba(0, 0, 0, 0.1)"
-          }
+            shadowColor: "rgba(0, 0, 0, 0.1)",
+          },
         },
         itemStyle: {
           normal: {
             color: "#00d887",
             borderColor: "rgba(221, 220, 107, .1)",
-            borderWidth: 12
-          }
+            borderWidth: 12,
+          },
         },
         data: [
-          50,
-          30,
-          50,
-          60,
-          10,
-          50,
-          30,
-          50,
-          60,
-          40,
-          60,
-          40,
-          80,
-          30,
-          50,
-          60,
-          10,
-          50,
-          30,
-          70,
-          20,
-          50,
-          10,
-          40,
-          50,
-          30,
-          70,
-          20,
-          50,
-          10,
-          40
-        ]
-      }
-    ]
+          50, 30, 50, 60, 10, 50, 30, 50, 60, 40, 60, 40, 80, 30, 50, 60, 10,
+          50, 30, 70, 20, 50, 10, 40, 50, 30, 70, 20, 50, 10, 40,
+        ],
+      },
+    ],
   };
 
   // 使用刚指定的配置项和数据显示图表。
   myChart.setOption(option);
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", function () {
     myChart.resize();
   });
 })();
 
 // 点位分布统计模块
-(function() {
+(function () {
   // 1. 实例化对象
   var myChart = echarts.init(document.querySelector(".pie1  .chart"));
   // 2. 指定配置项和数据
@@ -668,12 +611,12 @@
       itemHeight: 10,
       textStyle: {
         color: "rgba(255,255,255,.5)",
-        fontSize: "12"
-      }
+        fontSize: "12",
+      },
     },
     tooltip: {
       trigger: "item",
-      formatter: "{a} <br/>{b} : {c} ({d}%)"
+      formatter: "{a} <br/>{b} : {c} ({d}%)",
     },
     // 注意颜色写的位置
     color: [
@@ -684,7 +627,7 @@
       "#0096ff",
       "#9fe6b8",
       "#32c5e9",
-      "#1d9dff"
+      "#1d9dff",
     ],
     series: [
       {
@@ -702,27 +645,27 @@
           { value: 20, name: "江苏" },
           { value: 25, name: "浙江" },
           { value: 30, name: "深圳" },
-          { value: 42, name: "广东" }
+          { value: 42, name: "广东" },
         ],
         // 修饰饼形图文字相关的样式 label对象
         label: {
-          fontSize: 10
+          fontSize: 10,
         },
         // 修饰引导线样式
         labelLine: {
           // 连接到图形的线长度
           length: 10,
           // 连接到文字的线长度
-          length2: 10
-        }
-      }
-    ]
+          length2: 10,
+        },
+      },
+    ],
   };
 
   // 3. 配置项和数据给我们的实例化对象
   myChart.setOption(option);
   // 4. 当我们浏览器缩放的时候，图表也等比例缩放
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", function () {
     // 让我们的图表调用 resize这个方法
     myChart.resize();
   });

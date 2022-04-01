@@ -112,7 +112,7 @@ const geoCoordMap = {
   长治: [112.8625, 36.4746],
   阳泉: [113.4778, 38.0951],
   青岛: [120.4651, 36.3373],
-  韶关: [113.7964, 24.7028]
+  韶关: [113.7964, 24.7028],
 };
 
 const XAData = [
@@ -153,7 +153,7 @@ var convertData = function (data) {
         fromName: dataItem[0].name,
         toName: dataItem[1].name,
         coords: [fromCoord, toCoord],
-        value: dataItem[1].value
+        value: dataItem[1].value,
       });
     }
   }
@@ -165,7 +165,7 @@ var series = [];
 [
   ["西安", XAData],
   ["西宁", XNData],
-  ["银川", YCData]
+  ["银川", YCData],
 ].forEach(function (item, i) {
   series.push(
     {
@@ -177,16 +177,16 @@ var series = [];
         period: 6,
         trailLength: 0.7,
         color: "red", //arrow箭头的颜色
-        symbolSize: 3
+        symbolSize: 3,
       },
       lineStyle: {
         normal: {
           color: color[i],
           width: 0,
-          curveness: 0.2
-        }
+          curveness: 0.2,
+        },
       },
-      data: convertData(item[1])
+      data: convertData(item[1]),
     },
     {
       name: item[0] + " Top3",
@@ -199,17 +199,17 @@ var series = [];
         period: 6,
         trailLength: 0,
         symbol: planePath,
-        symbolSize: 15
+        symbolSize: 15,
       },
       lineStyle: {
         normal: {
           color: color[i],
           width: 1,
           opacity: 0.6,
-          curveness: 0.2
-        }
+          curveness: 0.2,
+        },
       },
-      data: convertData(item[1])
+      data: convertData(item[1]),
     },
     {
       name: item[0] + " Top3",
@@ -217,33 +217,40 @@ var series = [];
       coordinateSystem: "geo",
       zlevel: 2,
       rippleEffect: {
-        brushType: "stroke"
+        brushType: "stroke",
       },
       label: {
         normal: {
           show: true,
           position: "right",
-          formatter: "{b}"
-        }
+          formatter: "{b}",
+        },
       },
       symbolSize: function (val) {
         return val[2] / 8;
       },
       itemStyle: {
         normal: {
-          color: color[i]
+          color: color[i],
         },
         emphasis: {
-          areaColor: "#2B91B7"
-        }
+          areaColor: "#2B91B7",
+        },
       },
       data: item[1].map(function (dataItem) {
         return {
           name: dataItem[1].name,
-          value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+          value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value]),
         };
-      })
+      }),
     }
   );
 });
-module.exports = { planePath, convertData, XNData, XAData,YCData, geoCoordMap };
+module.exports = {
+  planePath,
+  convertData,
+  XNData,
+  XAData,
+  YCData,
+  geoCoordMap,
+};

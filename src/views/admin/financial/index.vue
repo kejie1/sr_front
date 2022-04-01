@@ -3,10 +3,7 @@
     <div class="search_btn">
       <div class="search_btn_container">
         <div class="search">
-          <el-input
-            placeholder="请输入专业名称"
-            v-model="searchParams"
-          >
+          <el-input placeholder="请输入专业名称" v-model="searchParams">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
           <el-button type="primary" @click="getVocationalName">搜索</el-button>
@@ -21,7 +18,11 @@
     <el-table :key="Math.random()" :data="tableData" stripe style="width: 100%">
       <el-table-column prop="id" label="ID" width="100"></el-table-column>
       <el-table-column prop="vocationalStr" label="专业名称"></el-table-column>
-      <el-table-column prop="cost" label="费用(元)" type="number"></el-table-column>
+      <el-table-column
+        prop="cost"
+        label="费用(元)"
+        type="number"
+      ></el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button
@@ -78,7 +79,7 @@ import {
   updateVocational,
   queryVocationalName,
   queryVocationalStrById,
-  queryCount
+  queryCount,
 } from "@/api/vocational";
 export default {
   components: {},
@@ -94,9 +95,7 @@ export default {
         currentPage: 1,
       },
       vocationalInfoRules: {
-        cost: [
-          { required: true, message: "请输入金额", trigger: "blur" },
-        ],
+        cost: [{ required: true, message: "请输入金额", trigger: "blur" }],
       },
       moreInfoList: [],
     };
@@ -112,10 +111,10 @@ export default {
   methods: {
     async getVocationalList() {
       const { data: res } = await vocationalList(this.paginationParams);
-      if (res.code == 200){
-          this.tableData = res.data.result;
-          this.paginationParams = res.data.pagination;
-      } 
+      if (res.code == 200) {
+        this.tableData = res.data.result;
+        this.paginationParams = res.data.pagination;
+      }
     },
     handleSizeChange(val) {
       this.paginationParams.pageSize = val;
@@ -126,8 +125,8 @@ export default {
       this.getVocationalList();
     },
     async getVocationalName() {
-      if(this.searchParams == ''){
-          this.getVocationalList()
+      if (this.searchParams == "") {
+        this.getVocationalList();
       }
       const { data: res } = await queryVocationalName({
         vocationalStr: this.searchParams,
@@ -142,11 +141,10 @@ export default {
     // 判断添加/修改
     async handleAddEdit(row) {
       this.vocationalVisible = true;
-        const { data: res } = await queryVocationalStrById({ id: row.id });
-        if (res.code == 200){
-            this.vocationalInfo = res.data[0];
-            
-        } 
+      const { data: res } = await queryVocationalStrById({ id: row.id });
+      if (res.code == 200) {
+        this.vocationalInfo = res.data[0];
+      }
     },
 
     handleCancel() {
@@ -156,10 +154,9 @@ export default {
     },
     // 添加修改保存
     async submit() {
-        console.log("res", this.vocationalInfo);
-        const { data: res } = await updateVocational(this.vocationalInfo);
-        if (res.code == 200)
-          this.$message({ message: res.msg, type: "success" });
+      console.log("res", this.vocationalInfo);
+      const { data: res } = await updateVocational(this.vocationalInfo);
+      if (res.code == 200) this.$message({ message: res.msg, type: "success" });
 
       this.handleCancel();
       this.getVocationalList();
@@ -167,16 +164,8 @@ export default {
     exportToExcel() {
       require.ensure([], () => {
         const { export_json_to_excel } = require("@/excel/Export2Excel");
-        const tHeader = [
-          "id",
-          "专业名称",
-          "费用(元)",
-        ];
-        const filterVal = [
-          "id",
-          "vocationalStr",
-          "cost",
-        ];
+        const tHeader = ["id", "专业名称", "费用(元)"];
+        const filterVal = ["id", "vocationalStr", "cost"];
         const list = this.tableData;
         const data = this.formatJson(filterVal, list);
         export_json_to_excel(tHeader, data, "各专业学费信息表");

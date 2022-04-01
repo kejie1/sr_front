@@ -79,7 +79,7 @@ import {
   queryCollegeCount,
   studentsList,
   queryAgeCount,
-  queryeGraduateDesc
+  queryeGraduateDesc,
 } from "@/api/students";
 import { collegeList as allCollegeList } from "@/api/college";
 import { nationList } from "@/util/Enum";
@@ -144,7 +144,7 @@ export default {
         ["西安", XAData],
         ["西宁", XNData],
         ["银川", YCData],
-      ].forEach((item, i)=> {
+      ].forEach((item, i) => {
         series.push(
           {
             name: item[0] + " Top3",
@@ -305,8 +305,8 @@ export default {
     },
     async getPie() {
       let myChart = this.$echarts.init(document.querySelector(".pie .chart"));
-      const temp = await this.getGraduateDesc()
-      pieOption.series[0].data = temp
+      const temp = await this.getGraduateDesc();
+      pieOption.series[0].data = temp;
       myChart.setOption(pieOption);
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -375,7 +375,7 @@ export default {
         currentPage: 1,
       });
       const temp = res.data.pagination.total;
-      const temp1 = res.data.result.map((x) => x.birthPlace.replace('市',''));
+      const temp1 = res.data.result.map((x) => x.birthPlace.replace("市", ""));
       this.nowRegisterCount = temp;
       this.birthPlaceMap = temp1;
     },
@@ -398,7 +398,6 @@ export default {
     convertData(param) {
       let res = [];
       for (let i = 0; i < param.length; i++) {
-        
         let dataItem = param[i];
         let fromCoord = geoCoordMap[dataItem[0].name];
         let toCoord = geoCoordMap[dataItem[1].name];
@@ -414,17 +413,19 @@ export default {
       return res;
     },
     // 毕业学校
-    async getGraduateDesc(){
-      const {data:rs} = await queryeGraduateDesc()
-      const temp1 = rs.data.map(x=>({
-        value:x.cntNum,
-        name:x.graduate
-      })).splice(0,5)
-      const temp2 = rs.data.splice(5,rs.data.length).map(x=>x.cntNum)
-      const others = eval(temp2.join("+"))
-      temp1.push({value:others,name:'其它'})
-      return temp1
-    }
+    async getGraduateDesc() {
+      const { data: rs } = await queryeGraduateDesc();
+      const temp1 = rs.data
+        .map((x) => ({
+          value: x.cntNum,
+          name: x.graduate,
+        }))
+        .splice(0, 5);
+      const temp2 = rs.data.splice(5, rs.data.length).map((x) => x.cntNum);
+      const others = eval(temp2.join("+"));
+      temp1.push({ value: others, name: "其它" });
+      return temp1;
+    },
   },
 };
 </script>

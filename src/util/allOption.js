@@ -1,10 +1,9 @@
 var lineData = {
   year: [
     [24, 40, 101, 134, 90, 230, 210, 230, 120, 230, 210, 120],
-    [40, 64, 191, 324, 290, 330, 310, 213, 180, 200, 180, 79]
-  ]
+    [40, 64, 191, 324, 290, 330, 310, 213, 180, 200, 180, 79],
+  ],
 };
-
 
 var barOption = {
   color: ["#2f89cf"],
@@ -12,33 +11,33 @@ var barOption = {
     trigger: "axis",
     axisPointer: {
       // 坐标轴指示器，坐标轴触发有效
-      type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-    }
+      type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+    },
   },
   grid: {
     left: "0%",
     top: "10px",
     right: "0%",
     bottom: "4%",
-    containLabel: true
+    containLabel: true,
   },
   xAxis: [
     {
       type: "category",
       data: [],
       axisTick: {
-        alignWithLabel: true
+        alignWithLabel: true,
       },
       axisLabel: {
         textStyle: {
           color: "rgba(255,255,255,.6)",
-          fontSize: "8"
-        }
+          fontSize: "8",
+        },
       },
       axisLine: {
-        show: false
+        show: false,
       },
-    }
+    },
   ],
   yAxis: [
     {
@@ -46,22 +45,22 @@ var barOption = {
       axisLabel: {
         textStyle: {
           color: "rgba(255,255,255,.6)",
-          fontSize: "12"
-        }
+          fontSize: "12",
+        },
       },
       axisLine: {
         lineStyle: {
-          color: "rgba(255,255,255,.1)"
+          color: "rgba(255,255,255,.1)",
           // width: 1,
           // type: "solid"
-        }
+        },
       },
       splitLine: {
         lineStyle: {
-          color: "rgba(255,255,255,.1)"
-        }
-      }
-    }
+          color: "rgba(255,255,255,.1)",
+        },
+      },
+    },
   ],
   series: [
     {
@@ -70,26 +69,25 @@ var barOption = {
       barWidth: "35%",
       data: [200, 300, 300, 900, 1500, 1200, 600],
       itemStyle: {
-        barBorderRadius: 5
-      }
-    }
-  ]
+        barBorderRadius: 5,
+      },
+    },
+  ],
 };
-
 
 var lineOption = {
   color: ["#00f2f1", "#ed3f35"],
   tooltip: {
     // 通过坐标轴来触发
-    trigger: "axis"
+    trigger: "axis",
   },
   legend: {
     // 距离容器10%
     right: "10%",
     // 修饰图例文字的颜色
     textStyle: {
-      color: "#4c9bfd"
-    }
+      color: "#4c9bfd",
+    },
     // 如果series 里面设置了name，此时图例组件的data可以省略
     // data: ["邮件营销", "联盟广告"]
   },
@@ -100,7 +98,7 @@ var lineOption = {
     bottom: "3%",
     show: true,
     borderColor: "#012f4a",
-    containLabel: true
+    containLabel: true,
   },
 
   xAxis: {
@@ -109,33 +107,33 @@ var lineOption = {
     data: [],
     // 去除刻度
     axisTick: {
-      show: false
+      show: false,
     },
     // 修饰刻度标签的颜色
     axisLabel: {
-      color: "rgba(255,255,255,.7)"
+      color: "rgba(255,255,255,.7)",
     },
     // 去除x坐标轴的颜色
     axisLine: {
-      show: false
-    }
+      show: false,
+    },
   },
   yAxis: {
     type: "value",
     // 去除刻度
     axisTick: {
-      show: false
+      show: false,
     },
     // 修饰刻度标签的颜色
     axisLabel: {
-      color: "rgba(255,255,255,.7)"
+      color: "rgba(255,255,255,.7)",
     },
     // 修改y轴分割线的颜色
     splitLine: {
       lineStyle: {
-        color: "#012f4a"
-      }
-    }
+        color: "#012f4a",
+      },
+    },
   },
   series: [
     {
@@ -144,16 +142,16 @@ var lineOption = {
       stack: "总量",
       // 是否让线条圆滑显示
       smooth: true,
-      data: lineData.year[0]
+      data: lineData.year[0],
     },
     {
       name: "女生",
       type: "line",
       stack: "总量",
       smooth: true,
-      data: lineData.year[1]
-    }
-  ]
+      data: lineData.year[1],
+    },
+  ],
 };
 
 var pieOption = {
@@ -163,7 +161,7 @@ var pieOption = {
     position: function (p) {
       //其中p为当前鼠标的位置
       return [p[0] + 10, p[1] - 10];
-    }
+    },
   },
   // legend: {
   //   top: "90%",
@@ -181,8 +179,8 @@ var pieOption = {
     itemHeight: 10,
     textStyle: {
       color: "rgba(255,255,255,.5)",
-      fontSize: "12"
-    }
+      fontSize: "12",
+    },
   },
   series: [
     {
@@ -199,13 +197,13 @@ var pieOption = {
         "#06b4ab",
         "#06c8ab",
         "#06dcab",
-        "#06f0ab"
+        "#06f0ab",
       ],
       label: { show: false },
       labelLine: { show: true },
-      data: []
-    }
-  ]
+      data: [],
+    },
+  ],
 };
 
 var bar1Data = [70, 34, 60, 78, 69];
@@ -217,10 +215,10 @@ var bar1Option = {
   grid: {
     top: "10%",
     left: "22%",
-    bottom: "10%"
+    bottom: "10%",
   },
   xAxis: {
-    show: false
+    show: false,
   },
   yAxis: [
     {
@@ -228,13 +226,13 @@ var bar1Option = {
       data: bar1Titlename,
       inverse: true,
       axisLine: {
-        show: false
+        show: false,
       },
       splitLine: {
-        show: false
+        show: false,
       },
       axisTick: {
-        show: false
+        show: false,
       },
       axisLabel: {
         color: "#fff",
@@ -247,10 +245,10 @@ var bar1Option = {
             // padding: 5,
             align: "center",
             width: 15,
-            height: 15
-          }
-        }
-      }
+            height: 15,
+          },
+        },
+      },
     },
     {
       show: true,
@@ -259,10 +257,10 @@ var bar1Option = {
       axisLabel: {
         textStyle: {
           fontSize: 12,
-          color: "#fff"
-        }
-      }
-    }
+          color: "#fff",
+        },
+      },
+    },
   ],
   series: [
     {
@@ -278,16 +276,16 @@ var bar1Option = {
           color: function (params) {
             var num = bar1MyColor.length;
             return bar1MyColor[params.dataIndex % num];
-          }
-        }
+          },
+        },
       },
       label: {
         normal: {
           show: true,
           position: "inside",
-          formatter: "{c}%"
-        }
-      }
+          formatter: "{c}%",
+        },
+      },
     },
     {
       name: "框",
@@ -301,34 +299,34 @@ var bar1Option = {
           color: "none",
           borderColor: "#00c1de",
           borderWidth: 3,
-          barBorderRadius: 15
-        }
-      }
-    }
-  ]
+          barBorderRadius: 15,
+        },
+      },
+    },
+  ],
 };
 var line1Option = {
   tooltip: {
     trigger: "axis",
     axisPointer: {
       lineStyle: {
-        color: "#dddc6b"
-      }
-    }
+        color: "#dddc6b",
+      },
+    },
   },
   legend: {
     top: "0%",
     textStyle: {
       color: "rgba(255,255,255,.5)",
-      fontSize: "12"
-    }
+      fontSize: "12",
+    },
   },
   grid: {
     left: "10",
     top: "30",
     right: "10",
     bottom: "10",
-    containLabel: true
+    containLabel: true,
   },
 
   xAxis: [
@@ -338,13 +336,13 @@ var line1Option = {
       axisLabel: {
         textStyle: {
           color: "rgba(255,255,255,.6)",
-          fontSize: 12
-        }
+          fontSize: 12,
+        },
       },
       axisLine: {
         lineStyle: {
-          color: "rgba(255,255,255,.2)"
-        }
+          color: "rgba(255,255,255,.2)",
+        },
       },
 
       data: [
@@ -376,15 +374,15 @@ var line1Option = {
         "27",
         "28",
         "29",
-        "30"
-      ]
+        "30",
+      ],
     },
     {
       axisPointer: { show: false },
       axisLine: { show: false },
       position: "bottom",
-      offset: 20
-    }
+      offset: 20,
+    },
   ],
 
   yAxis: [
@@ -393,22 +391,22 @@ var line1Option = {
       axisTick: { show: false },
       axisLine: {
         lineStyle: {
-          color: "rgba(255,255,255,.1)"
-        }
+          color: "rgba(255,255,255,.1)",
+        },
       },
       axisLabel: {
         textStyle: {
           color: "rgba(255,255,255,.6)",
-          fontSize: 12
-        }
+          fontSize: 12,
+        },
       },
 
       splitLine: {
         lineStyle: {
-          color: "rgba(255,255,255,.1)"
-        }
-      }
-    }
+          color: "rgba(255,255,255,.1)",
+        },
+      },
+    },
   ],
   series: [
     {
@@ -421,23 +419,28 @@ var line1Option = {
       lineStyle: {
         normal: {
           color: "#0184d5",
-          width: 2
-        }
+          width: 2,
+        },
       },
       areaStyle: {
         normal: {
           color: {
-            type: 'linear',
+            type: "linear",
             x: 0,
             y: 0,
             x2: 0,
             y2: 1,
-            colorStops: [{
-                offset: 0, color: "rgba(1, 132, 213, 0.4)" // 0% 处的颜色
-            }, {
-                offset: 1, color: "rgba(1, 132, 213, 0.1)" // 100% 处的颜色
-            }],
-            global: false // 缺省为 false
+            colorStops: [
+              {
+                offset: 0,
+                color: "rgba(1, 132, 213, 0.4)", // 0% 处的颜色
+              },
+              {
+                offset: 1,
+                color: "rgba(1, 132, 213, 0.1)", // 100% 处的颜色
+              },
+            ],
+            global: false, // 缺省为 false
           },
           // color: new echarts.graphic.LinearGradient(
           //   0,
@@ -456,48 +459,20 @@ var line1Option = {
           //   ],
           //   false
           // ),
-          shadowColor: "rgba(0, 0, 0, 0.1)"
-        }
+          shadowColor: "rgba(0, 0, 0, 0.1)",
+        },
       },
       itemStyle: {
         normal: {
           color: "#0184d5",
           borderColor: "rgba(221, 220, 107, .1)",
-          borderWidth: 12
-        }
+          borderWidth: 12,
+        },
       },
       data: [
-        30,
-        40,
-        30,
-        40,
-        30,
-        40,
-        30,
-        60,
-        20,
-        40,
-        20,
-        40,
-        30,
-        40,
-        30,
-        40,
-        30,
-        40,
-        30,
-        60,
-        20,
-        40,
-        20,
-        40,
-        30,
-        60,
-        20,
-        40,
-        20,
-        40
-      ]
+        30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 20, 40, 30, 40, 30, 40, 30, 40,
+        30, 60, 20, 40, 20, 40, 30, 60, 20, 40, 20, 40,
+      ],
     },
     {
       name: "转发量",
@@ -509,23 +484,28 @@ var line1Option = {
       lineStyle: {
         normal: {
           color: "#00d887",
-          width: 2
-        }
+          width: 2,
+        },
       },
       areaStyle: {
         normal: {
           color: {
-            type: 'linear',
+            type: "linear",
             x: 0,
             y: 0,
             x2: 0,
             y2: 1,
-            colorStops: [{
-                offset: 0, color: "rgba(0, 216, 135, 0.4)" // 0% 处的颜色
-            }, {
-                offset: 1, color: "rgba(0, 216, 135, 0.1)" // 100% 处的颜色
-            }],
-            global: false // 缺省为 false
+            colorStops: [
+              {
+                offset: 0,
+                color: "rgba(0, 216, 135, 0.4)", // 0% 处的颜色
+              },
+              {
+                offset: 1,
+                color: "rgba(0, 216, 135, 0.1)", // 100% 处的颜色
+              },
+            ],
+            global: false, // 缺省为 false
           },
           // color: new echarts.graphic.LinearGradient(
           //   0,
@@ -544,51 +524,22 @@ var line1Option = {
           //   ],
           //   false
           // ),
-          shadowColor: "rgba(0, 0, 0, 0.1)"
-        }
+          shadowColor: "rgba(0, 0, 0, 0.1)",
+        },
       },
       itemStyle: {
         normal: {
           color: "#00d887",
           borderColor: "rgba(221, 220, 107, .1)",
-          borderWidth: 12
-        }
+          borderWidth: 12,
+        },
       },
       data: [
-        50,
-        30,
-        50,
-        60,
-        10,
-        50,
-        30,
-        50,
-        60,
-        40,
-        60,
-        40,
-        80,
-        30,
-        50,
-        60,
-        10,
-        50,
-        30,
-        70,
-        20,
-        50,
-        10,
-        40,
-        50,
-        30,
-        70,
-        20,
-        50,
-        10,
-        40
-      ]
-    }
-  ]
+        50, 30, 50, 60, 10, 50, 30, 50, 60, 40, 60, 40, 80, 30, 50, 60, 10, 50,
+        30, 70, 20, 50, 10, 40, 50, 30, 70, 20, 50, 10, 40,
+      ],
+    },
+  ],
 };
 var pie1Option = {
   legend: {
@@ -597,12 +548,12 @@ var pie1Option = {
     itemHeight: 10,
     textStyle: {
       color: "rgba(255,255,255,.5)",
-      fontSize: "12"
-    }
+      fontSize: "12",
+    },
   },
   tooltip: {
     trigger: "item",
-    formatter: "{a} <br/>{b} : {c} ({d}%)"
+    formatter: "{a} <br/>{b} : {c} ({d}%)",
   },
   // 注意颜色写的位置
   color: [
@@ -613,7 +564,7 @@ var pie1Option = {
     "#0096ff",
     "#9fe6b8",
     "#32c5e9",
-    "#1d9dff"
+    "#1d9dff",
   ],
   series: [
     {
@@ -626,18 +577,24 @@ var pie1Option = {
       data: [],
       // 修饰饼形图文字相关的样式 label对象
       label: {
-        fontSize: 10
+        fontSize: 10,
       },
       // 修饰引导线样式
       labelLine: {
         // 连接到图形的线长度
         length: 10,
         // 连接到文字的线长度
-        length2: 10
-      }
-    }
-  ]
+        length2: 10,
+      },
+    },
+  ],
 };
 
-
-module.exports = { barOption, lineOption, pieOption,bar1Option,line1Option,pie1Option };
+module.exports = {
+  barOption,
+  lineOption,
+  pieOption,
+  bar1Option,
+  line1Option,
+  pie1Option,
+};
