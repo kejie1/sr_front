@@ -51,7 +51,7 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel line1">
-          <h2>折线图-播放量</h2>
+          <h2>男女比例</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
