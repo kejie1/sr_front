@@ -51,7 +51,7 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel line1">
-          <h2>男女比例</h2>
+          <h2>各学院男女人数</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -80,6 +80,7 @@ import {
   studentsList,
   queryAgeCount,
   queryeGraduateDesc,
+  querySexCount
 } from "@/api/students";
 import { collegeList as allCollegeList } from "@/api/college";
 import { nationList } from "@/util/Enum";
@@ -92,7 +93,10 @@ export default {
       collegeCount: [],
       registerCount: 0, //应注册总人数
       nowRegisterCount: 0, //已注册人数
-      ageCount: [], //年龄数据
+      ageManCount: [], //年龄数据
+      ageWoManCount: [], //年龄数据
+      manCount: [], //男生人数
+      woManCount: [], //女生数据
       birthPlaceMap: [],
     };
   },
@@ -104,9 +108,12 @@ export default {
       }, 1000);
     },
     async "$store.state.collegeList"() {
-      this.collegeList = this.$store.state.collegeList;
+      this.collegeList = await this.$store.state.collegeList;
       this.collegeCount = await this.getCollegeCount();
-      this.getBar();
+      await this.getBar();
+      await this.getBar1();
+      await this.getSexCount()
+      await this.getline1();
     },
   },
   created() {},
@@ -118,10 +125,8 @@ export default {
     await this.myMap();
     await this.getAgeCount();
     await this.getLine();
-    this.getPie();
-    this.getBar1();
-    this.getline1();
-    this.getPie1();
+    await this.getPie();
+    await this.getPie1();
   },
   methods: {
     getNewTime() {
@@ -293,11 +298,12 @@ export default {
     },
     getLine() {
       let myChart = this.$echarts.init(document.querySelector(".line .chart"));
-      const dataName = this.ageCount ? this.ageCount.map((x) => x.age) : [];
-      const dataValue = this.ageCount ? this.ageCount.map((x) => x.cntNum) : [];
+      const dataName = this.ageManCount ? this.ageManCount.map((x) => x.age) : [];
+      const dataValue1 = this.ageManCount ? this.ageManCount.map((x) => x.cntNum) : [];
+      const dataValue2 = this.ageWoManCount ? this.ageWoManCount.map((x) => x.cntNum) : [];
       lineOption.xAxis.data = dataName;
-      lineOption.series[0].data = dataValue;
-      lineOption.series[1].data = dataValue;
+      lineOption.series[0].data = dataValue1;
+      lineOption.series[1].data = dataValue2;
       myChart.setOption(lineOption);
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -314,6 +320,15 @@ export default {
     },
     getBar1() {
       let myChart = this.$echarts.init(document.querySelector(".bar1 .chart"));
+      const temp = this.collegeList
+      bar1Option.yAxis[0].data = this.collegeCount
+        ? this.collegeCount.map((x) => x.name).slice(0,5)
+        : [];
+      bar1Option.series[0].data = this.collegeCount
+        ? this.collegeCount.map((x) => 
+          x.value = x.value / temp[x.collegeId].register * 100
+        ).slice(0,5)
+        : [];
       myChart.setOption(bar1Option);
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -321,6 +336,12 @@ export default {
     },
     getline1() {
       let myChart = this.$echarts.init(document.querySelector(".line1 .chart"));
+      const dataName = this.collegeCount
+        ? this.collegeCount.map((x) => x.name)
+        : [];
+      line1Option.xAxis[0].data = dataName
+      line1Option.series[0].data = this.manCount.map(x=>x.cntNum)
+      line1Option.series[1].data = this.woManCount.map(x=>x.cntNum)
       myChart.setOption(line1Option);
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -335,12 +356,13 @@ export default {
         myChart.resize();
       });
     },
-
+    // 各学院报道人数
     async getCollegeCount() {
       const { data: res } = await queryCollegeCount();
       let temp;
       if (res.code == 200) {
         temp = res.data.map((x) => ({
+          collegeId:x.collegeId,
           value: x.cntNum,
           name: this.collegeList[x.collegeId].collegeStr,
         }));
@@ -379,10 +401,24 @@ export default {
       this.nowRegisterCount = temp;
       this.birthPlaceMap = temp1;
     },
-    // 年龄数量
+    // 男女人数
+    async getSexCount() {
+      const { data: res } = await querySexCount({sex:1});
+      const { data: rs } = await querySexCount({sex:2});
+      if (res.code == 200){
+        console.log('c',res.data);
+        this.manCount = res.data;   
+        this.woManCount = rs.data;
+      } 
+    },
     async getAgeCount() {
-      const { data: res } = await queryAgeCount();
-      if (res.code == 200) this.ageCount = res.data;
+      const { data: res } = await queryAgeCount({sex:1});
+      const { data: rs } = await queryAgeCount({sex:2});
+      if (res.code == 200){
+        this.ageManCount = res.data;
+        this.ageWoManCount = rs.data;
+      } 
+      
     },
     // 生源地
     async setBirthPlaceMap() {

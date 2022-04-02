@@ -19,10 +19,18 @@ export function queryeGraduateDesc() {
     method: "get",
   });
 }
-export function queryAgeCount() {
+export function queryAgeCount(params) {
   return http({
     url: "students/queryAgeCount",
     method: "get",
+    params
+  });
+}
+export function querySexCount(params) {
+  return http({
+    url: "students/getSexCount",
+    method: "get",
+    params,
   });
 }
 export function queryCollegeCount() {

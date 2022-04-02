@@ -209,12 +209,12 @@ var pieOption = {
 var bar1Data = [70, 34, 60, 78, 69];
 var bar1Titlename = ["讯飞学院", "软件学院", "智能制造学院", "大数据学院", "金融学院"];
 var bar1Valdata = [702, 350, 610, 793, 664];
-var bar1MyColor = ["#1089E7", "#F57474", "#56D0E3", "#F8B448", "#8B78F6"];
+var bar1MyColor = ["#1089E7", "#6699CC", "#56D0E3", "#CCFF99", "#CCFFFF"];
 var bar1Option = {
   //图标位置
   grid: {
     top: "10%",
-    left: "22%",
+    left: "25%",
     bottom: "10%",
   },
   xAxis: {
@@ -253,7 +253,7 @@ var bar1Option = {
     {
       show: true,
       inverse: true,
-      data: bar1Valdata,
+      data: [],
       axisLabel: {
         textStyle: {
           fontSize: 12,
@@ -322,7 +322,7 @@ var line1Option = {
     },
   },
   grid: {
-    left: "10",
+    left: "20",
     top: "30",
     right: "10",
     bottom: "10",
@@ -336,7 +336,7 @@ var line1Option = {
       axisLabel: {
         textStyle: {
           color: "rgba(255,255,255,.6)",
-          fontSize: 12,
+          fontSize: 8,
         },
       },
       axisLine: {
@@ -345,37 +345,7 @@ var line1Option = {
         },
       },
 
-      data: [
-        "01",
-        "02",
-        "03",
-        "04",
-        "05",
-        "06",
-        "07",
-        "08",
-        "09",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "19",
-        "20",
-        "21",
-        "22",
-        "23",
-        "24",
-        "25",
-        "26",
-        "27",
-        "28",
-        "29",
-        "30",
-      ],
+      data: [],
     },
     {
       axisPointer: { show: false },
@@ -410,7 +380,7 @@ var line1Option = {
   ],
   series: [
     {
-      name: "播放量",
+      name: "男生",
       type: "line",
       smooth: true,
       symbol: "circle",
@@ -442,23 +412,6 @@ var line1Option = {
             ],
             global: false, // 缺省为 false
           },
-          // color: new echarts.graphic.LinearGradient(
-          //   0,
-          //   0,
-          //   0,
-          //   1,
-          //   [
-          //     {
-          //       offset: 0,
-          //       color: "rgba(1, 132, 213, 0.4)"
-          //     },
-          //     {
-          //       offset: 0.8,
-          //       color: "rgba(1, 132, 213, 0.1)"
-          //     }
-          //   ],
-          //   false
-          // ),
           shadowColor: "rgba(0, 0, 0, 0.1)",
         },
       },
@@ -469,13 +422,10 @@ var line1Option = {
           borderWidth: 12,
         },
       },
-      data: [
-        30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 20, 40, 30, 40, 30, 40, 30, 40,
-        30, 60, 20, 40, 20, 40, 30, 60, 20, 40, 20, 40,
-      ],
+      data: [],
     },
     {
-      name: "转发量",
+      name: "女生",
       type: "line",
       smooth: true,
       symbol: "circle",
@@ -534,10 +484,7 @@ var line1Option = {
           borderWidth: 12,
         },
       },
-      data: [
-        50, 30, 50, 60, 10, 50, 30, 50, 60, 40, 60, 40, 80, 30, 50, 60, 10, 50,
-        30, 70, 20, 50, 10, 40, 50, 30, 70, 20, 50, 10, 40,
-      ],
+      data: [],
     },
   ],
 };
