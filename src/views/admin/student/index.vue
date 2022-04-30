@@ -235,19 +235,16 @@ import {
   deleteStudent,
   queryCount,
 } from "@/api/students";
-import { collegeList, queryCollegeStrById } from "@/api/college";
-import { vocationalList, queryVocationalStrById } from "@/api/vocational";
 import { counselorList, queryPhoneByName } from "@/api/counselor";
-import { classList, queryClassStrById } from "@/api/class";
 import { nationList } from "@/util/Enum";
 export default {
   components: {},
   data() {
     return {
       studentsList: [],
-      collegeList: [],
-      classList: [],
-      vocationalList: [],
+      collegeList: JSON.parse(sessionStorage.getItem('collegeList')),
+      classList: JSON.parse(sessionStorage.getItem('classList')),
+      vocationalList: JSON.parse(sessionStorage.getItem('vocationalList')),
       counselorList: [],
       phone: "",
       searchParams: "",
@@ -316,13 +313,10 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {
-    this.counts();
-    this.getCollegeList();
-    this.getVocational();
-    this.getClassList();
-    this.getStudentList();
-    this.getCounselorList();
+  async created() {
+    await this.handleLabel();
+    await this.getCounselorList();
+    await this.getStudentList();
   },
   mounted() {},
   updated() {},
@@ -332,27 +326,19 @@ export default {
     },
     searchUser() {},
     // 获取学院列表
-    async getCollegeList() {
-      const { data: res } = await collegeList();
-      this.collegeList = res.data.result.map((x) => ({
+    // 处理数据
+    handleLabel(){
+      this.collegeList = this.collegeList.map((x) => ({
         ...x,
         label: x.collegeStr,
         value: x.id,
       }));
-    },
-    // 获取班级列表
-    async getClassList() {
-      const { data: res } = await classList();
-      this.classList = res.data.result.map((x) => ({
+      this.classList = this.classList.map((x) => ({
         ...x,
         label: x.classStr,
         value: x.id,
       }));
-    },
-    // 获取专业列表
-    async getVocational() {
-      const { data: res } = await vocationalList();
-      this.vocationalList = res.data.result.map((x) => ({
+      this.vocationalList = this.vocationalList.map((x) => ({
         ...x,
         label: x.vocationalStr,
         value: x.id,
@@ -383,32 +369,14 @@ export default {
       let temp = res.data.result || [];
       for (let i = 0; i < temp.length; i++) {
         temp[i].ethnic = nationList[temp[i].ethnic].label;
-        temp[i].collegeId = await this.getCollegeStr(temp[i].collegeId);
-        temp[i].vocationalId = await this.getVocationalStr(
-          temp[i].vocationalId
-        );
-        temp[i].classId = await this.getClassStr(temp[i].classId);
-        temp[i].counselorId = await this.getCounselorName(temp[i].counselorId);
+        temp[i].collegeId = this.collegeList[temp[i].collegeId].collegeStr;
+        temp[i].vocationalId = this.vocationalList[temp[i].vocationalId].vocationalStr;
+        temp[i].classId = this.classList[temp[i].classId].classStr;
+        temp[i].counselorId = this.counselorList[temp[i].counselorId].name;
         temp[i].sex = temp[i].sex == 1 ? "男" : "女";
       }
       this.studentsList = temp;
       this.pagination = res.data.pagination;
-    },
-    // 学生详细信息
-    async getCollegeStr(param) {
-      const params = { id: param };
-      const { data: res } = await queryCollegeStrById(params);
-      return res.data[0].collegeStr;
-    },
-    async getVocationalStr(param) {
-      const params = { id: param };
-      const { data: res } = await queryVocationalStrById(params);
-      return res.data[0].vocationalStr;
-    },
-    async getClassStr(param) {
-      const params = { id: param };
-      const { data: res } = await queryClassStrById(params);
-      return res.data[0].classStr;
     },
 
     // 处理搜索

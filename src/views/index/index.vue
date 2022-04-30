@@ -89,7 +89,7 @@ export default {
     return {
       newTime: "2022年3月17-0时54分14秒",
       nowYear: 2021,
-      collegeList: [],
+      // collegeList: [],
       collegeCount: [],
       registerCount: 0, //应注册总人数
       nowRegisterCount: 0, //已注册人数
@@ -98,6 +98,7 @@ export default {
       manCount: [], //男生人数
       woManCount: [], //女生数据
       birthPlaceMap: [],
+      collegeList: JSON.parse(sessionStorage.getItem('collegeList')),
     };
   },
   computed: {},
@@ -107,18 +108,23 @@ export default {
         this.getNewTime();
       }, 1000);
     },
-    async "$store.state.collegeList"() {
-      this.collegeList = await this.$store.state.collegeList;
-      this.collegeCount = await this.getCollegeCount();
-      await this.getBar();
-      await this.getBar1();
-      await this.getSexCount()
-      await this.getline1();
-    },
+    // async "$store.state.collegeList"() {
+    //   this.collegeList = await this.$store.state.collegeList;
+    //   this.collegeCount = await this.getCollegeCount();
+    //   await this.getBar();
+    //   await this.getBar1();
+    //   await this.getSexCount()
+    //   await this.getline1();
+    // },
   },
   created() {},
   async mounted() {
     this.getNewTime();
+    this.collegeCount = await this.getCollegeCount();
+      await this.getBar();
+      await this.getBar1();
+      await this.getSexCount()
+      await this.getline1();
     await this.getRegisterCount();
     await this.getNowRegisterCount();
     await this.setBirthPlaceMap();
