@@ -1,12 +1,6 @@
 <template>
   <div class>
-    <el-dropdown trigger="click">
-      <el-avatar icon="el-icon-user-solid"></el-avatar>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-edit">修改资料</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-circle-plus">退出登录</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+    <el-button size="mini" plain @click="loginOut">退出登录</el-button>
   </div>
 </template>
 
@@ -18,7 +12,29 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    loginOut() {
+      this.$confirm("您正在退出登录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          sessionStorage.removeItem("token");
+          this.$router.push({ path: "/login" });
+          this.$message({
+            type: "success",
+            message: "退出登录成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消",
+          });
+        });
+    },
+  },
   created() {},
   mounted() {},
   updated() {},

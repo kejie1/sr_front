@@ -67,12 +67,13 @@ export default {
         if (valid) {
           const { data: res } = await login(this.loginForm);
           if (res.code == 200) {
-            sessionStorage.setItem("token", res.token);
-            this.$store.commit("setUserInfo", res.data);
+            sessionStorage.setItem("token", JSON.stringify(res.data.token));
+            sessionStorage.setItem("setUserInfo", JSON.stringify(res.data.data));
+            this.$message({ message: res.msg, type: "success" });
             this.$router.push({ path: "/admin/dashboard" });
           }
         } else {
-          this.$message.warning("请按要求输入用户名哥密码");
+          this.$message.warning("请按要求输入用户名和密码");
         }
       });
     },
