@@ -382,7 +382,7 @@ export default {
       if (res.code == 200) {
         temp = res.data.map((x) => ({
           value: x.cntNum,
-          name: nationList[x.ethnic].label,
+          name: nationList[x.ethnic-1].label,
         }));
       }
       return temp.slice(0, 5);

@@ -351,7 +351,7 @@ export default {
       const { data: res } = await studentsList(this.pagination);
       let temp = res.data.result || [];
       for (let i = 0; i < temp.length; i++) {
-        temp[i].ethnic = nationList[temp[i].ethnic].label;
+        temp[i].ethnic = nationList[temp[i].ethnic-1].label;
         temp[i].collegeId = this.collegeList[temp[i].collegeId].collegeStr;
         temp[i].vocationalId = this.vocationalList[temp[i].vocationalId].vocationalStr;
         temp[i].classId = this.classList[temp[i].classId].classStr;

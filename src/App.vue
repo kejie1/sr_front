@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       paginationParams: {
-        pageSize: 10,
+        pageSize: 100000,
         currentPage: 1,
       },
     };
@@ -19,9 +19,6 @@ export default {
   computed: {},
   watch: {},
   created() {
-    // await this.$store.dispatch("getCollegeList");
-    // await this.$store.dispatch("getVocationList");
-    // await this.$store.dispatch("getClassList");
     this.commonRequest()
   },
   mounted() {},

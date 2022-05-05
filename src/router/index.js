@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "@/views/admin/login.vue";
 import Index from "@/views/index/index.vue";
+import { TabPane } from "element-ui";
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -100,8 +101,12 @@ router.beforeEach((to, from, next) => {
       next()
     }
     else {
-      alert('请登录账号')
-      next('/login')
+      if(to.path === '/index'){next()}
+      else{
+        alert('请登录账号')
+        next('/login')
+      }
+      
     }
   }
 })
