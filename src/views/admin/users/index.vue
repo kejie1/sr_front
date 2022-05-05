@@ -5,17 +5,23 @@
         <div class="search">
           <el-input
             placeholder="请输入用户名"
-            @input="searchUser"
             v-model="searchParams"
+            size="mini"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="handleSearch"
+            >搜索</el-button
+          >
         </div>
         <div class="addBtn">
           <el-button
             type="primary"
             :disabled="accountType == 1 ? false : true"
-            plain
+            size="mini"
             @click="handleAddEdit"
             >添加用户</el-button
           >
@@ -238,11 +244,12 @@ export default {
     },
 
     // 防抖todo
-    async searchUser() {
+    async handleSearch() {
       if (this.searchParams == "") {
         this.getUserList();
       } else {
-        const { data } = await searchUser({ username: this.searchParams });
+        const { data } = await searchUser({ username: this.searchParams,pageSize: 10,
+        currentPage: 1, });
         this.tableData = data.data;
       }
     },
@@ -302,6 +309,12 @@ export default {
       justify-content: space-between;
       .search {
         width: 300px;
+        display: flex;
+        justify-content: space-around;
+        .el-input {
+          margin-left: 5px;
+          width: 70%;
+        }
       }
       .addBtn {
         .el-button {
