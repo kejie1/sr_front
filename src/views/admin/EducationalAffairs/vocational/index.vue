@@ -5,14 +5,17 @@
         <div class="search">
           <el-input
             placeholder="请输入专业名称"
-            @input="searchVocationalList"
             v-model="searchParams"
+            size="mini"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
+          <el-button size="mini" type="primary" @click="searchVocationalList"
+            >搜索</el-button
+          >
         </div>
         <div class="addBtn">
-          <el-button type="primary" plain @click="handleAddEdit"
+          <el-button type="primary" size="mini" @click="handleAddEdit"
             >添加专业</el-button
           >
         </div>
@@ -22,7 +25,7 @@
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="vocationalStr" label="专业名称"></el-table-column>
       <el-table-column prop="principal" label="专业负责人"></el-table-column>
-      <el-table-column label="操作" fixed="right" width="300">
+      <el-table-column label="操作" width="260">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -48,6 +51,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      small
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="paginationParams.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="paginationParams.pageSize"
+      layout="->,total, sizes, prev, pager,next, jumper"
+      :total="paginationParams.total || 0"
+    ></el-pagination>
     <!-- 添加专业 -->
     <el-dialog
       :title="`${vocationalInfo.id ? '编辑' : '添加'}专业`"
@@ -145,7 +158,10 @@ export default {
   methods: {
     async getVocationalList() {
       const { data: res } = await vocationalList(this.paginationParams);
-      if (res.code == 200) this.tableData = res.data.result;
+      if (res.code == 200) {
+        this.tableData = res.data.result;
+        this.paginationParams = res.data.pagination;
+      }
     },
     // 学院列表
     async getCollegeList() {
@@ -232,6 +248,15 @@ export default {
           });
         });
     },
+    // 分页
+    handleSizeChange(val) {
+      this.paginationParams.pageSize = val;
+      this.getClass();
+    },
+    handleCurrentChange(val) {
+      this.paginationParams.currentPage = val;
+      this.getClass();
+    },
   },
 };
 </script>
@@ -244,6 +269,12 @@ export default {
       justify-content: space-between;
       .search {
         width: 300px;
+        display: flex;
+        justify-content: space-around;
+        .el-input {
+          margin-left: 5px;
+          width: 70%;
+        }
       }
       .addBtn {
         .el-button {

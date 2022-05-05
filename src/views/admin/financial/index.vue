@@ -3,10 +3,10 @@
     <div class="search_btn">
       <div class="search_btn_container">
         <div class="search">
-          <el-input placeholder="请输入专业名称" v-model="searchParams">
+          <el-input size="mini" placeholder="请输入专业名称" v-model="searchParams">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <el-button type="primary" @click="getVocationalName">搜索</el-button>
+          <el-button size="mini" type="primary" @click="getVocationalName">搜索</el-button>
         </div>
         <div class="addBtn">
           <el-button type="success" @click="exportToExcel" size="mini"

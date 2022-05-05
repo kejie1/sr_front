@@ -5,14 +5,15 @@
         <div class="search">
           <el-input
             placeholder="请输入教师名称"
-            @input="searchVocationalList"
             v-model="searchParams"
+            size="mini"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
+           <el-button size="mini" type="primary" @click="searchVocationalList">搜索</el-button>
         </div>
         <div class="addBtn">
-          <el-button type="primary" plain @click="handleAddEdit"
+          <el-button type="primary" size="mini" @click="handleAddEdit"
             >添加教师</el-button
           >
         </div>
@@ -162,34 +163,18 @@ export default {
           { required: true, message: "请输入宿舍号", trigger: "blur" },
         ],
       },
-      collegeList: [],
-      vocationalList: [],
-      classList: [],
+      collegeList: JSON.parse(sessionStorage.getItem('collegeList')),
+      classList: JSON.parse(sessionStorage.getItem('classList')),
+      vocationalList: JSON.parse(sessionStorage.getItem('vocationalList')),
     };
   },
   computed: {},
-  watch: {
-    "$store.state.collegeList"() {
-      this.collegeList = this.$store.state.collegeList;
-      this.getList();
-    },
-    "$store.state.vocationalList"() {
-      this.vocationalList = this.$store.state.vocationalList;
-      this.getList();
-    },
-    "$store.state.classList"() {
-      this.classList = this.$store.state.classList;
-      this.getList();
-    },
-  },
-  created() {
-    this.getCount();
+  async created() {
+    await queryCount();
+    await this.getList();
   },
   mounted() {},
   methods: {
-    async getCount() {
-      await queryCount();
-    },
     getList() {
       if (
         this.collegeList != [] &&
@@ -319,6 +304,12 @@ export default {
       justify-content: space-between;
       .search {
         width: 300px;
+        display: flex;
+        justify-content: space-around;
+        .el-input {
+          margin-left: 5px;
+          width: 70%;
+        }
       }
       .addBtn {
         .el-button {

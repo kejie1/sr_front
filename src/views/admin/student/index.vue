@@ -7,25 +7,10 @@
             placeholder="请输入姓名"
             @input="searchUser"
             v-model="searchParams"
+            size="mini"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <el-select placeholder="请选择学院" v-model="collegeValue">
-            <el-option
-              v-for="item in collegeList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-          <el-select placeholder="请选择专业" v-model="vocationalValue">
-            <el-option
-              v-for="item in vocationalList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
           <el-button
             type="primary"
             :disabled="accountType == 1 ? false : true"
@@ -518,10 +503,10 @@ export default {
       .search {
         display: flex;
         justify-content: space-around;
-        width: 500px;
+        width: 300px;
         .el-input {
-          margin-left: 10px;
-          width: 60%;
+          margin-left: 5px;
+          width: 70%;
         }
         .el-select {
           margin-left: 10px;

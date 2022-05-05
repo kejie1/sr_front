@@ -5,11 +5,12 @@
         <div class="search">
           <el-input
             placeholder="请输入班级名称"
-            @input="searchClassList"
+            size="mini"
             v-model="searchParams"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
+          <el-button size="mini" type="primary" @click="searchClassList">搜索</el-button>
         </div>
         <div class="addBtn">
           <el-button type="primary" size="mini" @click="handleAddEdit"
@@ -149,12 +150,11 @@ import {
   queryClassName,
   queryClassStrById,
 } from "@/api/class";
-import { collegeList, queryCollegeByClassId } from "@/api/college";
+import { collegeList } from "@/api/college";
 import {
-  queryVocationalById,
-  queryVocationalByClassId,
+  queryVocationalById
 } from "@/api/vocational";
-import { queryByVocationalId, queryCounselorByClassId } from "@/api/counselor";
+import { queryByVocationalId, counselorList } from "@/api/counselor";
 import { queryStudentsByClassId } from "@/api/students";
 export default {
   data() {
@@ -164,9 +164,13 @@ export default {
       accountType: "",
       classVisible: false,
       classInfo: {},
-      vocationalList: [],
       collegeList: [],
-      counselorList: [],
+      collegeStrList: JSON.parse(sessionStorage.getItem('collegeList')),
+      classList: [],
+      vocationalStrList: JSON.parse(sessionStorage.getItem('vocationalList')),
+      vocationalList:[],
+      counselorStrList:[],
+      counselorList:[],
       paginationParams: {
         pageSize: 10,
         currentPage: 1,
@@ -191,47 +195,30 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {
-    this.counts();
-    this.getClass();
+  async created() {
+    await queryCount()
+    await this.getCounselorStrList()
+    await this.getClass();
   },
   mounted() {},
   updated() {},
   methods: {
-    async counts() {
-      await queryCount();
-    },
     async getClass() {
       const { data: res } = await classList(this.paginationParams);
       if (res.code == 200) {
         let temp = res.data.result || [];
         for (let i = 0; i < temp.length; i++) {
-          temp[i].collegeId = await this.getCollegeEnum({
-            classId: temp[i].collegeId,
-          });
-          temp[i].vocationalId = await this.getVocationalEnum({
-            classId: temp[i].vocationalId,
-          });
-          temp[i].counselorId = await this.getCounselorEnum({
-            classId: temp[i].counselorId,
-          });
+          temp[i].collegeId = this.collegeStrList[temp[i].collegeId].collegeStr
+          temp[i].vocationalId = this.vocationalStrList[temp[i].vocationalId].vocationalStr
+          temp[i].counselorId = this.counselorStrList[temp[i].counselorId].name
         }
         this.tableData = temp;
       }
       this.paginationParams = res.data.pagination;
     },
-    // 表格数据enum
-    async getCollegeEnum(classId) {
-      const { data: res } = await queryCollegeByClassId(classId);
-      return res.data[0].collegeStr;
-    },
-    async getVocationalEnum(classId) {
-      const { data: res } = await queryVocationalByClassId(classId);
-      return res.data[0].vocationalStr;
-    },
-    async getCounselorEnum(classId) {
-      const { data: res } = await queryCounselorByClassId(classId);
-      return res.data[0].name;
+    async getCounselorStrList(){
+      const { data: res } = await counselorList({pageSize: 1000,currentPage: 1});
+      this.counselorStrList = res.data.result
     },
     async getCollegeList() {
       const { data: res } = await collegeList();
@@ -243,30 +230,14 @@ export default {
           }))
         : [];
     },
-
-    // 防抖todo
-    debounce(fn, delay) {
-      let timer = null; //借助闭包
-      return (function () {
-        if (timer) {
-          clearTimeout(timer); //进入该分支语句，说明当前正在一个计时过程中，并且又触发了相同事件。所以要取消当前的计时，重新开始计时
-          timer = setTimeout(fn, delay);
-        } else {
-          timer = setTimeout(fn, delay); // 进入该分支说明当前并没有在计时，那么就开始一个计时
-        }
-      })();
-    },
-    async getClassName() {
-      const { data: res } = await queryClassName({
-        classStr: this.searchParams,
-      });
-      if (res.code == 200) this.tableData = res.data.result;
-    },
-    searchClassList() {
+    async searchClassList() {
       if (this.searchParams == "") {
-        this.debounce(this.getClass(), 1500);
+        this.getClass();
       } else {
-        this.debounce(this.getClassName(), 1500);
+        const { data: res } = await queryClassName({
+        classStr: this.searchParams,pageSize: 10,currentPage: 1,
+      });
+      if (res.code == 200) this.tableData = res.data;
       }
     },
     async handleMoreInfo(row) {
@@ -361,6 +332,12 @@ export default {
       justify-content: space-between;
       .search {
         width: 300px;
+        display: flex;
+        justify-content: space-around;
+        .el-input {
+          margin-left: 5px;
+          width: 70%;
+        }
       }
       .addBtn {
         .el-button {

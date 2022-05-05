@@ -432,7 +432,7 @@ export default {
       for (let i = 0; i < temp.length; i++) {
         XAData.push([
           { name: this.birthPlaceMap[i] },
-          { name: "重庆", value: 100 },
+          { name: "重庆", value: '' },
         ]);
       }
     },

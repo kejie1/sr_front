@@ -5,14 +5,15 @@
         <div class="search">
           <el-input
             placeholder="请输入学院名称"
-            @input="searchCollegeList"
             v-model="searchParams"
+            size="mini"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
+          <el-button size="mini" type="primary" @click="searchCollegeList">搜索</el-button>
         </div>
         <div class="addBtn">
-          <el-button type="primary" plain @click="handleAddEdit"
+          <el-button type="primary" size="mini" @click="handleAddEdit"
             >添加学院</el-button
           >
         </div>
@@ -48,6 +49,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      small
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="paginationParams.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="paginationParams.pageSize"
+      layout="->,total, sizes, prev, pager,next, jumper"
+      :total="paginationParams.total || 0"
+    ></el-pagination>
     <!-- 添加学院 -->
     <el-dialog
       :title="`${collegeInfo.id ? '编辑' : '添加'}学院`"
@@ -133,7 +144,10 @@ export default {
   methods: {
     async getCollegeList() {
       const { data: res } = await collegeList(this.paginationParams);
-      if (res.code == 200) this.tableData = res.data.result;
+      if (res.code == 200){
+        this.tableData = res.data.result;
+        this.paginationParams = res.data.pagination;
+      } 
     },
     // 防抖todo
     debounce(fn, delay) {
@@ -148,16 +162,16 @@ export default {
       })();
     },
     async getCollegeName() {
-      const { data: res } = await queryCollegeName({
+      
+    },
+    async searchCollegeList() {
+      if (this.searchParams == "") {
+        this.getCollegeList();
+      } else {
+        const { data: res } = await queryCollegeName({
         collegeStr: this.searchParams,
       });
-      if (res.code == 200) this.tableData = res.data.result;
-    },
-    searchCollegeList() {
-      if (this.searchParams == "") {
-        this.debounce(this.getCollegeList(), 1500);
-      } else {
-        this.debounce(this.getCollegeName(), 1500);
+      if (res.code == 200) this.tableData = res.data;
       }
     },
     async handleMoreInfo(row) {
@@ -213,6 +227,15 @@ export default {
           });
         });
     },
+    // 分页
+    handleSizeChange(val) {
+      this.paginationParams.pageSize = val;
+      this.getClass();
+    },
+    handleCurrentChange(val) {
+      this.paginationParams.currentPage = val;
+      this.getClass();
+    },
   },
 };
 </script>
@@ -225,6 +248,12 @@ export default {
       justify-content: space-between;
       .search {
         width: 300px;
+        display: flex;
+        justify-content: space-around;
+        .el-input {
+          margin-left: 5px;
+          width: 70%;
+        }
       }
       .addBtn {
         .el-button {

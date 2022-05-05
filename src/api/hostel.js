@@ -7,6 +7,12 @@ export function hostelList(params) {
     params,
   });
 }
+export function queryCount() {
+  return http({
+    url: "hostel/queryCount",
+    method: "get",
+  });
+}
 export function queryHostelName(params) {
   return http({
     url: "hostel/queryHostelName",

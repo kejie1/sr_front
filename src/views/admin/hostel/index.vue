@@ -5,14 +5,17 @@
         <div class="search">
           <el-input
             placeholder="请输入宿舍号"
-            @input="searchHostel"
             v-model="searchParams"
+            size="mini"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
+          <el-button type="primary" size="mini" @click="handleSearch"
+            >搜索</el-button
+          >
         </div>
         <div class="addBtn">
-          <el-button type="primary" plain @click="handleAddEdit"
+          <el-button type="primary" size="mini" @click="handleAddEdit"
             >添加宿舍</el-button
           >
         </div>
@@ -53,6 +56,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      small
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="paginationParams.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="paginationParams.pageSize"
+      layout="->,total, sizes, prev, pager,next, jumper"
+      :total="paginationParams.total || 0"
+    ></el-pagination>
     <!-- 添加宿舍 -->
     <el-dialog
       :title="`${hostelInfo.id ? '编辑' : '添加'}用户`"
@@ -118,6 +131,7 @@ import {
   addHostel,
   updateHostel,
   deleteHostel,
+  queryCount,
 } from "@/api/hostel";
 import { queryByHostel } from "@/api/students";
 import { collegeList, queryCollegeStrById } from "@/api/college";
@@ -152,15 +166,19 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {
-    this.getHostelList(this.paginationParams);
+  async created() {
+    await queryCount();
+    await this.getHostelList(this.paginationParams);
   },
   mounted() {},
   updated() {},
   methods: {
     async getHostelList() {
       const { data: res } = await hostelList(this.paginationParams);
-      if (res.code == 200) this.tableData = res.data.result;
+      if (res.code == 200) {
+        this.tableData = res.data.result;
+        this.paginationParams = res.data.pagination;
+      }
     },
 
     // 防抖todo
@@ -181,7 +199,7 @@ export default {
       });
       if (res.code == 200) this.tableData = res.data.result;
     },
-    searchHostel() {
+    handleSearch() {
       if (this.searchParams == "") {
         this.debounce(this.getHostelList(this.paginationParams), 1500);
       } else {
@@ -283,6 +301,15 @@ export default {
       const { data: res } = await queryPhoneByName(params);
       return res.data[0].name;
     },
+    // 分页
+    handleSizeChange(val) {
+      this.paginationParams.pageSize = val;
+      this.getClass();
+    },
+    handleCurrentChange(val) {
+      this.paginationParams.currentPage = val;
+      this.getClass();
+    },
   },
 };
 </script>
@@ -295,6 +322,12 @@ export default {
       justify-content: space-between;
       .search {
         width: 300px;
+        display: flex;
+        justify-content: space-around;
+        .el-input {
+          margin-left: 5px;
+          width: 70%;
+        }
       }
       .addBtn {
         .el-button {
