@@ -76,6 +76,7 @@ export default {
     }
     .el-main {
       width: 100%;
+      height: 540px;
     }
   }
 }

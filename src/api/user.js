@@ -12,7 +12,12 @@ export function userList() {
     method: "get",
   });
 }
-
+export function queryCount() {
+  return http({
+    url: "users/queryCount",
+    method: "get",
+  });
+}
 export function searchUser(params) {
   return http({
     url: "users/queryByUserName",

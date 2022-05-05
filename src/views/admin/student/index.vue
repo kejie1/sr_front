@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <el-table fit :data="studentsList" stripe style="width: 100%">
+    <el-table :data="studentsList" stripe style="width: 100%">
       <el-table-column prop="id" label="ID" width="50"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column
@@ -314,6 +314,7 @@ export default {
   computed: {},
   watch: {},
   async created() {
+    await queryCount();
     await this.handleLabel();
     await this.getCounselorList();
     await this.getStudentList();
@@ -321,9 +322,6 @@ export default {
   mounted() {},
   updated() {},
   methods: {
-    async counts() {
-      await queryCount();
-    },
     searchUser() {},
     // 获取学院列表
     // 处理数据

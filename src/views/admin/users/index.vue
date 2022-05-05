@@ -32,7 +32,6 @@
       <el-table-column prop="id" label="ID" width="50"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column
-        :v-if="accountType == 1"
         prop="password"
         label="密码"
       ></el-table-column>
@@ -46,9 +45,10 @@
           scope.row.accountType == 1 ? "超级管理员" : "普通用户"
         }}</template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="80px">
+      <el-table-column  prop="status" label="状态" width="80px">
         <template slot-scope="scope">
           <el-switch
+          :disabled="accountType == 1 ? false : true"
             v-model="scope.row.status"
             active-color="#13ce66"
             inactive-color="#ff4949"
@@ -62,6 +62,7 @@
             plain
             size="mini"
             @click="handleAddEdit(scope.row)"
+            :disabled="accountType == 1 ? false : true"
             >编辑</el-button
           >
           <el-button
@@ -69,11 +70,22 @@
             plain
             size="mini"
             @click="handleDelete(scope.row.id)"
+            :disabled="accountType == 1 ? false : true"
             >删除</el-button
           >
         </template>
       </el-table-column>
     </el-table>
+     <el-pagination
+      small
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagination.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pagination.pageSize"
+      layout="->,total, sizes, prev, pager,next, jumper"
+      :total="pagination.total || 0"
+    ></el-pagination>
     <!-- 添加修改用户 -->
     <el-dialog
       :title="`${userInfo.id ? '编辑' : '添加'}用户`"
@@ -101,7 +113,6 @@
         <el-form-item
           label="角色类型"
           prop="accountType"
-          :v-if="accountType == 1"
         >
           <el-select v-model="userInfo.accountType" placeholder="请选择">
             <el-option
@@ -115,18 +126,17 @@
         <el-form-item
           label="所属学院"
           prop="collegeId"
-          :v-if="accountType == 1"
         >
           <el-select v-model="userInfo.collegeId" placeholder="请选择">
             <el-option
               v-for="item in collegeList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.collegeStr"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态" prop="status" :v-if="accountType == 1">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="userInfo.status"
             active-color="#13ce66"
@@ -149,8 +159,9 @@ import {
   addUser,
   updateUser,
   deleteUser,
+  queryCount
 } from "@/api/user";
-import { collegeList, queryCollegeStrById } from "@/api/college";
+import {  queryCollegeStrById } from "@/api/college";
 // import { mapState } from 'vuex'
 export default {
   components: {},
@@ -158,15 +169,15 @@ export default {
     return {
       tableData: [],
       userInfoVisible: false,
-      accountType: 1,
+      accountType: 2,
+      collegeList: JSON.parse(sessionStorage.getItem('collegeList')),
       rowData: {},
-      collegeList: [],
       userInfo: {
         username: "",
         password: "",
         email: "",
         phone: "",
-        accountType: 1,
+        accountType: 2,
         status: true,
       },
       searchParams: "",
@@ -194,30 +205,32 @@ export default {
         { value: 1, label: "超级管理员" },
         { value: 2, label: "普通用户" },
       ],
+      pagination: {
+        pageSize: 10,
+        currentPage: 1,
+      },
     };
   },
   computed: {},
   watch: {},
   methods: {
     async getUserList() {
-      const { data } = await userList();
-      for (let i = 0; i < data.data.length; i++) {
-        data.data[i].status = data.data[i].status == 1 ? true : false;
-        data.data[i].college = await this.getCollegeStrById(
-          data.data[i].collegeId
-        );
+      let { data } = await userList(this.pagination);
+      const {data:res} = data
+      for (let i = 0; i < res.result.length; i++) {
+        res.result[i].status = res.result[i].status == 1 ? true : false;
+        res.result[i].college = this.collegeList[res.result[i].collegeId].collegeStr
       }
-      this.tableData = data.data;
-      console.log(this.tableData);
-      // this.accountType = this.$store.state.userInfo.accountType
+      this.tableData = res.result
+      this.pagination = res.pagination;
     },
-    // 获取学院列表
-    async getCollegeList() {
-      const { data: res } = await collegeList();
-      this.collegeList = res.data.result.map((x) => ({
-        label: x.collegeStr,
-        value: x.id,
-      }));
+    handleSizeChange(val) {
+      this.pagination.pageSize = val;
+      this.getUserList();
+    },
+    handleCurrentChange(val) {
+      this.pagination.currentPage = val;
+      this.getUserList();
     },
     async getCollegeStrById(id) {
       const { data: res } = await queryCollegeStrById({ id });
@@ -250,15 +263,13 @@ export default {
       if (this.userInfo.id) {
         const { data } = await updateUser(this.userInfo);
         this.$message({ message: data.msg, type: "success" });
-        this.userInfoVisible = false;
-        await this.getUserList();
       } else {
-        await addUser(this.userInfo);
-        this.userInfoVisible = false;
-        await this.getUserList();
+        const { data } = await addUser(this.userInfo);
+        this.$message({ message: data.msg, type: "success" });
       }
+      this.userInfoVisible = false;
+      await this.getUserList();
       this.userInfo.status = true;
-
       this.$refs["userInfo"].resetFields();
     },
     async handleStatus(row, column) {
@@ -274,7 +285,8 @@ export default {
     },
   },
   async created() {
-    await this.getCollegeList();
+    this.accountType = JSON.parse(sessionStorage.getItem('setUserInfo')).accountType
+    await queryCount()
     await this.getUserList();
   },
   mounted() {},
